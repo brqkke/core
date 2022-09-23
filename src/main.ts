@@ -1,0 +1,27 @@
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common';
+import { AppConfigService } from './services/ConfigService';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule, {});
+  const appConfig = app.get(AppConfigService).config;
+
+  app.setGlobalPrefix('api');
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+
+  const config = new DocumentBuilder()
+    .setTitle('Butanuki')
+    .setDescription('Butanuki api description')
+    .setVersion(process.env.APP_VERSION || 'dev')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('_swagger', app, document);
+
+  await app.listen(appConfig.port, async () => {
+    console.log('Listening on ', await app.getUrl());
+  });
+}
+bootstrap();
