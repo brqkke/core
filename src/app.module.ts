@@ -1,32 +1,26 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import makeDbConfigFromServiceConfig from './config/db';
-import { UserController } from './controllers/user.controller';
-import { AuthController } from './controllers/auth.controller';
-import { RecaptchaService } from './services/RecaptchaService';
 import { HttpModule } from '@nestjs/axios';
-import { AuthService } from './services/AuthService';
-import { UserService } from './services/UserService';
-import { AppConfigService } from './services/ConfigService';
-import { MailerTransportService } from './services/MailerTransportService';
-import { MailerService } from './services/MailerService';
-import { SSRService } from './services/SSRService';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { ConfigController } from './controllers/config.controller';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user.module';
+import { OrderModule } from './order/order.module';
+import { BityModule } from './bity/bity.module';
+import { AppConfigModule } from './config/config.module';
+import { MailerModule } from './emails/mailer.module';
 
 @Module({
   imports: [
     HttpModule,
-    ConfigModule.forRoot({
-      envFilePath: ['.env', '.env.development.local', '.env.development'],
-      isGlobal: true,
-      cache: true,
-      expandVariables: true,
-    }),
+    AppConfigModule,
+    MailerModule,
+    AuthModule,
+    UserModule,
     TypeOrmModule.forRootAsync({
       useFactory: makeDbConfigFromServiceConfig,
       inject: [ConfigService],
@@ -34,22 +28,12 @@ import { ConfigController } from './controllers/config.controller';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'front-build'),
     }),
-  ],
-  controllers: [
-    AppController,
-    UserController,
-    AuthController,
-    ConfigController,
-  ],
-  providers: [
-    AppService,
-    RecaptchaService,
-    AuthService,
-    UserService,
-    AppConfigService,
-    MailerTransportService,
-    MailerService,
-    SSRService,
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+    }),
+    OrderModule,
+    BityModule,
   ],
 })
 export class AppModule {}

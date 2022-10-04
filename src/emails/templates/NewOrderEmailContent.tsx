@@ -1,5 +1,5 @@
-import React, { ReactElement } from "react";
-import { Layout } from "./Layout";
+import React, { ReactElement } from 'react';
+import { Layout } from './Layout';
 
 export const NewOrderEmailContent = (props: {
   iban: string;
@@ -14,12 +14,12 @@ export const NewOrderEmailContent = (props: {
   currency: string;
 }): ReactElement<{}> => {
   return (
-    <Layout subtitle={"New order"}>
+    <Layout subtitle={'New order'}>
       <p>
-        Here are the details of you new order of{" "}
+        Here are the details of you new order of{' '}
         <b>
           {props.currency} {props.amount}
-        </b>{" "}
+        </b>{' '}
         to {props.redactedCryptoAddress} :
       </p>
       <p>

@@ -15,5 +15,7 @@ export default function makeDbConfigFromServiceConfig(
     database: config.get('DB_NAME'),
     synchronize: false,
     migrationsRun: config.getOrThrow('NODE_ENV') === 'development',
+    logging: 'all',
+    logger: 'simple-console',
   };
 }

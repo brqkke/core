@@ -69,6 +69,7 @@ export class AppConfigService {
           scopes: ['https://auth.bity.com/scopes/reporting.exchange'],
           baseUrl: 'https://reporting.api.bity.com/exchange/v1',
         },
+        refreshMaxRetry: 3,
         partnerFee: 0.007, //Fees percentage between 0 and 1 (3% = 0.03, 10% = 0.1, etc)
       },
       singleLoginTokenTTL: 60 * 10, // 10 minutes

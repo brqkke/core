@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { SSRService } from './SSRService';
 import { MailerTransportService } from './MailerTransportService';
-import { LoginLinkEmailContent } from '../emails/LoginLinkEmailContent';
-import { AppConfigService } from './ConfigService';
+import { LoginLinkEmailContent } from './templates/LoginLinkEmailContent';
+import { AppConfigService } from '../config/app.config.service';
 import React from 'react';
-import { BityAccountWasUnlinked } from '../emails/BityAccountWasUnlinked';
-import { NewOrderEmailContent } from '../emails/NewOrderEmailContent';
+import { BityAccountWasUnlinked } from './templates/BityAccountWasUnlinked';
+import { NewOrderEmailContent } from './templates/NewOrderEmailContent';
+import { Order } from '../entities/Order';
 
 @Injectable()
 export class MailerService {
@@ -50,8 +51,7 @@ export class MailerService {
     });
   }
 
-  //TODO: make order entity
-  async sendNewOrderEmail(order: any, email: string) {
+  async sendNewOrderEmail(order: Order, email: string) {
     const bankDetails = JSON.parse(order.bankDetails || '{}') as {
       iban: string;
       swift_bic: string;

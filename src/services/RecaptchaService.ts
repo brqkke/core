@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import * as querystring from 'querystring';
 import { lastValueFrom } from 'rxjs';
-import { AppConfigService } from './ConfigService';
+import { AppConfigService } from '../config/app.config.service';
 
 @Injectable()
 export class RecaptchaService {

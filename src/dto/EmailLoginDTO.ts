@@ -10,3 +10,13 @@ export class EmailLoginDTO {
   @IsNotEmpty()
   captchaToken: string;
 }
+
+export class EmailLoginVerifyDTO {
+  @ApiProperty()
+  @IsEmail()
+  email: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  tempCode: string;
+}

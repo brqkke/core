@@ -1,5 +1,14 @@
-import { Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { User } from './User';
 
+@Entity()
 export class Session {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -7,11 +16,15 @@ export class Session {
   @Column()
   expireAt: number;
 
+  @Column()
+  @Index()
   token: string;
 
-  // @OneToMany(User)
-  // user: User;
-  //
-  // @JoinColumn()
-  // userId: string;
+  @Column()
+  userId: string;
+
+  @ManyToOne(() => User, (user) => user.sessions)
+  @Index()
+  @JoinColumn()
+  user: User;
 }

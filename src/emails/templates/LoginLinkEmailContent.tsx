@@ -1,9 +1,9 @@
-import React from "react";
-import { Layout } from "./Layout";
+import React from 'react';
+import { Layout } from './Layout';
 
 export const LoginLinkEmailContent = (props: { url: string }) => {
   return (
-    <Layout subtitle={"Login link"}>
+    <Layout subtitle={'Login link'}>
       <h3>ENGLISH</h3>
       <p>
         Please click the link or button below to log into your account.
