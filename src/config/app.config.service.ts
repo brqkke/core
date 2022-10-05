@@ -20,6 +20,14 @@ export class AppConfigService {
     return {
       port: config.getOrThrow<number>('PORT', 3000),
       baseUrl: config.getOrThrow<string>('BASE_URL'),
+      nodeEnv: config.getOrThrow<string>('NODE_ENV'),
+      db: {
+        host: config.getOrThrow<string>('DB_HOST'),
+        port: parseInt(config.getOrThrow<string>('DB_PORT')),
+        username: config.getOrThrow<string>('DB_USER'),
+        password: config.getOrThrow<string>('DB_PASSWORD'),
+        database: config.getOrThrow<string>('DB_NAME'),
+      },
       publicWebsiteBaseUrl: config.getOrThrow<string>(
         'PUBLIC_WEBSITE_BASE_URL',
       ),
@@ -70,6 +78,9 @@ export class AppConfigService {
           baseUrl: 'https://reporting.api.bity.com/exchange/v1',
         },
         refreshMaxRetry: 3,
+        refreshRetryDelay: parseInt(
+          config.get('BITY_REFRESH_DELAY', '' + 3 * 3600),
+        ),
         partnerFee: 0.007, //Fees percentage between 0 and 1 (3% = 0.03, 10% = 0.1, etc)
       },
       singleLoginTokenTTL: 60 * 10, // 10 minutes

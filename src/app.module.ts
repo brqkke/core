@@ -1,7 +1,4 @@
 import { Module } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import makeDbConfigFromServiceConfig from './config/db';
 import { HttpModule } from '@nestjs/axios';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
@@ -13,6 +10,7 @@ import { OrderModule } from './order/order.module';
 import { BityModule } from './bity/bity.module';
 import { AppConfigModule } from './config/config.module';
 import { MailerModule } from './emails/mailer.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -21,10 +19,6 @@ import { MailerModule } from './emails/mailer.module';
     MailerModule,
     AuthModule,
     UserModule,
-    TypeOrmModule.forRootAsync({
-      useFactory: makeDbConfigFromServiceConfig,
-      inject: [ConfigService],
-    }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'front-build'),
     }),
@@ -34,6 +28,7 @@ import { MailerModule } from './emails/mailer.module';
     }),
     OrderModule,
     BityModule,
+    DatabaseModule,
   ],
 })
 export class AppModule {}

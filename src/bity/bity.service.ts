@@ -11,7 +11,7 @@ import ClientOAuth2 from 'client-oauth2';
 import { buildRepositories, genRandomString } from '../utils';
 import { User } from '../entities/User';
 import { OrderService } from '../order/order.service';
-import { DataSource } from 'typeorm';
+import { DataSource, QueryFailedError } from 'typeorm';
 import { Token } from '../entities/Token';
 import { TokenStatus } from '../entities/enums/TokenStatus';
 import { BityClientService } from './bity.client.service';
@@ -58,46 +58,67 @@ export class BityService {
   //5 on error incrmeent the retry counter and set the status to NEED_REFRESH_RETRY
   //6 if the retry counter reach the limit, set the status to broken and send an email
   async refreshBityToken(token: Token): Promise<Token | null> {
-    return this.db.manager.transaction(
-      'SERIALIZABLE',
-      async (entityManager) => {
-        const db = buildRepositories(entityManager);
-        const dbToken = await db.token.findOneOrFail({
-          lock: { mode: 'pessimistic_write', tables: ['token'] },
-          where: { id: token.id },
-          relations: ['user'],
-        });
+    const result: { retry: true } | { retry: false; token: Token | null } =
+      await this.db.manager.transaction(
+        'SERIALIZABLE',
+        async (entityManager) => {
+          const db = buildRepositories(entityManager);
+          // await new Promise((r) => setTimeout(r, Math.random() * 3000));
 
-        if (dbToken.accessToken !== token.accessToken) {
-          return dbToken;
-        }
+          let dbToken: Token;
 
-        const newToken = await this.bityClient.refreshToken(token.refreshToken);
-        dbToken.lastRefreshTriedAt = new Date();
-        dbToken.refreshTriesCount++;
+          try {
+            dbToken = await db.token.findOneOrFail({
+              lock: {
+                mode: 'pessimistic_write',
+                tables: ['token'],
+              },
+              where: { id: token.id },
+              relations: ['user'],
+            });
+          } catch (e: unknown) {
+            console.log(e);
+            if (typeof e === 'object' && e instanceof QueryFailedError) {
+              if (e.driverError.code === '40001') {
+                return { retry: true };
+              }
+            }
+            throw e;
+          }
+          if (dbToken.accessToken !== token.accessToken) {
+            return { retry: false, token: dbToken };
+          }
 
-        if (newToken) {
-          dbToken.lastRefreshedAt = new Date();
-          dbToken.accessToken = newToken.accessToken;
-          dbToken.refreshToken = newToken.refreshToken;
-          dbToken.status = TokenStatus.ACTIVE;
-          dbToken.refreshTriesCount = 0;
-          return db.token.save(dbToken);
-        }
+          const newToken = await this.bityClient.refreshToken(
+            token.refreshToken,
+          );
+          dbToken.lastRefreshTriedAt = new Date();
+          dbToken.refreshTriesCount++;
 
-        if (
-          dbToken.refreshTriesCount > this.config.config.bity.refreshMaxRetry
-        ) {
-          dbToken.status = TokenStatus.BROKEN;
-          await this.mailer.sendBityRelink(dbToken.user.email);
-        } else {
-          dbToken.status = TokenStatus.NEED_REFRESH_RETRY;
-        }
-        await db.token.save(dbToken);
+          if (newToken) {
+            dbToken.lastRefreshedAt = new Date();
+            dbToken.accessToken = newToken.accessToken;
+            dbToken.refreshToken = newToken.refreshToken;
+            dbToken.status = TokenStatus.ACTIVE;
+            dbToken.refreshTriesCount = 0;
+            return { retry: false, token: await db.token.save(dbToken) };
+          }
 
-        return null;
-      },
-    );
+          if (
+            dbToken.refreshTriesCount > this.config.config.bity.refreshMaxRetry
+          ) {
+            dbToken.status = TokenStatus.BROKEN;
+            await this.mailer.sendBityRelink(dbToken.user.email);
+          } else {
+            dbToken.status = TokenStatus.NEED_REFRESH_RETRY;
+          }
+          await db.token.save(dbToken, { reload: false });
+
+          return { retry: false, token: null };
+        },
+      );
+
+    return result.retry ? this.refreshBityToken(token) : result.token;
   }
 
   protected async doBityRequestWithRetryRefresh<R = any>({

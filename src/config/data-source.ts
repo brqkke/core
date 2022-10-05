@@ -1,12 +1,12 @@
 import { DataSource } from 'typeorm';
 import makeDbConfigFromServiceConfig from './db';
 import { NestFactory } from '@nestjs/core';
-import { ConfigService } from '@nestjs/config';
 import { AppConfigModule } from './config.module';
+import { AppConfigService } from './app.config.service';
 
 const getConfig = async () => {
   const config = await NestFactory.create(AppConfigModule);
-  const configService = config.get(ConfigService);
+  const configService = config.get(AppConfigService);
   const dataSource = new DataSource(
     makeDbConfigFromServiceConfig(configService),
   );

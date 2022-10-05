@@ -1,8 +1,9 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { SchedulerModule } from './scheduler/scheduler.module';
+import { SchedulerService } from './scheduler/scheduler.service';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  setInterval(() => console.log('hey'), 2000);
+  const scheduler = await NestFactory.createApplicationContext(SchedulerModule);
+  scheduler.get(SchedulerService).start();
 }
 bootstrap();

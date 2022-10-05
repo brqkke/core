@@ -62,4 +62,11 @@ export class BityLinkController {
       await this.bity.removeToken(user);
     }
   }
+
+  @Post('/refresh')
+  async refresh(@CurrentUser() user: User) {
+    if (user.token) {
+      return this.bity.refreshBityToken(user.token);
+    }
+  }
 }
