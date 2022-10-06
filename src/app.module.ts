@@ -11,6 +11,7 @@ import { BityModule } from './bity/bity.module';
 import { AppConfigModule } from './config/config.module';
 import { MailerModule } from './emails/mailer.module';
 import { DatabaseModule } from './database/database.module';
+import { AppController } from './controllers/app.controller';
 
 @Module({
   imports: [
@@ -30,5 +31,6 @@ import { DatabaseModule } from './database/database.module';
     BityModule,
     DatabaseModule,
   ],
+  controllers: [AppController],
 })
 export class AppModule {}

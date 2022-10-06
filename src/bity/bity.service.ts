@@ -17,9 +17,14 @@ import { TokenStatus } from '../entities/enums/TokenStatus';
 import { BityClientService } from './bity.client.service';
 import { MailerService } from '../emails/MailerService';
 import { paths } from './generated/schema';
+import { Order } from '../entities/Order';
+import { EventLogType } from '../entities/EventLog';
 
-type GetOrderResponse =
+export type GetOrderResponse =
   paths['/orders/{order_uuid}']['get']['responses']['200']['content']['application/json'];
+
+export type GetOrdersResponse =
+  paths['/orders']['get']['responses']['200']['content']['application/json'];
 
 @Injectable()
 export class BityService {
@@ -109,6 +114,11 @@ export class BityService {
           ) {
             dbToken.status = TokenStatus.BROKEN;
             await this.mailer.sendBityRelink(dbToken.user.email);
+            await db.eventLog.insert({
+              data: dbToken.user.id,
+              createdAt: new Date(),
+              type: EventLogType.BROKEN_TOKEN,
+            });
           } else {
             dbToken.status = TokenStatus.NEED_REFRESH_RETRY;
           }
@@ -263,6 +273,113 @@ export class BityService {
       token,
       endpoint: `/orders/${orderId}`,
     });
+  }
+
+  async cancelBityOrder({ id, token }: { id: string; token: Token }) {
+    return this.doBityRequestWithRetryRefresh({
+      token,
+      method: 'POST',
+      endpoint: `/orders/${id}/cancel`,
+    });
+  }
+
+  public async renewOrder({ order, token }: { order: Order; token: Token }) {
+    let latestToken: Token = token;
+    const { response, newToken } = await this.doBityRequestWithRetryRefresh({
+      endpoint: `/orders/${order.remoteId}/duplicate`,
+      method: 'POST',
+      token: latestToken,
+    });
+    latestToken = newToken;
+
+    console.log(
+      { remoteId: order.remoteId, token, latestToken },
+      response.status,
+      response.data,
+    );
+
+    let orderId: string | null = null;
+    if (response.status === 201) {
+      const orderLocation = response.headers['location'];
+      orderId =
+        orderLocation
+          ?.split('/')
+          .filter((part) => !!part.length)
+          .pop() || '';
+    }
+    if (response.status === 400) {
+      console.log('Caught 400 while renewing order ', order.remoteId);
+      if (
+        response.data.errors &&
+        response.data.errors.some(
+          (err: any) => err.code === 'order_already_duplicated',
+        )
+      ) {
+        const fetchedNewOrder = await this.findBityOrderRenewingOrder(
+          order,
+          latestToken,
+        );
+        latestToken = fetchedNewOrder.newToken;
+        if (fetchedNewOrder.orderId) {
+          console.log('New Order was fetched from bity', fetchedNewOrder);
+          orderId = fetchedNewOrder.orderId;
+        } else {
+          console.log('Error, new Order could not be fetched from bity');
+        }
+      }
+    }
+
+    if (orderId) {
+      return this.getBityOrder({ token: latestToken, orderId });
+    }
+    return null;
+  }
+
+  //In case we already duplicated an order, we try to find the new order on bity's side
+  //We fetch the current order and find a bity order with the same reference created after the current one
+  async findBityOrderRenewingOrder(
+    order: Order,
+    token: Token,
+  ): Promise<{ newToken: Token; orderId: string | null }> {
+    const reference = order.transferLabel;
+
+    const { newToken, response } = await this.getBityOrder({
+      orderId: order.remoteId,
+      token,
+    });
+    let latestToken = newToken;
+
+    if (response.status !== 200 || !response.data.timestamp_created) {
+      return { newToken: latestToken, orderId: null };
+    }
+
+    const lastKnownOrderTimestamp = response.data.timestamp_created;
+    for (let page = 1; ; page++) {
+      const { response, newToken } =
+        await this.doBityRequestWithRetryRefresh<GetOrdersResponse>({
+          token: latestToken,
+          endpoint: `/orders?page=${page}`,
+        });
+      latestToken = newToken;
+      if (response.status !== 200) {
+        break;
+      }
+      const newOrder = response.data.orders.find((bityOrder) => {
+        return (
+          bityOrder.id !== order.remoteId &&
+          bityOrder.payment_details?.reference === reference &&
+          bityOrder.timestamp_created > lastKnownOrderTimestamp
+        );
+      });
+      if (newOrder) {
+        return { newToken: latestToken, orderId: newOrder.id };
+      }
+      if ((response.data.pagination?.last || 1) <= page) {
+        break;
+      }
+    }
+
+    return { newToken: latestToken, orderId: null };
   }
 
   // async doRawBityRequest<R = any>({

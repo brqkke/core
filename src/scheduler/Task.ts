@@ -15,7 +15,7 @@ export abstract class AbstractTask {
   private intervalId?: NodeJS.Timeout;
   abstract run(): Promise<any | void>;
 
-  private get name() {
+  protected get name() {
     return this.options?.name || 'TASK_NO_NAME';
   }
 

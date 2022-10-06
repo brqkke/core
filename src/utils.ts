@@ -3,6 +3,8 @@ import { User } from './entities/User';
 import { Token } from './entities/Token';
 import { Order } from './entities/Order';
 import { Session } from './entities/Session';
+import { Task } from './entities/Task';
+import { EventLog } from './entities/EventLog';
 
 export function genRandomString(length: number) {
   const list = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -21,6 +23,8 @@ export function buildRepositories(manager: EntityManager) {
     order: manager.getRepository(Order),
     token: manager.getRepository(Token),
     session: manager.getRepository(Session),
+    task: manager.getRepository(Task),
+    eventLog: manager.getRepository(EventLog),
   };
 }
 

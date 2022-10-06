@@ -92,7 +92,7 @@ export class AppConfigService {
         orderCheckInterval: 300, //Check open orders every hours,
         reporting: {
           reportingInterval: 3600 * 24, //1 day
-          reportingEmail: 'reportingbity@uazo.com',
+          reportingEmail: 'taccolaaless@gmail.com', //'reportingbity@uazo.com',
         },
       },
     };

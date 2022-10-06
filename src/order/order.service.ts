@@ -4,13 +4,14 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { DataSource, In, Not } from 'typeorm';
+import { DataSource, In, LessThan, Not } from 'typeorm';
 import { OrderStatus } from '../entities/enums/OrderStatus';
 import { OrderCurrency } from '../entities/enums/OrderCurrency';
 import { buildRepositories, redactCryptoAddress, Repositories } from '../utils';
 import { BityService } from '../bity/bity.service';
 import { Token } from '../entities/Token';
 import { Order } from '../entities/Order';
+import { TokenStatus } from '../entities/enums/TokenStatus';
 
 @Injectable()
 export class OrderService {
@@ -31,6 +32,75 @@ export class OrderService {
           : {}),
       },
       order: { createdAt: 'DESC' },
+    });
+  }
+
+  async getOrdersScheduledForCancellation(limit: number): Promise<Order[]> {
+    return this.db.order.find({
+      where: {
+        status: OrderStatus.TO_CANCEL,
+        user: {
+          token: {
+            status: TokenStatus.ACTIVE,
+          },
+        },
+      },
+      take: limit,
+      relations: {
+        user: {
+          token: true,
+        },
+      },
+    });
+  }
+
+  async getOrdersToCheck(
+    limit: number,
+    minimumCheckInterval: number,
+  ): Promise<Order[]> {
+    return this.db.order.find({
+      where: {
+        lastCheckedAt: LessThan(
+          new Date(Date.now() - minimumCheckInterval * 1000),
+        ),
+        status: OrderStatus.OPEN,
+        user: {
+          token: {
+            status: TokenStatus.ACTIVE,
+          },
+        },
+      },
+      take: limit,
+      relations: {
+        user: {
+          token: true,
+        },
+      },
+      order: {
+        lastCheckedAt: 'ASC',
+      },
+    });
+  }
+
+  async getOrdersToRenew(limit: number): Promise<Order[]> {
+    return this.db.order.find({
+      where: {
+        status: OrderStatus.FILLED_NEED_RENEW,
+        user: {
+          token: {
+            status: TokenStatus.ACTIVE,
+          },
+        },
+      },
+      take: limit,
+      relations: {
+        user: {
+          token: true,
+        },
+      },
+      order: {
+        lastCheckedAt: 'ASC',
+      },
     });
   }
 

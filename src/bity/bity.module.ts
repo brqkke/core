@@ -7,6 +7,7 @@ import { BityOrderController } from './bity.order.controller';
 import { OrderModule } from '../order/order.module';
 import { BityClientService } from './bity.client.service';
 import { MailerModule } from '../emails/mailer.module';
+import { BityReportingService } from './bity.reporting.service';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { MailerModule } from '../emails/mailer.module';
     MailerModule,
   ],
   controllers: [BityOrderController, BityLinkController],
-  providers: [BityService, BityClientService],
-  exports: [BityService],
+  providers: [BityService, BityClientService, BityReportingService],
+  exports: [BityService, BityReportingService],
 })
 export class BityModule {}

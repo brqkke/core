@@ -28,17 +28,21 @@ export class MailerTransportService {
     to,
     subject,
     content,
+    prefix,
   }: {
     to: string;
     subject: string;
     content: string;
+    prefix?: string;
   }) {
     //TODO move to queue
+    const fullSubject =
+      prefix === undefined ? `Butanuki - ${subject}` : `${prefix}${subject}`;
     const transport = this.transporter;
     return transport.sendMail({
       from: { name: 'Butanuki', address: 'no-reply@butanuki.com' },
       to,
-      subject: `Butanuki - ${subject}`,
+      subject: fullSubject,
       html: content,
     });
   }

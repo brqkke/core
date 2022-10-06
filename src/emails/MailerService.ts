@@ -73,4 +73,14 @@ export class MailerService {
       subject: 'New Butanuki order',
     });
   }
+
+  async sendReportingEmail(content: string) {
+    const now = new Date();
+    return this.transport.sendRawEmail({
+      to: this.appConfig.config.backgroundAgent.reporting.reportingEmail,
+      content,
+      subject: `Report ${now.getUTCFullYear()}-${now.getUTCMonth() + 1}`,
+      prefix: 'BTNK ',
+    });
+  }
 }

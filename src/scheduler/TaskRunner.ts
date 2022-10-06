@@ -1,6 +1,5 @@
 import { ModuleRef, Reflector } from '@nestjs/core';
 import { AbstractTask, TASK_OPTIONS_KEY, TaskOptions } from './Task';
-import { SchedulerModule } from './scheduler.module';
 import { Type } from '@nestjs/common/interfaces/type.interface';
 import { Injectable } from '@nestjs/common';
 
@@ -9,9 +8,9 @@ export class TaskRunner {
   private tasksOptions = new Map<Type<AbstractTask>, TaskOptions>();
 
   constructor(private reflector: Reflector, private moduleRef: ModuleRef) {
-    const providers = Reflect.getMetadata('providers', SchedulerModule);
-    if (Array.isArray(providers)) {
-      providers.forEach((provider) => this.register(provider));
+    const classes = moduleRef.get('LOADED_TASKS');
+    if (Array.isArray(classes)) {
+      classes.forEach((loadedClass) => this.register(loadedClass));
     }
   }
 
@@ -32,6 +31,7 @@ export class TaskRunner {
     await Promise.all(
       [...this.tasksOptions.entries()].map(async ([task, options], i) => {
         const taskInstance = await this.moduleRef.create<AbstractTask>(task);
+        console.log('Initiating task', options);
         await wait(5 * i * 1000); //delay each task startup by 5 seconds from each other to avoid doing lots of work at the same time
         taskInstance.options = options;
         return taskInstance.initTask();
