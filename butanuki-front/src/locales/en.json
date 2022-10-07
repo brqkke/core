@@ -1,0 +1,77 @@
+{
+  "code": "en",
+  "language": "EN",
+  "nav": {
+    "about": "About",
+    "help": "Help",
+    "blog": "Blog",
+    "contact": "Contact",
+    "privacy": "Privacy",
+    "links": {
+      "about": "/en/about",
+      "help": "/en/help",
+      "tou": "/en/conditions",
+      "privacy": "/en/privacy",
+      "login": "/en/login",
+      "root": "/en/"
+    }
+  },
+  "homepage": {
+    "hello": "Soon, a Bitcoin & cryptocurrencies ATM open 24/7 in Geneva city-center.",
+    "get_started": "Get started here: ",
+    "get_started_call_to_action": "Buy Bitcoin",
+    "subtitle": "Easy Bitcoin Saving",
+    "get_started_follow_us": "Follow us on Twitter: "
+  },
+  "tou": {
+    "title": "Terms Of Use"
+  },
+  "privacy": {
+    "title": "Privacy policy"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions"
+  },
+  "about": {
+    "title": "About"
+  },
+  "app": {
+    "loading": "Loading",
+    "error": {
+      "loading": "Error while loading"
+    },
+    "login": {
+      "enter_email": "Enter your email to receive a unique login link",
+      "email": "Email",
+      "receive_link": "Receive login link",
+      "accept_tou": "Accept the <1>Terms Of Use</1>"
+    },
+    "home": {
+      "bity": {
+        "linked": "Your bity account is linked",
+        "not_linked": "Your Bity account isn't linked",
+        "broken": "It looks like the link between Butanuki and your Bity account is broken.",
+        "to_link": "to link it now.",
+        "to_unlink": "to unlink it.",
+        "not_setup": "DCA not setup"
+      },
+      "click_here": "Click here",
+      "setup_dca": "Setup DCA"
+    },
+    "order": {
+      "amount": "Amount",
+      "change_amount": "Change Amount",
+      "reference": "Bank Transfer Reference (VERY IMPORTANT!)",
+      "crypto_address": "Crypto address",
+      "crypto_address_desc": "Receiving Bitcoin address",
+      "save": "Save",
+      "go_back": "Go back",
+      "warning_reset": "Warning, you will get a new Bank Transfer Reference"
+    },
+    "bity": {
+      "error": {
+        "input_payment_information_required": "Your bity account doesn't have an IBAN setup."
+      }
+    }
+  }
+}

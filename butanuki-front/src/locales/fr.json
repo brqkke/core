@@ -1,0 +1,77 @@
+{
+  "code": "fr",
+  "language": "FR",
+  "nav": {
+    "about": "À propos",
+    "help": "Aide",
+    "blog": "Blog",
+    "contact": "Contact",
+    "privacy": "Vie privée",
+    "links": {
+      "help": "/aide",
+      "about": "/apropos",
+      "tou": "/conditions",
+      "privacy": "/vieprivee",
+      "login": "/login",
+      "root": "/"
+    }
+  },
+  "homepage": {
+    "hello": "Bientôt, un distributeur automatique de Bitcoin et cryptomonnaies ouvert 24h/24 au centre-ville de Genève!",
+    "get_started": "Commencez ici: ",
+    "get_started_call_to_action": "Acheter du Bitcoin",
+    "subtitle": "L'épargne Bitcoin facile",
+    "get_started_follow_us": "Suivez-nous sur Twitter: "
+  },
+  "tou": {
+    "title": "Conditions générales d'utilisation"
+  },
+  "privacy": {
+    "title": "Politique de vie privée"
+  },
+  "faq": {
+    "title": "Foire Aux Questions"
+  },
+  "about": {
+    "title": "À propos"
+  },
+  "app": {
+    "loading": "Chargement",
+    "error": {
+      "loading": "Erreur pendant le chargement"
+    },
+    "login": {
+      "enter_email": "Entrez votre adresse email pour recevoir un lien de connexion unique",
+      "email": "Adresse email",
+      "receive_link": "Recevoir le lien de connexion",
+      "accept_tou": "Accepter les <1>Conditions Générales d'Utilisation</1>"
+    },
+    "home": {
+      "bity": {
+        "linked": "Votre compte Bity est bien lié",
+        "not_linked": "Votre compte Bity n'est pas lié",
+        "broken": "Il semble que le lien entre Butanuki et votre compte Bity est cassé.",
+        "to_link": "pour le lier maintenant.",
+        "to_unlink": "pour le déconnecter.",
+        "not_setup": "Épargne récurrente Bitcoin non configurée"
+      },
+      "click_here": "Cliquez ici",
+      "setup_dca": "Mettre en place le DCA"
+    },
+    "order": {
+      "amount": "Montant",
+      "change_amount": "Changer le montant",
+      "reference": "Label de paiement (TRÈS IMPORTANT!)",
+      "crypto_address": "Adresse Bitcoin",
+      "crypto_address_desc": "Adresse Bitcoin de réception",
+      "save": "Sauvegarder",
+      "go_back": "Retour",
+      "warning_reset": "Attention, vous aurez un nouveau label de paiement!"
+    },
+    "bity": {
+      "error": {
+        "input_payment_information_required": "Votre compte bity n'a pas d'iban configuré."
+      }
+    }
+  }
+}
