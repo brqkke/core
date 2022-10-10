@@ -10,13 +10,13 @@ FROM node:16.17.1-alpine3.16  As core-build
 
 # Create app directory
 WORKDIR /app
-COPY butanuki-core/package*.json ./
+COPY butanuki-api/package*.json ./
 
 # Install app dependencies using the `npm ci` command instead of `npm install`
 RUN npm ci
 
 # Bundle app source
-COPY butanuki-core/. .
+COPY butanuki-api/. .
 
 # Run the build command which creates the production bundle
 RUN npm run build
