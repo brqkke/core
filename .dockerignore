@@ -1,9 +1,8 @@
 *
-!butanuki-core/src/
-!butanuki-core/package-lock.json
-!butanuki-core/tsconfig.*
-!butanuki-core/package*.json
-!butanuki-core/nest-cli*.json
+!butanuki-api/src/
+!butanuki-api/package*.json
+!butanuki-api/tsconfig.*
+!butanuki-api/nest-cli*.json
 
 
 !butanuki-front/src
