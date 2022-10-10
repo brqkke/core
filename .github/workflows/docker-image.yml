@@ -1,0 +1,23 @@
+name: Push image
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build-and-push:
+    name: "Build Prod Docker image and push to ghcr"
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --build-arg appVersion=${{ github.ref_name }} --tag ghcr.io/butanuki21/core:${{ github.ref_name }}
+    - name: Push the Docker image
+      run:  docker push ghcr.io/butanuki21/core:${{  github.ref_name }}

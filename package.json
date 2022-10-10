@@ -1,0 +1,21 @@
+{
+  "name": "butanuki-core",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "cd butanuki-front && npm install && cd ../butanuki-api && npm install",
+    "test": "cd butanuki-api && npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/butanuki21/core.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/butanuki21/core/issues"
+  },
+  "homepage": "https://github.com/butanuki21/core#readme"
+}

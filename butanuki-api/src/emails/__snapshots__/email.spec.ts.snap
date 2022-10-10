@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Send new order email sends an email with the order label 1`] = `
+Object {
+  "content": "<html><body><h1 style=\\"text-align:center\\">Butanuki</h1><h2>New order</h2><p>Here are the details of you new order of <b>EUR 10</b> to aaa...zzz :</p><p>IBAN : <b>1245 1234 1234</b><br/>BIC/SWIFT : <b>ABCDEF</b><br/>Recipient : <b>Bity co</b><br/>Account number : <b>9876543210</b><br/>Bank Code : <b>1234</b><br/>Bank Address : <b>42 space street</b><br/>Reference : <b>bity.com 123456</b><br/></p></body></html>",
+  "subject": "New Butanuki order",
+  "to": "aa@aaa.com",
+}
+`;
