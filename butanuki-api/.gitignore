@@ -36,3 +36,6 @@ lerna-debug.log*
 
 server.crt
 server.key
+
+front-build/
+!front-build/index.html

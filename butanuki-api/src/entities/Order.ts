@@ -44,15 +44,15 @@ export class Order {
   @Column()
   lastCheckedAt: Date;
 
-  @Column({ nullable: true })
-  previousOrderId: string;
+  @Column({ type: 'string', nullable: true })
+  previousOrderId?: string | null;
 
   @ManyToOne(() => Order, (order) => order.renewedByOrders, { nullable: true })
   @JoinColumn()
   previousOrder?: Order;
 
   @OneToMany(() => Order, (order) => order.previousOrder)
-  renewedByOrders: Order[];
+  renewedByOrders?: Order[];
 
   @Column()
   amount: number;
