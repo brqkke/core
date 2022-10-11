@@ -1,0 +1,5 @@
+export enum TokenStatus {
+  ACTIVE = 'ACTIVE',
+  NEED_REFRESH_RETRY = 'NEED_REFRESH_RETRY',
+  BROKEN = 'BROKEN',
+}
