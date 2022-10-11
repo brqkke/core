@@ -35,9 +35,6 @@ export class AppConfigService {
         key: config.getOrThrow<string>('RECAPTCHA_KEY'),
         secret: config.getOrThrow<string>('RECAPTCHA_SECRET'),
       },
-      sendinblue: {
-        key: config.getOrThrow<string>('SENDINBLUE_KEY'),
-      },
       email: {
         from: config.getOrThrow<string>('EMAIL_FROM'),
         smtp: {
@@ -92,7 +89,10 @@ export class AppConfigService {
         orderCheckInterval: 300, //Check open orders every hours,
         reporting: {
           reportingInterval: 3600 * 24, //1 day
-          reportingEmail: 'taccolaaless@gmail.com', //'reportingbity@uazo.com',
+          reportingEmail: config.get<string>(
+            'REPORTING_EMAIL',
+            'taccolaaless@gmail.com',
+          ), //'reportingbity@uazo.com',
         },
       },
     };

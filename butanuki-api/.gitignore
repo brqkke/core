@@ -39,3 +39,5 @@ server.key
 
 front-build/
 !front-build/index.html
+
+.env
