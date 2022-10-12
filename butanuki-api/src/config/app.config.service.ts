@@ -81,12 +81,14 @@ export class AppConfigService {
         partnerFee: 0.007, //Fees percentage between 0 and 1 (3% = 0.03, 10% = 0.1, etc)
       },
       singleLoginTokenTTL: 60 * 10, // 10 minutes
-      sessionTokenTTL: 60 * 60 * 24 * 10, // 10 j
+      sessionTokenTTL: 60 * 60, // 1h
       backgroundAgent: {
         apiKey: config.getOrThrow<string>('BACKGROUND_AGENT_API_KEY'),
         baseUrl: config.getOrThrow<string>('BASE_URL') + '/api',
-        orderCheckBatchSize: 50, //Check open orders by group of n
-        orderCheckInterval: 300, //Check open orders every hours,
+        orderCheckBatchSize: 10, //Check open orders by group of n
+        orderCheckInterval: parseInt(
+          config.getOrThrow<string>('ORDER_CHECK_INTERVAL', '3600'),
+        ), //Check open orders every hours,
         reporting: {
           reportingInterval: 3600 * 24, //1 day
           reportingEmail: config.get<string>(
