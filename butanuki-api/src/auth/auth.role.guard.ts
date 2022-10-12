@@ -2,8 +2,13 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { AuthService } from './AuthService';
 import { User } from '../entities/User';
 import { Reflector } from '@nestjs/core';
-import { ROLES_KEY } from '../decorator/user.decorator';
+import {
+  getRequestFromExecutionContext,
+  ROLES_KEY,
+} from '../decorator/user.decorator';
 import { roleHierarchy, UserRole } from '../entities/enums/UserRole';
+import { IncomingMessage } from 'http';
+import { GqlExecutionContext } from '@nestjs/graphql';
 
 @Injectable()
 export class RoleGuard implements CanActivate {
@@ -19,7 +24,8 @@ export class RoleGuard implements CanActivate {
       return true;
     }
 
-    const { user } = context.switchToHttp().getRequest<{ user?: User }>();
+    const request = getRequestFromExecutionContext(context);
+    const { user } = request;
 
     if (!user) {
       return false;

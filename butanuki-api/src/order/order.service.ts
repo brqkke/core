@@ -35,6 +35,16 @@ export class OrderService {
     });
   }
 
+  async getVaultOrders(vaultId: string): Promise<Order[]> {
+    return this.db.order.find({
+      where: {
+        vaultId,
+        status: In([OrderStatus.FILLED_NEED_RENEW, OrderStatus.OPEN]),
+      },
+      order: { createdAt: 'DESC' },
+    });
+  }
+
   async getOrdersScheduledForCancellation(limit: number): Promise<Order[]> {
     return this.db.order.find({
       where: {

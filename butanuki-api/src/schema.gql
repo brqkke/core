@@ -2,10 +2,79 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Vault {
+  id: String!
+  name: String!
+  currency: String!
+  createdAt: DateTime!
+  userId: String!
+  orders: [Order!]!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type BityPaymentDetails {
+  iban: String
+  swift_bic: String
+  recipient: String
+  account_number: String
+  bank_code: String
+  bank_address: String
+}
+
+type Order {
+  id: String!
+  transferLabel: String!
+  status: String!
+  vaultId: String
+  amount: Float!
+  currency: OrderCurrency!
+  redactedCryptoAddress: String
+  bankDetails: BityPaymentDetails
+}
+
+enum OrderCurrency {
+  CHF
+  EUR
+}
+
 type User {
+  id: ID!
   email: String!
+  locale: String!
+  bityTokenStatus: BityLinkStatus!
+  vaults: [Vault!]!
+}
+
+type BityLinkStatus {
+  linked: Boolean!
+  linkStatus: TokenStatus
+}
+
+enum TokenStatus {
+  ACTIVE
+  NEED_REFRESH_RETRY
+  BROKEN
 }
 
 type Query {
-  me: User
+  me: User!
+  linkUrl: String!
+  vault(id: ID!): Vault!
+}
+
+type Mutation {
+  updateLocale(locale: String!): User!
+  unlinkBity: User!
+  linkBity(redirectedFrom: String!): User!
+  addVault(data: VaultInput!): Vault!
+  deleteVault(vaultId: ID!): Vault!
+}
+
+input VaultInput {
+  name: String!
+  currency: OrderCurrency!
 }

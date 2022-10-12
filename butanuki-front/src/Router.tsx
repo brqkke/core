@@ -1,4 +1,4 @@
-import { Switch, Route, BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Login } from "./pages/Login";
 import { UserContextProvider } from "./context/UserContext";
 import { LoginValidate } from "./pages/LoginValidate";
@@ -31,6 +31,11 @@ function AppRouter() {
         <Switch>
           <Route path={"/"} exact component={AppHome} />
           <Route path={"/order-settings"} exact component={OrderSettings} />
+          <Route
+            path={"/vault/:vaultId/new-order"}
+            exact
+            component={OrderSettings}
+          />
           <Route path={"/auth/bity/callback"} exact component={LinkBity} />
           <Route path={"*"} exact component={NotFound} />
         </Switch>

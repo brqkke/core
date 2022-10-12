@@ -1,0 +1,45 @@
+fragment VaultInfos on Vault{
+    id
+    currency
+    name
+    orders {
+        ...OrderInfos
+    }
+}
+
+fragment BankDetails on BityPaymentDetails{
+    account_number
+    bank_address
+    bank_code
+    iban
+    recipient
+    swift_bic
+
+}
+
+fragment OrderInfos on Order{
+    id
+    amount
+    currency
+    bankDetails {
+        ...BankDetails
+    }
+    redactedCryptoAddress
+    status
+    transferLabel
+    vaultId
+}
+
+mutation addVault($data: VaultInput!){
+    addVault(data: $data){
+        ...VaultInfos
+    }
+}
+
+
+mutation deleteVault($vaultId: ID!){
+    deleteVault(vaultId: $vaultId){
+        id
+    }
+}
+

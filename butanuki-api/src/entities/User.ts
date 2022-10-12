@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserStatus } from './enums/UserStatus';
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Session } from './Session';
 import { UserRole } from './enums/UserRole';
 import { Order } from './Order';
@@ -17,6 +17,7 @@ import { Token } from './Token';
 @ObjectType()
 export class User {
   @PrimaryGeneratedColumn('uuid')
+  @Field(() => ID)
   id: string;
 
   @Column()
@@ -46,6 +47,7 @@ export class User {
   role: UserRole = UserRole.USER;
 
   @Column()
+  @Field(() => String)
   locale: string = 'en';
 
   @OneToMany(() => Order, (order) => order.user)

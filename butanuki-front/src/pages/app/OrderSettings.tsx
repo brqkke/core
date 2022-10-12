@@ -2,10 +2,11 @@ import { MainLayout } from "../../layout/MainLayout";
 import { useCall } from "../../api/hook";
 import { useEffect, useState } from "react";
 import { ApiError, put } from "../../api/call";
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import { LoggedLayout } from "../../layout/LoggedLayout";
 import { ApiErrorAlert } from "../../components/ApiErrorAlert";
+import { useVaultQuery } from "../../generated/graphql";
 
 type Order = {
   amount: number;
@@ -20,6 +21,10 @@ export function OrderSettings() {
       order: Order;
     }
   >("GET", "/bity/order");
+  const { vaultId } = useParams<{ vaultId: string }>();
+
+  const vault = useVaultQuery({ variables: { id: vaultId } });
+
   const { t } = useTranslation();
   const [amount, setAmount] = useState(10);
   const [currency, setCurrency] = useState<"CHF" | "EUR">("CHF");
@@ -63,6 +68,11 @@ export function OrderSettings() {
 
   return (
     <LoggedLayout>
+      <div className="row">
+        <div className="col-12">
+          <pre>{JSON.stringify(vault.data)}</pre>
+        </div>
+      </div>
       <div className="row">
         <div className="col-md-6">
           <br />

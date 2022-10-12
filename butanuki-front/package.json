@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@apollo/client": "^3.7.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -12,6 +13,7 @@
     "@types/react-dom": "^17.0.0",
     "@types/react-router": "^5.1.12",
     "@types/react-router-dom": "^5.1.7",
+    "graphql": "^16.6.0",
     "http-proxy-middleware": "^2.0.6",
     "i18next": "^20.1.0",
     "lodash": "^4.17.21",
@@ -27,7 +29,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "codegen": "graphql-codegen --config codegen.yaml --errors-only"
   },
   "eslintConfig": {
     "extends": [
@@ -49,6 +52,10 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.186",
+    "@graphql-codegen/cli": "^2.13.6",
+    "@graphql-codegen/typescript": "^2.7.4",
+    "@graphql-codegen/typescript-operations": "^2.5.4",
+    "@graphql-codegen/typescript-react-apollo": "^3.3.4",
     "prettier": "^2.3.1"
   },
   "proxy": "http://localhost:3001"

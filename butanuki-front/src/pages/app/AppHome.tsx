@@ -1,24 +1,24 @@
-import {BityStatus} from "../../components/BityStatus";
-import {OrderStatus} from "../../components/OrderStatus";
-import {LoggedLayout} from "../../layout/LoggedLayout";
-import {useGet} from "../../api/hook";
-
-const BITY_STATUS_ENDPOINT = "/bity/link/status";
+import { BityStatus } from "../../components/BityStatus";
+import { LoggedLayout } from "../../layout/LoggedLayout";
+import { useUserContext } from "../../context/UserContext";
+import { Vaults } from "../../components/Vaults";
+import { TokenStatus } from "../../generated/graphql";
 
 export function AppHome() {
-  const { response: bityStatus, refetch } =
-    useGet<{ linked: boolean; linkStatus: "ACTIVE" | "BROKEN" }>(
-      BITY_STATUS_ENDPOINT
-    );
+  const user = useUserContext();
+  const bityStatus = user.bityTokenStatus;
 
   return (
     <LoggedLayout>
       <div className="row">
-        <div className="col-md-6">
+        <div className="col-md-12">
           <h3>Bity account</h3>
-          <BityStatus bityStatus={bityStatus} onDelete={refetch} />
+          <BityStatus bityStatus={bityStatus} />
           {bityStatus && bityStatus.linked && (
-            <OrderStatus disabled={bityStatus.linkStatus === "BROKEN"} />
+            // <OrderStatus
+            //   disabled={bityStatus.linkStatus === TokenStatus.Broken}
+            // />
+            <Vaults disabled={bityStatus.linkStatus === TokenStatus.Broken} />
           )}
         </div>
       </div>

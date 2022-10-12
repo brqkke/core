@@ -1,11 +1,13 @@
 import { useCallback } from "react";
-import { deleteCall, get } from "../api/call";
 import { useTranslation } from "react-i18next";
+import {
+  BityLinkStatus,
+  useBityLinkUrlLazyQuery,
+  useUnlinkBityMutation,
+} from "../generated/graphql";
 
-const BITY_GET_LINK_URL_ENDPOINT = "/bity/link/";
-
-function ClickHere(props: {
-  onClick: () => Promise<void>;
+function ClickHere<T>(props: {
+  onClick: () => Promise<T>;
   level: "success" | "warning" | "primary" | "danger";
 }) {
   const { t } = useTranslation();
@@ -16,40 +18,17 @@ function ClickHere(props: {
   );
 }
 
-export function BityStatus({
-  bityStatus,
-  onDelete,
-}: {
-  bityStatus:
-    | {
-        linked: boolean;
-        linkStatus: "ACTIVE" | "BROKEN" | "NEED_REFRESH_RETRY";
-      }
-    | null
-    | undefined;
-  onDelete: () => void;
-}) {
-  const linkAccount = useCallback(async () => {
-    const r = await get<{ redirectUrl: string }>(BITY_GET_LINK_URL_ENDPOINT);
-    if (r.response) {
-      window.location.href = r.response.redirectUrl;
-    }
-  }, []);
-
-  const unlinkAccount = useCallback(async () => {
-    await deleteCall<undefined>(BITY_GET_LINK_URL_ENDPOINT);
-    onDelete();
-  }, [onDelete]);
-
+export function BityStatus({ bityStatus }: { bityStatus: BityLinkStatus }) {
+  const [loadLinkUrl] = useBityLinkUrlLazyQuery();
+  const [unlinkAccount] = useUnlinkBityMutation();
   const { t } = useTranslation();
 
-  if (bityStatus === undefined) {
-    return <p>{t("app.loading")}</p>;
-  }
-
-  if (bityStatus === null) {
-    return <p>{t("app.error.loading")}</p>;
-  }
+  const linkAccount = useCallback(async () => {
+    const result = await loadLinkUrl();
+    if (result.data) {
+      window.location.href = result.data.linkUrl;
+    }
+  }, [loadLinkUrl]);
 
   const linkBtn = (
     <p>

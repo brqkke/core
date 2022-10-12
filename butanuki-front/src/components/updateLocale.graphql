@@ -1,0 +1,6 @@
+mutation updateLocale($locale: String!){
+    updateLocale(locale: $locale){
+        locale
+        id
+    }
+}

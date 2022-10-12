@@ -7,9 +7,10 @@ import { AppConfigService } from './app.config.service';
 const getConfig = async () => {
   const config = await NestFactory.create(AppConfigModule);
   const configService = config.get(AppConfigService);
-  const dataSource = new DataSource(
-    makeDbConfigFromServiceConfig(configService),
-  );
+  const dataSource = new DataSource({
+    ...makeDbConfigFromServiceConfig(configService),
+    migrationsRun: false,
+  });
   return dataSource;
 };
 

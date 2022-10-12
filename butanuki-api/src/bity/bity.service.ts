@@ -54,13 +54,7 @@ export class BityService {
   getTokenFromCodeRedirectUrl(
     redirectUrl: string,
   ): Promise<ClientOAuth2.Token | null> {
-    return this.bityClient
-      .getBityOAuthClient()
-      .code.getToken(redirectUrl)
-      .catch((err) => {
-        console.error(err);
-        return null;
-      });
+    return this.bityClient.getBityOAuthClient().code.getToken(redirectUrl);
   }
 
   /**

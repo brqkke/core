@@ -1,45 +1,35 @@
 import { Redirect, useLocation } from "react-router";
 import { useEffect, useState } from "react";
-import { post } from "../../api/call";
+import { useLinkBityMutation } from "../../generated/graphql";
 
 export function LinkBity() {
-  const [done, setDone] = useState<boolean>();
   const location = useLocation();
   const [urlSearchParams] = useState(new URLSearchParams(location.search));
-
+  const [linkBityWithCode, result] = useLinkBityMutation();
   useEffect(() => {
-    if (urlSearchParams.get("error")) {
-      setDone(false);
-      return;
-    }
     const url = window.document.location.href;
     const path = url.replace(window.document.location.origin, "");
-    (async () => {
-      const r = await post<{ redirectedFrom: string }, { success: boolean }>(
-        "/bity/link/code",
-        { redirectedFrom: path }
-      );
-      console.log(r);
-      if (r.response && r.response.success) {
-        setDone(true);
-      } else {
-        setDone(false);
-      }
-    })();
-  }, [urlSearchParams]);
+    linkBityWithCode({ variables: { redirectedFrom: path } });
+  }, [linkBityWithCode, urlSearchParams]);
 
-  if (done) {
+  if (result.loading || !result.called) {
+    return <p>Loading</p>;
+  }
+
+  if (result.data?.linkBity.bityTokenStatus.linked) {
     return <Redirect to={"/"} />;
   }
 
-  if (done === false) {
-    return (
-      <p>
-        {urlSearchParams.get("error_description") || "Error."}
-        <br /> Try again : <a href={"/"}>Go back</a>
-      </p>
-    );
-  }
+  const urlError = urlSearchParams.get("error_description");
+  const responseError = result.error?.message;
+  const messages = [responseError, urlError].filter((err) => err);
 
-  return <p>Loading</p>;
+  return (
+    <p>
+      {messages.join(" ") || "Error."}
+      <br />
+      <br />
+      <br /> Try again : <a href={"/"}>Go back</a>
+    </p>
+  );
 }
