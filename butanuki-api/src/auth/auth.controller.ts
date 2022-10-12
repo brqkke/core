@@ -72,7 +72,9 @@ export class AuthController {
 
   @Get('me')
   @Roles(UserRole.USER)
-  async me(@CurrentUser() user?: User): Promise<{ email: string } | null> {
-    return user ? { email: user.email } : null;
+  async me(
+    @CurrentUser() user?: User,
+  ): Promise<{ email: string; locale: string } | null> {
+    return user ? { email: user.email, locale: user.locale } : null;
   }
 }

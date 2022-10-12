@@ -28,7 +28,7 @@ export function LocaleChanger({ logged = false }) {
                   ev.preventDefault();
                   if (logged) {
                     put<{ locale: string }, { locale: string }>(
-                      "/auth/me/locale",
+                      "/user/me/locale",
                       {
                         locale,
                       }
