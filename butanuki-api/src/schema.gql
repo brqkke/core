@@ -63,6 +63,7 @@ enum TokenStatus {
 type Query {
   me: User!
   linkUrl: String!
+  order(id: ID!): Order!
   vault(id: ID!): Vault!
 }
 
@@ -70,8 +71,14 @@ type Mutation {
   updateLocale(locale: String!): User!
   unlinkBity: User!
   linkBity(redirectedFrom: String!): User!
+  addOrder(data: OrderInput!, vaultId: ID!, replaceOrderId: ID): Vault!
   addVault(data: VaultInput!): Vault!
   deleteVault(vaultId: ID!): Vault!
+}
+
+input OrderInput {
+  amount: Int!
+  cryptoAddress: String
 }
 
 input VaultInput {

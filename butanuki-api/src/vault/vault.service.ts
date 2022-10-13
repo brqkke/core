@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { DataSource, In } from 'typeorm';
 import { buildRepositories, Repositories } from '../utils';
 import { VaultInput } from './types';
@@ -11,7 +11,10 @@ import { OrderStatus } from '../entities/enums/OrderStatus';
 @Injectable()
 export class VaultService {
   private db: Repositories;
-  constructor(db: DataSource, private orderService: OrderService) {
+  constructor(
+    db: DataSource,
+    @Inject(forwardRef(() => OrderService)) private orderService: OrderService,
+  ) {
     this.db = buildRepositories(db.manager);
   }
 

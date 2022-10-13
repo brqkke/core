@@ -17,7 +17,7 @@ export function VaultOrders({ vault, disabled }: Props) {
         </div>
       ))}
       {vault.orders.length === 0 ? (
-        <NoOrders />
+        <NoOrders vaultId={vault.id} />
       ) : (
         <AddOrder vaultId={vault.id} />
       )}
@@ -25,12 +25,12 @@ export function VaultOrders({ vault, disabled }: Props) {
   );
 }
 
-function NoOrders() {
+function NoOrders({ vaultId }: { vaultId: string }) {
   const { t } = useTranslation();
   return (
     <p>
       {t("app.home.bity.not_setup")}
-      <Link to={"/order-settings"} className={"btn btn-success"}>
+      <Link to={`/vault/${vaultId}/new-order`} className={"btn btn-success"}>
         {t("app.home.setup_dca")}
       </Link>
     </p>

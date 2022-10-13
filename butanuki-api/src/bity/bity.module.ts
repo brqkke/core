@@ -10,12 +10,14 @@ import { MailerModule } from '../emails/mailer.module';
 import { BityReportingService } from './bity.reporting.service';
 import { BityLinkResolver } from './resolvers/bityLinkResolver';
 import { BityOrderResolver } from './resolvers/bity.order.resolver';
+import { VaultModule } from '../vault/vault.module';
 
 @Module({
   imports: [
     AppConfigModule,
     HttpModule,
     forwardRef(() => OrderModule),
+    forwardRef(() => VaultModule),
     MailerModule,
   ],
   controllers: [BityOrderController, BityLinkController],

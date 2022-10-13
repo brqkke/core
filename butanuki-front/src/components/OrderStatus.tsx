@@ -28,7 +28,7 @@ export function OrderStatus({
           )}
           <br />
           <Link
-            to={"/order-settings"}
+            to={`/vault/${order.vaultId}/edit-order/${order.id}`}
             className={`btn btn-primary btn-sm ${disabled ? "disabled" : ""}`}
           >
             {t("app.order.change_amount")}

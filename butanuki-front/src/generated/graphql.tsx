@@ -35,11 +35,19 @@ export type BityPaymentDetails = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addOrder: Vault;
   addVault: Vault;
   deleteVault: Vault;
   linkBity: User;
   unlinkBity: User;
   updateLocale: User;
+};
+
+
+export type MutationAddOrderArgs = {
+  data: OrderInput;
+  replaceOrderId?: InputMaybe<Scalars['ID']>;
+  vaultId: Scalars['ID'];
 };
 
 
@@ -79,11 +87,22 @@ export enum OrderCurrency {
   Eur = 'EUR'
 }
 
+export type OrderInput = {
+  amount: Scalars['Int'];
+  cryptoAddress?: InputMaybe<Scalars['String']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   linkUrl: Scalars['String'];
   me: User;
+  order: Order;
   vault: Vault;
+};
+
+
+export type QueryOrderArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -182,6 +201,22 @@ export type VaultQueryVariables = Exact<{
 
 
 export type VaultQuery = { __typename?: 'Query', vault: { __typename?: 'Vault', id: string, currency: string, name: string } };
+
+export type AddOrderMutationVariables = Exact<{
+  data: OrderInput;
+  vaultId: Scalars['ID'];
+  replaceOrderId?: InputMaybe<Scalars['ID']>;
+}>;
+
+
+export type AddOrderMutation = { __typename?: 'Mutation', addOrder: { __typename?: 'Vault', id: string, orders: Array<{ __typename?: 'Order', id: string, amount: number, currency: OrderCurrency, redactedCryptoAddress?: string | null, status: string, transferLabel: string, vaultId?: string | null, bankDetails?: { __typename?: 'BityPaymentDetails', account_number?: string | null, bank_address?: string | null, bank_code?: string | null, iban?: string | null, recipient?: string | null, swift_bic?: string | null } | null }> } };
+
+export type OrderQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type OrderQuery = { __typename?: 'Query', order: { __typename?: 'Order', id: string, amount: number, currency: OrderCurrency, redactedCryptoAddress?: string | null, status: string, transferLabel: string, vaultId?: string | null, bankDetails?: { __typename?: 'BityPaymentDetails', account_number?: string | null, bank_address?: string | null, bank_code?: string | null, iban?: string | null, recipient?: string | null, swift_bic?: string | null } | null } };
 
 export const BityStatusFragmentDoc = gql`
     fragment BityStatus on User {
@@ -511,3 +546,76 @@ export function useVaultLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Vaul
 export type VaultQueryHookResult = ReturnType<typeof useVaultQuery>;
 export type VaultLazyQueryHookResult = ReturnType<typeof useVaultLazyQuery>;
 export type VaultQueryResult = Apollo.QueryResult<VaultQuery, VaultQueryVariables>;
+export const AddOrderDocument = gql`
+    mutation addOrder($data: OrderInput!, $vaultId: ID!, $replaceOrderId: ID) {
+  addOrder(vaultId: $vaultId, data: $data, replaceOrderId: $replaceOrderId) {
+    id
+    orders {
+      ...OrderInfos
+    }
+  }
+}
+    ${OrderInfosFragmentDoc}`;
+export type AddOrderMutationFn = Apollo.MutationFunction<AddOrderMutation, AddOrderMutationVariables>;
+
+/**
+ * __useAddOrderMutation__
+ *
+ * To run a mutation, you first call `useAddOrderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddOrderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addOrderMutation, { data, loading, error }] = useAddOrderMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *      vaultId: // value for 'vaultId'
+ *      replaceOrderId: // value for 'replaceOrderId'
+ *   },
+ * });
+ */
+export function useAddOrderMutation(baseOptions?: Apollo.MutationHookOptions<AddOrderMutation, AddOrderMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddOrderMutation, AddOrderMutationVariables>(AddOrderDocument, options);
+      }
+export type AddOrderMutationHookResult = ReturnType<typeof useAddOrderMutation>;
+export type AddOrderMutationResult = Apollo.MutationResult<AddOrderMutation>;
+export type AddOrderMutationOptions = Apollo.BaseMutationOptions<AddOrderMutation, AddOrderMutationVariables>;
+export const OrderDocument = gql`
+    query order($id: ID!) {
+  order(id: $id) {
+    ...OrderInfos
+  }
+}
+    ${OrderInfosFragmentDoc}`;
+
+/**
+ * __useOrderQuery__
+ *
+ * To run a query within a React component, call `useOrderQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrderQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOrderQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useOrderQuery(baseOptions: Apollo.QueryHookOptions<OrderQuery, OrderQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OrderQuery, OrderQueryVariables>(OrderDocument, options);
+      }
+export function useOrderLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrderQuery, OrderQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OrderQuery, OrderQueryVariables>(OrderDocument, options);
+        }
+export type OrderQueryHookResult = ReturnType<typeof useOrderQuery>;
+export type OrderLazyQueryHookResult = ReturnType<typeof useOrderLazyQuery>;
+export type OrderQueryResult = Apollo.QueryResult<OrderQuery, OrderQueryVariables>;

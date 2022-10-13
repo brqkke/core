@@ -36,6 +36,11 @@ function AppRouter() {
             exact
             component={OrderSettings}
           />
+          <Route
+            path={"/vault/:vaultId/edit-order/:orderId"}
+            exact
+            component={OrderSettings}
+          />
           <Route path={"/auth/bity/callback"} exact component={LinkBity} />
           <Route path={"*"} exact component={NotFound} />
         </Switch>

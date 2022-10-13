@@ -4,7 +4,7 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { DataSource, In, LessThan, Not } from 'typeorm';
+import { DataSource, In, LessThan } from 'typeorm';
 import { OrderStatus } from '../entities/enums/OrderStatus';
 import { OrderCurrency } from '../entities/enums/OrderCurrency';
 import { buildRepositories, redactCryptoAddress, Repositories } from '../utils';
@@ -39,6 +39,17 @@ export class OrderService {
     return this.db.order.find({
       where: {
         vaultId,
+        status: In([OrderStatus.FILLED_NEED_RENEW, OrderStatus.OPEN]),
+      },
+      order: { createdAt: 'DESC' },
+    });
+  }
+
+  async getOrder(userId: string, orderId: string): Promise<Order> {
+    return this.db.order.findOneOrFail({
+      where: {
+        userId,
+        id: orderId,
         status: In([OrderStatus.FILLED_NEED_RENEW, OrderStatus.OPEN]),
       },
       order: { createdAt: 'DESC' },
@@ -122,16 +133,19 @@ export class OrderService {
     currency,
     userId,
     amount,
+    vaultId,
   }: {
     currency: OrderCurrency;
     userId: string;
     amount: number;
+    vaultId: string;
   }) {
     return await this.db.order.count({
       where: {
         currency,
         userId,
         amount,
+        vaultId,
         status: In([OrderStatus.FILLED_NEED_RENEW, OrderStatus.OPEN]),
       },
     });
@@ -142,11 +156,15 @@ export class OrderService {
     cryptoAddress,
     token,
     currency,
+    vaultId,
+    replaceOrderId,
   }: {
     currency: OrderCurrency;
     amount: number;
     cryptoAddress: string;
     token: Token;
+    vaultId: string;
+    replaceOrderId?: string;
   }) {
     const bityOrder = await this.bity.placeBityOrder({
       amount,
@@ -172,26 +190,30 @@ export class OrderService {
         currency,
         bankDetails: JSON.stringify(bityOrder.payment_details),
         redactedCryptoAddress: redactCryptoAddress(cryptoAddress),
+        vaultId,
       });
-      await this.saveOrderAndSetOldToCancelled(newOrder);
+      await this.saveOrderAndSetOldToCancelled(newOrder, replaceOrderId);
       return newOrder;
     }
 
     return null;
   }
 
-  protected saveOrderAndSetOldToCancelled(order: Order) {
+  protected saveOrderAndSetOldToCancelled(order: Order, oldOrderId?: string) {
     return this.db.em.transaction('SERIALIZABLE', async (entityManager) => {
       const db = buildRepositories(entityManager);
       await db.order.save(order);
-      await db.order.update(
-        {
-          userId: order.userId,
-          id: Not(order.id),
-          status: In([OrderStatus.FILLED_NEED_RENEW, OrderStatus.OPEN]),
-        },
-        { status: OrderStatus.CANCELLED },
-      );
+      if (oldOrderId) {
+        await db.order.update(
+          {
+            userId: order.userId,
+            id: oldOrderId,
+            vaultId: order.vaultId || undefined,
+            status: In([OrderStatus.FILLED_NEED_RENEW, OrderStatus.OPEN]),
+          },
+          { status: OrderStatus.CANCELLED },
+        );
+      }
     });
   }
 }

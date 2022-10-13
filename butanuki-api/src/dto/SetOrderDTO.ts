@@ -1,18 +1,10 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
-import { OrderCurrency } from '../entities/enums/OrderCurrency';
+import { Field, InputType, Int } from '@nestjs/graphql';
 
+@InputType('OrderInput')
 export class SetOrderDTO {
-  @ApiProperty()
-  @IsNumber({ allowInfinity: false, allowNaN: false })
+  @Field(() => Int)
   amount: number;
 
-  @ApiProperty()
-  @IsOptional()
-  @IsString()
+  @Field(() => String, { nullable: true })
   cryptoAddress?: string;
-
-  @ApiProperty()
-  @IsEnum(OrderCurrency)
-  currency: OrderCurrency;
 }

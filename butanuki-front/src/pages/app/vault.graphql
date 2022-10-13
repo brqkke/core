@@ -8,3 +8,18 @@ query vault($id: ID!){
         ...VaultShortInfos
     }
 }
+
+mutation addOrder($data: OrderInput!, $vaultId: ID!, $replaceOrderId: ID){
+    addOrder(vaultId: $vaultId, data: $data, replaceOrderId: $replaceOrderId){
+        id
+        orders {
+            ...OrderInfos
+        }
+    }
+}
+
+query order($id: ID!){
+    order(id: $id){
+        ...OrderInfos
+    }
+}
