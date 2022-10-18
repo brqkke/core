@@ -8,13 +8,22 @@ type Vault {
   currency: String!
   createdAt: DateTime!
   userId: String!
-  orders: [Order!]!
+  orderTemplates: [OrderTemplate!]!
 }
 
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type OrderTemplate {
+  id: ID!
+  name: String!
+  vaultId: ID!
+  amount: Float!
+  activeOrder: Order
+  vault: Vault!
+}
 
 type BityPaymentDetails {
   iban: String
@@ -29,7 +38,7 @@ type Order {
   id: String!
   transferLabel: String!
   status: String!
-  vaultId: String
+  orderTemplateId: String
   amount: Float!
   currency: OrderCurrency!
   redactedCryptoAddress: String
@@ -62,16 +71,18 @@ enum TokenStatus {
 
 type Query {
   me: User!
+  orderTemplate(id: ID!): OrderTemplate!
   linkUrl: String!
-  order(id: ID!): Order!
   vault(id: ID!): Vault!
 }
 
 type Mutation {
   updateLocale(locale: String!): User!
+  updateOrderTemplate(data: OrderInput!, orderTemplateId: ID!): OrderTemplate!
+  createOrder(vaultId: ID!, data: CreateOrderInput!): OrderTemplate!
+  deleteOrderTemplate(orderTemplateId: ID!): OrderTemplate!
   unlinkBity: User!
   linkBity(redirectedFrom: String!): User!
-  addOrder(data: OrderInput!, vaultId: ID!, replaceOrderId: ID): Vault!
   addVault(data: VaultInput!): Vault!
   deleteVault(vaultId: ID!): Vault!
 }
@@ -79,6 +90,13 @@ type Mutation {
 input OrderInput {
   amount: Int!
   cryptoAddress: String
+  name: String
+}
+
+input CreateOrderInput {
+  amount: Int!
+  cryptoAddress: String
+  name: String
 }
 
 input VaultInput {

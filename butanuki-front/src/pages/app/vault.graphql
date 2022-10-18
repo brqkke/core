@@ -1,25 +1,37 @@
-fragment VaultShortInfos on Vault{
-    id
-    currency
-    name
-}
+
 query vault($id: ID!){
     vault(id: $id){
         ...VaultShortInfos
     }
 }
 
-mutation addOrder($data: OrderInput!, $vaultId: ID!, $replaceOrderId: ID){
-    addOrder(vaultId: $vaultId, data: $data, replaceOrderId: $replaceOrderId){
-        id
-        orders {
-            ...OrderInfos
+mutation addOrder($data: CreateOrderInput!, $vaultId: ID!){
+    createOrder(vaultId: $vaultId, data: $data){
+        ...OrderTemplateInfos
+        vault{
+            ...VaultShortInfos
+            orderTemplates {
+                id
+            }
         }
     }
 }
 
+mutation updateOrder($data: OrderInput!, $orderTemplateId: ID!){
+    updateOrderTemplate(orderTemplateId: $orderTemplateId, data: $data){
+        ...OrderTemplateInfos
+    }
+}
+
+mutation deleteOrder($orderTemplateId: ID!){
+    deleteOrderTemplate(orderTemplateId: $orderTemplateId){
+        id
+    }
+}
+
+
 query order($id: ID!){
-    order(id: $id){
-        ...OrderInfos
+    orderTemplate(id: $id){
+        ...OrderTemplateInfos
     }
 }

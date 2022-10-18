@@ -13,6 +13,7 @@ import { User } from './User';
 import { OrderCurrency } from './enums/OrderCurrency';
 import { Vault } from './Vault';
 import { Field, ObjectType } from '@nestjs/graphql';
+import { OrderTemplate } from './OrderTemplate';
 
 @ObjectType()
 export class BityPaymentDetails {
@@ -81,14 +82,14 @@ export class Order {
   @OneToMany(() => Order, (order) => order.previousOrder)
   renewedByOrders?: Order[];
 
-  @ManyToOne(() => Vault, { nullable: true })
+  @ManyToOne(() => OrderTemplate, { nullable: true })
   @Index()
   @JoinColumn()
-  vault?: Vault | null;
+  orderTemplate?: Vault | null;
 
   @Column({ nullable: true })
   @Field(() => String, { nullable: true })
-  vaultId?: string | null;
+  orderTemplateId?: string | null;
 
   @Column()
   @Field()

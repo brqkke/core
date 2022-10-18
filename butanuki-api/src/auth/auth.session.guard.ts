@@ -2,7 +2,6 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { IncomingMessage } from 'http';
 import { AuthService } from './AuthService';
 import { User } from '../entities/User';
-import { GqlExecutionContext } from '@nestjs/graphql';
 import { getRequestFromExecutionContext } from '../decorator/user.decorator';
 
 @Injectable()

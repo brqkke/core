@@ -13,6 +13,8 @@ import { DatabaseModule } from './database/database.module';
 import { AppController } from './controllers/app.controller';
 import { UserModule } from './user/user.module';
 import { VaultModule } from './vault/vault.module';
+import { DataSource } from 'typeorm';
+import { buildDataloaders } from './dataloader/dataloaders';
 
 @Module({
   imports: [
@@ -25,14 +27,21 @@ import { VaultModule } from './vault/vault.module';
       rootPath: join(__dirname, '..', 'front-build'),
       exclude: ['/api/graphql'],
     }),
-    GraphQLModule.forRoot<ApolloDriverConfig>({
+    GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
-      introspection: true,
-      cache: 'bounded',
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-      playground: true,
-      path: '/api/graphql',
-      // context: ({ req }) => req,
+      useFactory: (db: DataSource) => ({
+        driver: ApolloDriver,
+        introspection: true,
+        cache: 'bounded',
+        autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+        playground: true,
+        path: '/api/graphql',
+        context: (ctx) => {
+          const dataloaders = buildDataloaders(db);
+          return { ...ctx, dataloaders };
+        },
+      }),
+      inject: [DataSource],
     }),
     OrderModule,
     BityModule,

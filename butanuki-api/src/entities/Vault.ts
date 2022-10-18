@@ -5,11 +5,13 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { OrderCurrency } from './enums/OrderCurrency';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { User } from './User';
+import { OrderTemplate } from './OrderTemplate';
 
 @Entity()
 @ObjectType()
@@ -41,4 +43,7 @@ export class Vault {
 
   @DeleteDateColumn()
   deletedAt?: null | Date;
+
+  @OneToMany(() => OrderTemplate, (orderTemplate) => orderTemplate.vault)
+  orderTemplates?: OrderTemplate[];
 }

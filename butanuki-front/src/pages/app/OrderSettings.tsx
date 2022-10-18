@@ -1,5 +1,5 @@
 import { MainLayout } from "../../layout/MainLayout";
-import { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { ApiError } from "../../api/call";
 import { useHistory, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
@@ -8,71 +8,74 @@ import { ApiErrorAlert } from "../../components/ApiErrorAlert";
 import {
   useAddOrderMutation,
   useOrderQuery,
+  useUpdateOrderMutation,
   useVaultQuery,
 } from "../../generated/graphql";
-
-type Order = {
-  amount: number;
-  currency: "CHF" | "EUR";
-  reference: string;
-};
+import { OrderStatus } from "../../components/OrderStatus";
 
 export function OrderSettings() {
-  // const { loading, response } = useCall<
-  //   undefined,
-  //   {
-  //     order: Order;
-  //   }
-  // >("GET", "/bity/order");
   const { vaultId, orderId } = useParams<{
     vaultId: string;
     orderId?: string;
   }>();
 
-  const vault = useVaultQuery({ variables: { id: vaultId } });
+  const vault = useVaultQuery({
+    variables: { id: vaultId },
+  });
   const order = useOrderQuery({
     variables: {
       id: orderId || "",
     },
     skip: !orderId,
+    onCompleted: (data) => {
+      setName(data.orderTemplate.name);
+      setAmount(data.orderTemplate.amount);
+      setCryptoAddress("");
+    },
   });
   const [placeOrder] = useAddOrderMutation();
+  const [updateOrder] = useUpdateOrderMutation();
 
   const { t } = useTranslation();
   const [amount, setAmount] = useState(10);
-  //const [currency, setCurrency] = useState<"CHF" | "EUR">("CHF");
-
   const [cryptoAddress, setCryptoAddress] = useState("");
+  const [name, setName] = useState("");
+
   const [error, setError] = useState<ApiError | undefined>();
 
   const history = useHistory();
-  // useEffect(() => {
-  //   if (response) {
-  //     setAmount(response.order.amount);
-  //   }
-  // }, [response]);
 
-  const submit = async () => {
-    if (amount && cryptoAddress) {
-      setError(undefined);
-      // const response = await put<
-      //   { currency: string; amount: number; cryptoAddress: string },
-      //   undefined
-      // >("/bity/order", { currency, amount, cryptoAddress });
-      // if (response.error) {
-      //   setError(response.error);
-      // } else {
-      //   history.replace("/");
-      // }
+  const submit = useCallback(async () => {
+    setError(undefined);
+    if (orderId) {
+      await updateOrder({
+        variables: {
+          orderTemplateId: orderId,
+          data: { amount, cryptoAddress, name },
+        },
+      });
+    } else {
       placeOrder({
         variables: {
           vaultId,
-          data: { amount, cryptoAddress },
-          replaceOrderId: orderId,
+          data: { amount, cryptoAddress, name },
+        },
+        onCompleted: (data) => {
+          const { vaultId, id: orderId } = data.createOrder;
+          history.replace(`/vault/${vaultId}/edit-order/${orderId}`);
         },
       });
     }
-  };
+  }, [
+    orderId,
+    updateOrder,
+    amount,
+    cryptoAddress,
+    name,
+    placeOrder,
+    vaultId,
+    history,
+  ]);
 
   if (vault.loading || !vault.data || order.loading) {
     return (
@@ -86,11 +89,25 @@ export function OrderSettings() {
     );
   }
 
+  const amountChanged =
+    !order.data || order.data.orderTemplate.amount !== amount;
+  const addressChanged = !!cryptoAddress;
+  const amountIsValid = (amountChanged && !!amount) || !amountChanged;
+  const addressIsValid = (!amountChanged && !addressChanged) || addressChanged;
+
+  console.log({ addressChanged, addressIsValid, amountChanged, amountIsValid });
   return (
     <LoggedLayout>
       <div className="row">
         <div className="col-12">
-          <pre>{JSON.stringify(vault.data)}</pre>
+          <h3>{vault.data.vault.name}</h3>
+          {orderId ? (
+            <p>
+              {t("app.order.editing", { name: order.data?.orderTemplate.name })}
+            </p>
+          ) : (
+            <p> {t("app.order.creating", { name: vault.data.vault.name })}</p>
+          )}
         </div>
       </div>
       <div className="row">
@@ -104,6 +121,23 @@ export function OrderSettings() {
               return false;
             }}
           >
+            <div className="form-group">
+              <div className="input-group">
+                <div className="input-group-prepend">
+                  <span className="input-group-text">
+                    {t("app.order.name")}
+                  </span>
+                </div>
+                <input
+                  className={"form-control"}
+                  onChange={(ev) => {
+                    setName(ev.target.value);
+                  }}
+                  value={name}
+                  placeholder={t("app.order.name_placeholder")}
+                />
+              </div>
+            </div>
             <div className="form-group">
               <div className="input-group">
                 <div className="input-group-prepend">
@@ -153,26 +187,26 @@ export function OrderSettings() {
               </div>
             </div>
             <br />
-            {/*{response?.order && (*/}
-            {/*  <>*/}
-            {/*    <div className={"alert alert-warning"}>*/}
-            {/*      {t("app.order.warning_reset")}*/}
-            {/*    </div>*/}
-            {/*    <br />*/}
-            {/*  </>*/}
-            {/*)}*/}
+            {order.data?.orderTemplate && (amountChanged || addressChanged) && (
+              <>
+                <div className={"alert alert-warning"}>
+                  {t("app.order.warning_reset")}
+                </div>
+                <br />
+              </>
+            )}
             <button
               type={"button"}
               className={"btn btn-secondary"}
               onClick={() => {
-                history.goBack();
+                history.push("/");
               }}
             >
               {t("app.order.go_back")}
             </button>
             <button
               type={"submit"}
-              disabled={!amount || !cryptoAddress}
+              disabled={!addressIsValid || !amountIsValid}
               className={"btn btn-primary"}
             >
               {t("app.order.save")}
@@ -180,6 +214,13 @@ export function OrderSettings() {
           </form>
         </div>
       </div>
+      {order.data?.orderTemplate.activeOrder && (
+        <OrderStatus
+          order={order.data.orderTemplate.activeOrder}
+          template={order.data.orderTemplate}
+          disabled
+        />
+      )}
     </LoggedLayout>
   );
 }

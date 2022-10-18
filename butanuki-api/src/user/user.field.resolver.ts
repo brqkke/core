@@ -33,7 +33,9 @@ export class UserFieldResolver {
   @ResolveField(() => BityLinkStatus)
   @Roles(UserRole.USER)
   async bityTokenStatus(@Root() user: User): Promise<BityLinkStatus> {
-    const token = await this.db.token.findOne({ where: { userId: user.id } });
+    const token =
+      user.token ||
+      (await this.db.token.findOne({ where: { userId: user.id } }));
     return {
       linked: !!token,
       linkStatus: token?.status || null,

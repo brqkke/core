@@ -54,7 +54,6 @@ function NotFound() {
 }
 
 function Logout() {
-  console.log("Logout");
   useEffect(() => {
     window.localStorage.removeItem("sessionKey");
     window.location.href = "/";

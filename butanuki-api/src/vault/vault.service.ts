@@ -4,9 +4,9 @@ import { buildRepositories, Repositories } from '../utils';
 import { VaultInput } from './types';
 import { User } from '../entities/User';
 import { Vault } from '../entities/Vault';
-import { Order } from '../entities/Order';
 import { OrderService } from '../order/order.service';
 import { OrderStatus } from '../entities/enums/OrderStatus';
+import { OrderTemplate } from '../entities/OrderTemplate';
 
 @Injectable()
 export class VaultService {
@@ -30,21 +30,32 @@ export class VaultService {
   deleteVault(id: string, user: User) {
     return this.db.em.transaction('SERIALIZABLE', async (em) => {
       const db = buildRepositories(em);
-      const vault = await db.vault.findOneByOrFail({ id, userId: user.id });
-      await db.order.update(
-        {
-          vaultId: vault.id,
-          status: In([OrderStatus.FILLED_NEED_RENEW, OrderStatus.OPEN]),
-        },
-        { status: OrderStatus.CANCELLED, updatedAt: new Date() },
+      const vault = await db.vault.findOneOrFail({
+        where: { id, userId: user.id },
+        relations: { orderTemplates: true },
+      });
+      const templateIds = (vault.orderTemplates || []).map(
+        (template) => template.id,
       );
+      const date = new Date();
+      if (templateIds.length) {
+        await db.order.update(
+          {
+            orderTemplateId: In(templateIds),
+            status: In([OrderStatus.FILLED_NEED_RENEW, OrderStatus.OPEN]),
+          },
+          { status: OrderStatus.CANCELLED, updatedAt: date },
+        );
+        await db.orderTemplate.softRemove(vault.orderTemplates || []);
+      }
       await db.vault.softRemove(vault);
+
       return vault;
     });
   }
 
-  findVaultOrders(vault: Vault): Promise<Order[]> {
-    return this.orderService.getVaultOrders(vault.id);
+  findVaultOrderTemplates(vault: Vault): Promise<OrderTemplate[]> {
+    return this.orderService.getVaultOrderTemplates(vault.id);
   }
 
   findUserVault(user: User, vaultId: string): Promise<Vault> {

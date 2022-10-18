@@ -1,7 +1,9 @@
 import {
+  ConflictException,
   createParamDecorator,
   ExecutionContext,
   SetMetadata,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { UserRole } from '../entities/enums/UserRole';
 import { ContextType } from '@nestjs/common/interfaces/features/arguments-host.interface';
@@ -12,6 +14,25 @@ import { User } from '../entities/User';
 export const CurrentUser = createParamDecorator(
   (data: unknown, ctx: ExecutionContext) => {
     const request = getRequestFromExecutionContext(ctx);
+    if (!request.user) {
+      throw new UnauthorizedException();
+    }
+    return request.user;
+  },
+);
+
+export const CurrentUserWithToken = createParamDecorator(
+  (data: unknown, ctx: ExecutionContext) => {
+    const request = getRequestFromExecutionContext(ctx);
+    if (!request.user) {
+      throw new UnauthorizedException();
+    }
+    if (!request.user?.token) {
+      throw new ConflictException({
+        success: false,
+        error: 'Bity not linked',
+      });
+    }
     return request.user;
   },
 );

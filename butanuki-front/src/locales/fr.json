@@ -66,7 +66,25 @@
       "crypto_address_desc": "Adresse Bitcoin de réception",
       "save": "Sauvegarder",
       "go_back": "Retour",
-      "warning_reset": "Attention, vous aurez un nouveau label de paiement!"
+      "warning_reset": "Attention, vous aurez un nouveau label de paiement!",
+      "create_order_text": "Besoin de faire un achat supplémentaire ?",
+      "create_order": "Ajouter un nouvel ordre",
+      "name": "Nom",
+      "name_placeholder": "Donnez un nom à cet ordre pour le retrouver facilement",
+      "editing": "Edition de l'ordre {{name}}",
+      "creating": "Ajout d'un ordre dans la tirelire {{name}}"
+    },
+    "vault": {
+      "add": "Ajouter une tirelire",
+      "name": "Nom",
+      "name_placeholder": "Nom de cette tirelire",
+      "currency": "Devise"
+    },
+    "action": {
+      "submit": "Envoyer",
+      "save": "Enregistrer",
+      "go_back": "Retour",
+      "cancel": "Annuler"
     },
     "bity": {
       "error": {

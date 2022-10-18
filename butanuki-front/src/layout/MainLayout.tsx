@@ -5,12 +5,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Header />
-      <div className={"container"}>
-        <div className="row">
-          <div className="col-lg-12">
-            <h1>Butanuki</h1>
-          </div>
-        </div>
+      <div className={"container"} style={{ marginTop: "60px" }}>
         {children}
       </div>
       <Footer />

@@ -13,7 +13,7 @@ export class ConfigController {
     const config = this.appConfig.config;
     const locale = availableLocales.includes(req.cookies?.locale)
       ? req.cookies.locale
-      : 'en';
+      : 'fr';
     return {
       recaptchaKey: config.recaptcha.key,
       locale, //TODO: use browser locale

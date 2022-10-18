@@ -9,6 +9,7 @@ import { EntityTarget } from 'typeorm/common/EntityTarget';
 import { ObjectLiteral } from 'typeorm/common/ObjectLiteral';
 import { TokenHistory } from './entities/TokenHistory';
 import { Vault } from './entities/Vault';
+import { OrderTemplate } from './entities/OrderTemplate';
 
 export function genRandomString(length: number) {
   const list = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -31,6 +32,7 @@ export function buildRepositories(manager: EntityManager) {
     eventLog: manager.getRepository(EventLog),
     tokenHistory: manager.getRepository(TokenHistory),
     vault: manager.getRepository(Vault),
+    orderTemplate: manager.getRepository(OrderTemplate),
   };
 }
 

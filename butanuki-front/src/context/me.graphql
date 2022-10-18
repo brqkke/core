@@ -4,21 +4,3 @@ query me {
     }
 }
 
-fragment BityStatus on User{
-    id
-    bityTokenStatus {
-        linked
-        linkStatus
-    }
-}
-
-
-fragment UserProfile on User{
-    ...BityStatus
-    id
-    locale
-    email
-    vaults {
-     ...VaultInfos
-    }
-}

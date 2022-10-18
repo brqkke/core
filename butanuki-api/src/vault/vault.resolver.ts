@@ -13,7 +13,9 @@ import { VaultInput } from './types';
 import { CurrentUser, Roles } from '../decorator/user.decorator';
 import { User } from '../entities/User';
 import { UserRole } from '../entities/enums/UserRole';
-import { Order } from '../entities/Order';
+import { OrderTemplate } from '../entities/OrderTemplate';
+import { Dataloaders } from '../decorator/dataloader.decorator';
+import { DLoaders } from '../dataloader/dataloaders';
 
 @Resolver(() => Vault)
 export class VaultResolver {
@@ -54,8 +56,11 @@ export class VaultResolver {
     return this.vaultService.deleteVault(vaultId, user);
   }
 
-  @ResolveField(() => [Order])
-  async orders(@Root() vault: Vault) {
-    return this.vaultService.findVaultOrders(vault);
+  @ResolveField(() => [OrderTemplate])
+  async orderTemplates(
+    @Root() vault: Vault,
+    @Dataloaders() dataloader: DLoaders,
+  ): Promise<OrderTemplate[]> {
+    return dataloader.orderTemplatesByVaultId.load(vault.id);
   }
 }

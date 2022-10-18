@@ -1,5 +1,6 @@
 import { OrderCurrency, VaultInput } from "../generated/graphql";
 import { ChangeEvent, FormEvent, useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   onSave: (input: VaultInput) => void;
@@ -12,6 +13,8 @@ export const VaultForm = (props: Props) => {
     name: "",
     currency: OrderCurrency.Chf,
   });
+
+  const { t } = useTranslation();
 
   const handleChange = useCallback(
     <K extends keyof VaultInput>(key: K, value: VaultInput[K]) => {
@@ -47,14 +50,14 @@ export const VaultForm = (props: Props) => {
     <form onSubmit={onSubmit}>
       <div className="mb-3 row">
         <label htmlFor="vaultName" className="col-4 col-form-label">
-          Name
+          {t("app.order.name")}
         </label>
         <div className="col-8">
           <input
             onChange={onNameChange}
             id="vaultName"
             name="vaultName"
-            placeholder="Name of this vault"
+            placeholder={t("app.vault.name_placeholder")}
             type="text"
             className="form-control"
             required={true}
@@ -63,7 +66,7 @@ export const VaultForm = (props: Props) => {
       </div>
       <div className="mb-3 row">
         <label htmlFor="vaultCurrency" className="col-4 col-form-label">
-          Currency
+          {t("app.vault.currency")}
         </label>
         <div className="col-8">
           <select
@@ -88,12 +91,12 @@ export const VaultForm = (props: Props) => {
               type={"button"}
               className={"btn"}
             >
-              Cancel
+              {t("app.action.cancel")}
             </button>
           </div>
           <div className="btn-group">
             <button name="submit" type="submit" className="btn btn-primary">
-              Submit
+              {t("app.action.submit")}
             </button>
           </div>
         </div>

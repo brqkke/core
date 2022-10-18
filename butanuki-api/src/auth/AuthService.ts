@@ -45,6 +45,10 @@ export class AuthService {
           token: true,
         },
       },
+      // cache: {
+      //   milliseconds: 1000 * 60,
+      //   id: 'session_' + sessionToken,
+      // },
     });
 
     return sessionUser?.user || null;

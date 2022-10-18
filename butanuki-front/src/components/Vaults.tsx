@@ -8,10 +8,12 @@ import {
   VaultInfosFragmentDoc,
   VaultInput,
 } from "../generated/graphql";
+import { useTranslation } from "react-i18next";
 
 export const Vaults = ({ disabled }: { disabled: boolean }) => {
   const user = useUserContext();
   const [newVaultForm, setNewVaultForm] = useState(false);
+  const { t } = useTranslation();
   const [addVault] = useAddVaultMutation({
     // refetchQueries: [{ query: MeDocument }],
     update: (cache, { data }) => {
@@ -79,7 +81,7 @@ export const Vaults = ({ disabled }: { disabled: boolean }) => {
               disabled={disabled}
               onClick={() => setNewVaultForm(true)}
             >
-              + Add vault
+              {t("app.vault.add")}
             </button>
           )
         )}

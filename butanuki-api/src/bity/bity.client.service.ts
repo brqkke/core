@@ -92,6 +92,7 @@ export class BityClientService {
     method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
     body?: object;
   }): Promise<AxiosResponse<R>> {
+    console.log({ method, endpoint });
     const url = `${this.config.config.bity.oauthConfig.baseUrl}${endpoint}`;
     return firstValueFrom(
       this.http.request({
