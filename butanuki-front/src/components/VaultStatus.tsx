@@ -1,4 +1,3 @@
-import { useTranslation } from "react-i18next";
 import { VaultInfosFragment } from "../generated/graphql";
 import { useCallback } from "react";
 import { VaultOrders } from "./VaultOrders";
@@ -12,7 +11,6 @@ export function VaultStatus({
   vault: VaultInfosFragment;
   onDeleteVault: (id: string) => void;
 }) {
-  const { t } = useTranslation();
   const onDelete = useCallback(() => {
     onDeleteVault(vault.id);
   }, [vault.id, onDeleteVault]);
