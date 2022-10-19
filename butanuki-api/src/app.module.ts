@@ -15,6 +15,7 @@ import { UserModule } from './user/user.module';
 import { VaultModule } from './vault/vault.module';
 import { DataSource } from 'typeorm';
 import { buildDataloaders } from './dataloader/dataloaders';
+import { AppConfigService } from './config/app.config.service';
 
 @Module({
   imports: [
@@ -29,19 +30,20 @@ import { buildDataloaders } from './dataloader/dataloaders';
     }),
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
-      useFactory: (db: DataSource) => ({
+      useFactory: (db: DataSource, { config }: AppConfigService) => ({
         driver: ApolloDriver,
-        introspection: true,
+        introspection: config.nodeEnv === 'development',
         cache: 'bounded',
         autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-        playground: true,
+        playground: config.nodeEnv === 'development',
         path: '/api/graphql',
         context: (ctx) => {
           const dataloaders = buildDataloaders(db);
           return { ...ctx, dataloaders };
         },
       }),
-      inject: [DataSource],
+      inject: [DataSource, AppConfigService],
+      imports: [AppConfigModule],
     }),
     OrderModule,
     BityModule,

@@ -1,12 +1,23 @@
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import { AppConfigService } from './app.config.service';
+import { BetterSqlite3ConnectionOptions } from 'typeorm/driver/better-sqlite3/BetterSqlite3ConnectionOptions';
 
 export default function makeDbConfigFromServiceConfig({
   config: {
-    db: { host, password, port, database, username },
+    db: { host, password, port, database, username, useMockDb },
     nodeEnv,
   },
-}: AppConfigService): PostgresConnectionOptions {
+}: AppConfigService):
+  | PostgresConnectionOptions
+  | BetterSqlite3ConnectionOptions {
+  if (useMockDb) {
+    return {
+      type: 'better-sqlite3',
+      database: ':memory:',
+      dropSchema: true,
+      synchronize: true,
+    };
+  }
   return {
     type: 'postgres',
     host,
