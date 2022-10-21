@@ -9,7 +9,6 @@ import { OrderStatus } from '../../entities/enums/OrderStatus';
 
 @Task({
   name: 'CHECK_PENDING_ORDERS',
-  interval: 60 * 1000,
 })
 export class CheckPendingOrdersTask extends AbstractTask {
   private db: Repositories;

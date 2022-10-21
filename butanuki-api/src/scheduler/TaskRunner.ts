@@ -27,17 +27,14 @@ export class TaskRunner {
     }
   }
 
-  async startAll() {
-    await Promise.all(
-      [...this.tasksOptions.entries()].map(async ([task, options], i) => {
+  async initAll(): Promise<AbstractTask[]> {
+    return Promise.all(
+      [...this.tasksOptions.entries()].map(async ([task, options]) => {
         const taskInstance = await this.moduleRef.create<AbstractTask>(task);
         console.log('Initiating task', options);
-        await wait(5 * i * 1000); //delay each task startup by 5 seconds from each other to avoid doing lots of work at the same time
         taskInstance.options = options;
-        return taskInstance.initTask();
+        return taskInstance;
       }),
     );
   }
 }
-
-const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));

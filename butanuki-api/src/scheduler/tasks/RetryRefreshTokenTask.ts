@@ -7,7 +7,6 @@ import { BityService } from '../../bity/bity.service';
 
 @Task({
   name: 'RETRY_REFRESH_TOKEN',
-  interval: 60 * 1000,
 })
 export class RetryRefreshTokenTask extends AbstractTask {
   private db: Repositories;
@@ -20,20 +19,27 @@ export class RetryRefreshTokenTask extends AbstractTask {
     this.db = buildRepositories(db.manager);
   }
   async run() {
-    const tokensToRetry = await this.db.token.find({
-      where: {
-        status: TokenStatus.NEED_REFRESH_RETRY,
-        lastRefreshTriedAt: LessThan(
-          new Date(
-            Date.now() - this.config.config.bity.refreshRetryDelay * 1000,
-          ),
-        ),
-        //last refresh tried more than 3 hours ago
-      },
-      take: 10,
-    });
-    await Promise.allSettled(
-      tokensToRetry.map((token) => this.bityService.refreshBityToken(token)),
+    const treshold = new Date(
+      Date.now() - this.config.config.bity.refreshRetryDelay * 1000,
     );
+    const tokensToRetry = await this.db.token.find({
+      where: [
+        {
+          status: TokenStatus.NEED_REFRESH_RETRY,
+          lastRefreshTriedAt: LessThan(treshold),
+          //last refresh tried more than 3 hours ago
+        },
+        {
+          status: TokenStatus.NEED_REFRESH_RETRY,
+          refreshTriesCount: 1,
+        },
+      ],
+      take: 5,
+    });
+    for (const token of tokensToRetry) {
+      await this.bityService
+        .refreshBityToken(token, true)
+        .catch((err) => console.log(token.id, err));
+    }
   }
 }

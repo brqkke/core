@@ -8,7 +8,6 @@ import { OrderStatus } from '../../entities/enums/OrderStatus';
 
 @Task({
   name: 'CANCEL_PENDING_ORDERS',
-  interval: 60 * 1000,
 })
 export class CancelOrdersToCancelTask extends AbstractTask {
   private db: Repositories;

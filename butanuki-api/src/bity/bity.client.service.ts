@@ -18,6 +18,7 @@ export class BityClientService {
       grant_type: 'refresh_token',
       refresh_token: refreshToken,
     });
+    console.log('refreshing token', body);
     const r = await firstValueFrom(
       this.http.post<ClientOAuth2.Data | { error: any }>(
         this.config.config.bity.oauthConfig.accessTokenUri,
@@ -31,6 +32,7 @@ export class BityClientService {
     if (r.status >= 400) {
       console.log(r.statusText);
       console.log(r.data.error);
+      console.log(r.data);
       return null;
     }
 

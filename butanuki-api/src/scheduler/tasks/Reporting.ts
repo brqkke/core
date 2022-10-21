@@ -8,7 +8,7 @@ import { OrderStatus } from '../../entities/enums/OrderStatus';
 import { EventLogType } from '../../entities/EventLog';
 import { BityReportingService } from '../../bity/bity.reporting.service';
 
-@Task({ name: 'REPORTING', interval: 60 * 1000 })
+@Task({ name: 'REPORTING' })
 export class Reporting extends AbstractTask {
   private db: Repositories;
 

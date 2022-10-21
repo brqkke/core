@@ -7,7 +7,7 @@ import { Order } from '../../entities/Order';
 import { buildRepositories } from '../../utils';
 import { OrderStatus } from '../../entities/enums/OrderStatus';
 
-@Task({ name: 'RENEW_FILLED_ORDER', interval: 60 * 1000 })
+@Task({ name: 'RENEW_FILLED_ORDER' })
 export class RenewFilledOrderTask extends AbstractTask {
   private em: EntityManager;
   constructor(

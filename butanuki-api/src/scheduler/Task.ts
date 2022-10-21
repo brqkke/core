@@ -3,7 +3,6 @@ import { applyDecorators, Injectable, SetMetadata } from '@nestjs/common';
 export const TASK_OPTIONS_KEY = 'TASK';
 export type TaskOptions = {
   name: string;
-  interval: number;
 };
 export const Task = (options: TaskOptions) =>
   applyDecorators(SetMetadata(TASK_OPTIONS_KEY, options), Injectable());
@@ -12,15 +11,10 @@ export abstract class AbstractTask {
   private running = false;
   public options?: TaskOptions;
 
-  private intervalId?: NodeJS.Timeout;
   abstract run(): Promise<any | void>;
 
   protected get name() {
     return this.options?.name || 'TASK_NO_NAME';
-  }
-
-  private get interval() {
-    return this.options?.interval || 60 * 1000;
   }
 
   log(data: any, level: 'log' | 'error' | 'info' = 'log') {
@@ -38,28 +32,17 @@ export abstract class AbstractTask {
     }
   }
 
-  setIntervalId(id: NodeJS.Timeout) {
-    this.intervalId = id;
-  }
-
-  clearInterval() {
-    if (this.intervalId) {
-      this.log('Clearing');
-      clearInterval(this.intervalId);
-    }
-    this.intervalId = undefined;
-  }
-
   async shouldRun() {
     return true;
   }
 
-  async _run() {
-    if (this.running || !(await this.shouldRun())) {
+  async _run(): Promise<{ took: number }> {
+    const start = Date.now();
+    if (this.running || !(await this.shouldRun().catch(() => false))) {
       console.log(
         `[${new Date().toISOString()}][Scheduler] [${this.name}] Skip`,
       );
-      return;
+      return { took: Date.now() - start };
     }
 
     this.running = true;
@@ -81,14 +64,7 @@ export abstract class AbstractTask {
       );
       this.running = false;
     }
-  }
-
-  initTask() {
-    this.setIntervalId(
-      setInterval(async () => {
-        this._run();
-      }, this.interval),
-    );
+    return { took: Date.now() - start };
   }
 
   onError(err: Error) {
