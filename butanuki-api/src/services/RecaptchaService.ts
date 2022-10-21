@@ -9,7 +9,6 @@ export class RecaptchaService {
   constructor(private config: AppConfigService, private http: HttpService) {}
 
   async verifyCaptcha(token: string): Promise<boolean> {
-    return true;
     const r = await lastValueFrom(
       this.http.post(
         'https://www.google.com/recaptcha/api/siteverify',
