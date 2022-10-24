@@ -24,19 +24,6 @@ jobs:
   build-docker:
     name: Build docker image
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build the Docker image
-        run: docker build . --file Dockerfile --build-arg appVersion=${{ github.sha }} --tag ghcr.io/butanuki21/core:${{  github.sha }}
-  start-docker:
-    runs-on: ubuntu-latest
-    container: node:16
     services:
       # Label used to access the service container
       postgres:
@@ -51,22 +38,29 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-      app:
-        image: ghcr.io/butanuki21/core:${{  github.sha }}
-        volumes:
-          - butanuki-api/.env.development:app/.env
-        env:
-          DB_HOST: postgres
-          DB_NAME: postgres
-          DB_PASSWORD: butanuki
-          DB_USER: postgres
-          DB_PORT: 5432
-          PORT: 80
-          USE_SSL: false
-        ports:
-          - 80:80
     steps:
+      - uses: actions/checkout@v3
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --build-arg appVersion=${{ github.sha }} --tag ghcr.io/butanuki21/core:${{  github.sha }}
+      - name: start docker
+        run: |
+          docker run -d -p 80:80 --env-file butanuki-api/.env.development \
+            -e DB_HOST=postgres \
+            -e DB_NAME=postgres \
+            -e DB_PASSWORD=butanuki \
+            -e DB_USER=postgres \
+            -e PORT=80 \
+            -e USE_SSL=false  \
+            ghcr.io/butanuki21/core:${{  github.sha }}
       # Performs a clean installation of all dependencies in the `package.json` file
       # For more information, see https://docs.npmjs.com/cli/ci.html
+      - name: wait for app to be up
+        run: ci/wait-for-it.sh -h localhost -p 80
       - name: Test version
-        run: curl http://localhost/api/version
+        run: curl http://localhost/api/status | grep ok
