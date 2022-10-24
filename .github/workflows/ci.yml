@@ -34,3 +34,39 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build the Docker image
         run: docker build . --file Dockerfile --build-arg appVersion=${{ github.sha }} --tag ghcr.io/butanuki21/core:${{  github.sha }}
+  start-docker:
+    runds-on: ubuntu-latest
+    container: node:16
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: butanuki
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      app:
+        image: ghcr.io/butanuki21/core:${{  github.sha }}
+        volumes:
+          - butanuki-api/.env.development:app/.env
+        env:
+          DB_HOST: postgres
+          DB_NAME: postgres
+          DB_PASSWORD: butanuki
+          DB_USER: postgres
+          DB_PORT: 5432
+          PORT: 80
+          USE_SSL: false
+        ports:
+          - 80:80
+    steps:
+      # Performs a clean installation of all dependencies in the `package.json` file
+      # For more information, see https://docs.npmjs.com/cli/ci.html
+      - name: Test version
+        run: curl http://localhost/api/version

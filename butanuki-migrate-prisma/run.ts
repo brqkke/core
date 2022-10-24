@@ -12,16 +12,19 @@ import { OrderCurrency } from "./entities/enums/OrderCurrency";
 import { Token } from "./entities/Token";
 import { TokenStatus } from "./entities/enums/TokenStatus";
 import { Task } from "./entities/Task";
+import { Session } from "./entities/Session";
 import { EventLog, EventLogType } from "./entities/EventLog";
-
-dotenv.config();
 process.env.TZ = "UTC";
+
 const prisma = new PrismaClient();
 
 AppDataSource.initialize()
   .then((ds) => {
     const userIdMap = new Map<number, string>();
     return ds.transaction(async (em) => {
+      await Promise.all([EventLog, Order, Session, Task, Token, User].map(async entity => {
+        await em.getRepository(entity).delete({});
+      }))
       const oldUsers = await prisma.user.findMany({ include: { token: true } });
       for (const oldUser of oldUsers) {
         const newUser = await em.getRepository(User).save({
@@ -58,7 +61,7 @@ AppDataSource.initialize()
       for (const oldTask of oldTasks) {
         await em.getRepository(Task).save({
           name: oldTask.name,
-          lastRunAt: oldTask.name,
+          lastRunAt: oldTask.lastRunAt,
         });
       }
 
@@ -70,8 +73,6 @@ AppDataSource.initialize()
           data: userIdMap.get(oldLog.data) || "",
         });
       }
-
-      // throw new Error("abort");
     });
   })
   .catch((error) => console.log(error));
