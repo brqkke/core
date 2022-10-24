@@ -64,3 +64,5 @@ jobs:
         run: ci/wait-for-it.sh -h localhost -p 80
       - name: Test version
         run: curl http://localhost/api/status | grep ok || docker logs app
+      - name: Test version
+        run: docker logs app
