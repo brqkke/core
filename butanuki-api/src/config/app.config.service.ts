@@ -74,7 +74,7 @@ export class AppConfigService {
           scopes: ['https://auth.bity.com/scopes/reporting.exchange'],
           baseUrl: 'https://reporting.api.bity.com/exchange/v1',
         },
-        refreshMaxRetry: 3,
+        refreshMaxRetry: 4,
         refreshRetryDelay: parseInt(
           config.get('BITY_REFRESH_DELAY', '' + 3 * 3600),
         ),
@@ -95,6 +95,10 @@ export class AppConfigService {
             'REPORTING_EMAIL',
             'taccolaaless@gmail.com',
           ), //'reportingbity@uazo.com',
+          alertEmail: config.get(
+            'REPORTING_ALERT_EMAIL',
+            'taccolaaless@gmail.com',
+          ),
         },
       },
     };

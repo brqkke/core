@@ -31,12 +31,12 @@ export class SchedulerService {
         const { took } = await task._run();
         task.log('Took ' + took / 1000 + ' s');
         totalRealRun += took;
-        await new Promise((r) => setTimeout(r, 1 * 1000));
+        await new Promise((r) => setTimeout(r, 1000));
       }
       const loopDone = Date.now();
       console.log('Loop ended, took : ' + (loopDone - loopStart) / 1000 + ' s');
       console.log('Took (real) ' + totalRealRun / 1000 + ' s');
-      await new Promise((r) => setTimeout(r, 1 * 1000));
+      await new Promise((r) => setTimeout(r, 2000));
     }
   }
 }
