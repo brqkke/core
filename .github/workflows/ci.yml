@@ -60,6 +60,8 @@ jobs:
             ghcr.io/butanuki21/core:${{  github.sha }}
       # Performs a clean installation of all dependencies in the `package.json` file
       # For more information, see https://docs.npmjs.com/cli/ci.html
+      - name: chmod
+        run: chmod u+x ci/wait-wor-it.sh
       - name: wait for app to be up
         run: ci/wait-for-it.sh -h localhost -p 80
       - name: Test version
