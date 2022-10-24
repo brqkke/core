@@ -50,7 +50,7 @@ jobs:
         run: docker build . --file Dockerfile --build-arg appVersion=${{ github.sha }} --tag ghcr.io/butanuki21/core:${{  github.sha }}
       - name: start docker
         run: |
-          docker run -d -p 80:80 --env-file butanuki-api/.env.development \
+          docker run -d --name app -p 80:80 --env-file butanuki-api/.env.development \
             -e DB_HOST=postgres \
             -e DB_NAME=postgres \
             -e DB_PASSWORD=butanuki \
@@ -63,4 +63,4 @@ jobs:
       - name: wait for app to be up
         run: ci/wait-for-it.sh -h localhost -p 80
       - name: Test version
-        run: curl http://localhost/api/status | grep ok
+        run: curl http://localhost/api/status | grep ok || docker logs app
