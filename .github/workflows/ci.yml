@@ -35,7 +35,7 @@ jobs:
       - name: Build the Docker image
         run: docker build . --file Dockerfile --build-arg appVersion=${{ github.sha }} --tag ghcr.io/butanuki21/core:${{  github.sha }}
   start-docker:
-    runds-on: ubuntu-latest
+    runs-on: ubuntu-latest
     container: node:16
     services:
       # Label used to access the service container
