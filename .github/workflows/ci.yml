@@ -53,7 +53,7 @@ jobs:
       - name: start docker
         run: |
           docker run --name core -p 80:80 --env-file butanuki-api/.env.development \
-            -e DB_HOST=localhost \
+            -e DB_HOST=postgres \
             -e DB_NAME=postgres \
             -e DB_PASSWORD=butanuki \
             -e DB_USER=postgres \
