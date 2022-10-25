@@ -13,12 +13,12 @@ export class BityClientService {
   public async refreshToken(
     refreshToken: string,
   ): Promise<ClientOAuth2.Token | null> {
+    console.log('Refreshing', refreshToken);
     const body = new URLSearchParams({
       client_id: this.config.config.bity.oauthConfig.clientId,
       grant_type: 'refresh_token',
       refresh_token: refreshToken,
     });
-    console.log('refreshing token', body);
     const r = await firstValueFrom(
       this.http.post<ClientOAuth2.Data | { error: any }>(
         this.config.config.bity.oauthConfig.accessTokenUri,
@@ -29,10 +29,8 @@ export class BityClientService {
         },
       ),
     );
+    console.log('refreshed token', body, r.data, r.status);
     if (r.status >= 400) {
-      console.log(r.statusText);
-      console.log(r.data.error);
-      console.log(r.data);
       return null;
     }
 

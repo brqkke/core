@@ -90,7 +90,7 @@ export class MailerService {
 
   async sendReportBityRefreshError(token: Token) {
     return this.renderAndSend({
-      to: this.appConfig.config.backgroundAgent.reporting.reportingEmail,
+      to: this.appConfig.config.backgroundAgent.reporting.alertEmail,
       params: { token },
       element: TokenStatusReporting,
       subject: `Bity token refresh error ${token.id}`,

@@ -51,3 +51,5 @@ export function acquireLockOnEntity<Entity extends ObjectLiteral & EntityClass>(
     [valueForId],
   );
 }
+
+export const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));

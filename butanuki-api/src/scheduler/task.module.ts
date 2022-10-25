@@ -9,12 +9,15 @@ import { BityModule } from '../bity/bity.module';
 import { TaskRunner } from './TaskRunner';
 import { OrderModule } from '../order/order.module';
 import { MailerModule } from '../emails/mailer.module';
+import { TASK_OPTIONS_KEY } from './Task';
 
 @Module({})
 export class TaskModule {
   private static loadFileClasses(exported: any, allLoaded: Type[] = []) {
     if (typeof exported === 'function') {
-      allLoaded.push(exported);
+      if (Reflect.hasMetadata(TASK_OPTIONS_KEY, exported)) {
+        allLoaded.push(exported);
+      }
     } else if (Array.isArray(exported)) {
       exported.forEach((i: any) => TaskModule.loadFileClasses(i, allLoaded));
     } else if (typeof exported === 'object') {

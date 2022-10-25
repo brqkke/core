@@ -63,29 +63,6 @@ export class BityService {
       });
   }
 
-  async tryRefreshUsingTokenHistory(
-    token: Token,
-  ): Promise<ClientOAuth2.Token | null> {
-    console.log('tryRefreshUsingTokenHistory for token', token);
-    const db = buildRepositories(this.db.manager);
-    const tokenHistory = await db.tokenHistory.find({
-      where: { tokenId: token.id },
-      order: { createdAt: 'DESC' },
-      take: 5,
-    });
-    console.log('found', tokenHistory.length, 'tokens for', token.id);
-    for (const savedToken of tokenHistory) {
-      const oauthToken = await this.bityClient.refreshToken(
-        savedToken.refreshToken,
-      );
-      if (oauthToken) {
-        return oauthToken;
-      }
-    }
-
-    return null;
-  }
-
   /**
    *<pre> first we acquire an advisory lock with the token id as a key to prevent concurrent updates
    * Then fetch the token from the db to get a fresh one
@@ -93,22 +70,19 @@ export class BityService {
    *    it means we have an obsolete version
    *    this means we don't have to refresh it, we just return the recent version
    * If it hasn't changed
+   *    we increment the version number
    *    it means we can now try to refresh it
    *    if it succeeds
    *       we update it in the database and we return the updated token
    *       we also save a copy of that new token in the token_history table
    *    if it doesn't succeed
-   *        if forceRetryWithHistory is true OR the token retries count is 1
-   *            we try the refresh step again using the 5 latest refresh token from the token_history table
-   *            if it works we update the token and insert the new token in the token_history table
-   *            if it doesnt work
-   *              We send an email to the alert reporting address to notify us of this fail.
-   *        if this dosen't work (or forceRetryWithHistory is false and try count is not 1)
-   *            we increment the number of refresh tries and we set it's status to NEED_REFRESH_RETRY
-   *           this token is now in a "suspended state" and a job will take care of refreshing it later in case it was a temporary issue
-   *           if the number of tries reaches a treshold (3)
-   *             we set the token status to BROKEN and it is considered as not working anymore
-   *             we send an email to the person</pre>
+   *        we increment the number of refresh tries and we set it's status to NEED_REFRESH_RETRY
+   *        this token is now in a "suspended state" and a job will take care of refreshing it later in case it was a temporary issue
+   *        if token retries count is 1
+   *            We send an email to the alert reporting address to notify us of this fail.
+   *        if the number of tries reaches a treshold (3)
+   *            we set the token status to BROKEN and it is considered as not working anymore
+   *            we send an email to the person</pre>
    */
   async refreshBityToken(
     token: Token,
@@ -117,7 +91,7 @@ export class BityService {
     return this.db.manager.transaction(async (entityManager) => {
       const db = buildRepositories(entityManager);
       const lock = await acquireLockOnEntity(Token, token.id, entityManager);
-      console.log(lock);
+      console.log('acquire lock', lock);
       const dbToken: Token = await db.token.findOneOrFail({
         where: { id: token.id },
         relations: ['user'],
@@ -129,21 +103,11 @@ export class BityService {
         dbToken.version++;
       }
 
-      let newToken = await this.bityClient.refreshToken(token.refreshToken);
-      let newTokenHistoryCause: TokenHistoryCause = TokenHistoryCause.REFRESH;
+      const newToken = await this.bityClient.refreshToken(token.refreshToken);
+      const newTokenHistoryCause: TokenHistoryCause = TokenHistoryCause.REFRESH;
       console.log(token.id, newToken);
       dbToken.lastRefreshTriedAt = new Date();
       dbToken.refreshTriesCount++;
-
-      if (
-        !newToken &&
-        (forceRetryWithHistory || dbToken.refreshTriesCount === 1)
-      ) {
-        //Note: this operation doesn't use the transaction's entityManager
-        newToken = await this.tryRefreshUsingTokenHistory(dbToken);
-        newTokenHistoryCause = TokenHistoryCause.REFRESH_FROM_HISTORY;
-        console.log(token.id, newToken);
-      }
 
       if (newToken) {
         dbToken.lastRefreshedAt = new Date();
@@ -154,13 +118,17 @@ export class BityService {
 
         //Note: this operation doesn't use the transaction's entityManager
         //If the transaction is reverted, the record will still be there
-        await this.saveTokenToHistory(dbToken, newTokenHistoryCause);
+        await this.saveTokenToHistory(dbToken, newTokenHistoryCause).catch(
+          (err) => console.log('An error occured in saveTokenToHistory', err),
+        );
 
         return db.token.save(dbToken);
       }
 
       if (dbToken.refreshTriesCount === 1) {
-        await this.mailer.sendReportBityRefreshError(dbToken);
+        await this.mailer.sendReportBityRefreshError(dbToken).catch((err) => {
+          console.log('an error occured while sendReportBityRefreshError', err);
+        });
       }
 
       if (dbToken.refreshTriesCount > this.config.config.bity.refreshMaxRetry) {
