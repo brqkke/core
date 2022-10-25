@@ -1,39 +1,30 @@
-import { useTranslation } from "react-i18next";
 import { usePublicPageLink } from "../utils/i18n";
-import { AppBar, Typography, useTheme } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 export const Header = () => {
   const { t } = useTranslation();
   const getUrl = usePublicPageLink();
-  const theme = useTheme();
   return (
-    <AppBar position={"fixed"}>
-      <Typography
-        style={{ textDecoration: "none", color: theme.palette.bitcoin }}
-      >
-        Butanuki
-      </Typography>
-    </AppBar>
-    // <div className="nav">
-    //   <input type="checkbox" id="nav-check" />
-    //   <div className="nav-header">
-    //     <div className="nav-title">
-    //       <a href={getUrl("root")} target="_top">
-    //         Butanuki
-    //       </a>
-    //     </div>
-    //   </div>
-    //   <div className="nav-links">
-    //     <a href={getUrl("about")} target="_top">
-    //       {t("nav.about")}
-    //     </a>
-    //     <a href={getUrl("help")} target="_top">
-    //       {t("nav.help")}
-    //     </a>
-    //     <a href="https://twitter.com/butanuki21" target="twitter">
-    //       Twitter
-    //     </a>
-    //   </div>
-    // </div>
+    <div className="nav">
+      <input type="checkbox" id="nav-check" />
+      <div className="nav-header">
+        <div className="nav-title">
+          <a href={getUrl("root")} target="_top">
+            Butanuki
+          </a>
+        </div>
+      </div>
+      <div className="nav-links">
+        <a href={getUrl("about")} target="_top">
+          {t("nav.about")}
+        </a>
+        <a href={getUrl("help")} target="_top">
+          {t("nav.help")}
+        </a>
+        <a href="https://twitter.com/butanuki21" target="twitter">
+          Twitter
+        </a>
+      </div>
+    </div>
   );
 };

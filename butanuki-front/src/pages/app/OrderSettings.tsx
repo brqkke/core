@@ -7,17 +7,21 @@ import { LoggedLayout } from "../../layout/LoggedLayout";
 import { ApiErrorAlert } from "../../components/ApiErrorAlert";
 import {
   useAddOrderMutation,
+  useBityStatusQuery,
   useOrderQuery,
   useUpdateOrderMutation,
   useVaultQuery,
 } from "../../generated/graphql";
 import { OrderStatus } from "../../components/OrderStatus";
+import { BityStatus } from "../../components/BityStatus";
 
 export function OrderSettings() {
   const { vaultId, orderId } = useParams<{
     vaultId: string;
     orderId?: string;
   }>();
+
+  const { data: bityStatus, refetch: refetchBityStatus } = useBityStatusQuery();
 
   const vault = useVaultQuery({
     variables: { id: vaultId },
@@ -33,8 +37,9 @@ export function OrderSettings() {
       setCryptoAddress("");
     },
   });
-  const [placeOrder] = useAddOrderMutation();
-  const [updateOrder] = useUpdateOrderMutation();
+  const [placeOrder, { loading: addLoading }] = useAddOrderMutation();
+  const [updateOrder, { loading: updateLoading }] = useUpdateOrderMutation();
+  const saveLoading = addLoading || updateLoading;
 
   const { t } = useTranslation();
   const [amount, setAmount] = useState(10);
@@ -55,7 +60,7 @@ export function OrderSettings() {
         },
       });
     } else {
-      placeOrder({
+      await placeOrder({
         variables: {
           vaultId,
           data: { amount, cryptoAddress, name },
@@ -66,8 +71,10 @@ export function OrderSettings() {
         },
       });
     }
+    refetchBityStatus();
   }, [
     orderId,
+    refetchBityStatus,
     updateOrder,
     amount,
     cryptoAddress,
@@ -110,6 +117,11 @@ export function OrderSettings() {
           )}
         </div>
       </div>
+      {bityStatus && !bityStatus.me.bityTokenStatus.linked && (
+        <div className="row">
+          <BityStatus bityStatus={bityStatus.me.bityTokenStatus} />
+        </div>
+      )}
       <div className="row">
         <div className="col-md-6">
           <br />
@@ -206,7 +218,7 @@ export function OrderSettings() {
             </button>
             <button
               type={"submit"}
-              disabled={!addressIsValid || !amountIsValid}
+              disabled={!addressIsValid || !amountIsValid || saveLoading}
               className={"btn btn-primary"}
             >
               {t("app.order.save")}

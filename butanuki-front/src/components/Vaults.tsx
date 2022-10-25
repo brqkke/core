@@ -5,6 +5,7 @@ import { VaultForm } from "./VaultForm";
 import {
   useAddVaultMutation,
   useDeleteVaultMutation,
+  useVaultsQuery,
   VaultInfosFragmentDoc,
   VaultInput,
 } from "../generated/graphql";
@@ -12,6 +13,7 @@ import { useTranslation } from "react-i18next";
 
 export const Vaults = ({ disabled }: { disabled: boolean }) => {
   const user = useUserContext();
+  const vaults = useVaultsQuery();
   const [newVaultForm, setNewVaultForm] = useState(false);
   const { t } = useTranslation();
   const [addVault] = useAddVaultMutation({
@@ -61,7 +63,7 @@ export const Vaults = ({ disabled }: { disabled: boolean }) => {
   return (
     <div className="row">
       <hr />
-      {user.vaults.map((vault) => (
+      {vaults.data?.me.vaults.map((vault) => (
         <div className="col-12" key={vault.id}>
           <VaultStatus
             disabled={disabled}
@@ -71,21 +73,23 @@ export const Vaults = ({ disabled }: { disabled: boolean }) => {
           <hr />
         </div>
       ))}
-      <div className="col-6">
-        {newVaultForm ? (
-          <VaultForm onSave={submitNew} key={"new"} cancel={closeForm} />
-        ) : (
-          user.vaults.length < 3 && (
-            <button
-              className={"btn btn-primary"}
-              disabled={disabled}
-              onClick={() => setNewVaultForm(true)}
-            >
-              {t("app.vault.add")}
-            </button>
-          )
-        )}
-      </div>
+      {vaults.data && (
+        <div className="col-6">
+          {newVaultForm ? (
+            <VaultForm onSave={submitNew} key={"new"} cancel={closeForm} />
+          ) : (
+            vaults.data.me.vaults.length < 3 && (
+              <button
+                className={"btn btn-primary"}
+                disabled={disabled}
+                onClick={() => setNewVaultForm(true)}
+              >
+                {t("app.vault.add")}
+              </button>
+            )
+          )}
+        </div>
+      )}
     </div>
   );
 };

@@ -173,7 +173,7 @@ export type VaultShortInfosFragment = { __typename?: 'Vault', id: string, curren
 
 export type BityStatusFragment = { __typename?: 'User', id: string, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } };
 
-export type UserProfileFragment = { __typename?: 'User', id: string, locale: string, email: string, vaults: Array<{ __typename?: 'Vault', id: string, currency: string, name: string, orderTemplates: Array<{ __typename?: 'OrderTemplate', id: string, name: string, amount: number, vaultId: string, activeOrder?: { __typename?: 'Order', id: string, amount: number, currency: OrderCurrency, redactedCryptoAddress?: string | null, status: string, transferLabel: string, orderTemplateId?: string | null, bankDetails?: { __typename?: 'BityPaymentDetails', account_number?: string | null, bank_address?: string | null, bank_code?: string | null, iban?: string | null, recipient?: string | null, swift_bic?: string | null } | null } | null }> }>, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } };
+export type UserProfileFragment = { __typename?: 'User', id: string, locale: string, email: string, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } };
 
 export type VaultInfosFragment = { __typename?: 'Vault', id: string, currency: string, name: string, orderTemplates: Array<{ __typename?: 'OrderTemplate', id: string, name: string, amount: number, vaultId: string, activeOrder?: { __typename?: 'Order', id: string, amount: number, currency: OrderCurrency, redactedCryptoAddress?: string | null, status: string, transferLabel: string, orderTemplateId?: string | null, bankDetails?: { __typename?: 'BityPaymentDetails', account_number?: string | null, bank_address?: string | null, bank_code?: string | null, iban?: string | null, recipient?: string | null, swift_bic?: string | null } | null } | null }> };
 
@@ -221,10 +221,20 @@ export type DeleteVaultMutationVariables = Exact<{
 
 export type DeleteVaultMutation = { __typename?: 'Mutation', deleteVault: { __typename?: 'Vault', id: string } };
 
+export type VaultsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type VaultsQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, vaults: Array<{ __typename?: 'Vault', id: string, currency: string, name: string, orderTemplates: Array<{ __typename?: 'OrderTemplate', id: string, name: string, amount: number, vaultId: string, activeOrder?: { __typename?: 'Order', id: string, amount: number, currency: OrderCurrency, redactedCryptoAddress?: string | null, status: string, transferLabel: string, orderTemplateId?: string | null, bankDetails?: { __typename?: 'BityPaymentDetails', account_number?: string | null, bank_address?: string | null, bank_code?: string | null, iban?: string | null, recipient?: string | null, swift_bic?: string | null } | null } | null }> }> } };
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, locale: string, email: string, vaults: Array<{ __typename?: 'Vault', id: string, currency: string, name: string, orderTemplates: Array<{ __typename?: 'OrderTemplate', id: string, name: string, amount: number, vaultId: string, activeOrder?: { __typename?: 'Order', id: string, amount: number, currency: OrderCurrency, redactedCryptoAddress?: string | null, status: string, transferLabel: string, orderTemplateId?: string | null, bankDetails?: { __typename?: 'BityPaymentDetails', account_number?: string | null, bank_address?: string | null, bank_code?: string | null, iban?: string | null, recipient?: string | null, swift_bic?: string | null } | null } | null }> }>, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, locale: string, email: string, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } } };
+
+export type BityStatusQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type BityStatusQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } } };
 
 export type VaultQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -279,6 +289,14 @@ export const BityStatusFragmentDoc = gql`
   }
 }
     `;
+export const UserProfileFragmentDoc = gql`
+    fragment UserProfile on User {
+  ...BityStatus
+  id
+  locale
+  email
+}
+    ${BityStatusFragmentDoc}`;
 export const BankDetailsFragmentDoc = gql`
     fragment BankDetails on BityPaymentDetails {
   account_number
@@ -324,18 +342,6 @@ export const VaultInfosFragmentDoc = gql`
   }
 }
     ${OrderTemplateInfosFragmentDoc}`;
-export const UserProfileFragmentDoc = gql`
-    fragment UserProfile on User {
-  ...BityStatus
-  id
-  locale
-  email
-  vaults {
-    ...VaultInfos
-  }
-}
-    ${BityStatusFragmentDoc}
-${VaultInfosFragmentDoc}`;
 export const UnlinkBityDocument = gql`
     mutation unlinkBity {
   unlinkBity {
@@ -533,6 +539,43 @@ export function useDeleteVaultMutation(baseOptions?: Apollo.MutationHookOptions<
 export type DeleteVaultMutationHookResult = ReturnType<typeof useDeleteVaultMutation>;
 export type DeleteVaultMutationResult = Apollo.MutationResult<DeleteVaultMutation>;
 export type DeleteVaultMutationOptions = Apollo.BaseMutationOptions<DeleteVaultMutation, DeleteVaultMutationVariables>;
+export const VaultsDocument = gql`
+    query vaults {
+  me {
+    id
+    vaults {
+      ...VaultInfos
+    }
+  }
+}
+    ${VaultInfosFragmentDoc}`;
+
+/**
+ * __useVaultsQuery__
+ *
+ * To run a query within a React component, call `useVaultsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useVaultsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useVaultsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useVaultsQuery(baseOptions?: Apollo.QueryHookOptions<VaultsQuery, VaultsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<VaultsQuery, VaultsQueryVariables>(VaultsDocument, options);
+      }
+export function useVaultsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<VaultsQuery, VaultsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<VaultsQuery, VaultsQueryVariables>(VaultsDocument, options);
+        }
+export type VaultsQueryHookResult = ReturnType<typeof useVaultsQuery>;
+export type VaultsLazyQueryHookResult = ReturnType<typeof useVaultsLazyQuery>;
+export type VaultsQueryResult = Apollo.QueryResult<VaultsQuery, VaultsQueryVariables>;
 export const MeDocument = gql`
     query me {
   me {
@@ -567,6 +610,40 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const BityStatusDocument = gql`
+    query bityStatus {
+  me {
+    ...BityStatus
+  }
+}
+    ${BityStatusFragmentDoc}`;
+
+/**
+ * __useBityStatusQuery__
+ *
+ * To run a query within a React component, call `useBityStatusQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBityStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBityStatusQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useBityStatusQuery(baseOptions?: Apollo.QueryHookOptions<BityStatusQuery, BityStatusQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BityStatusQuery, BityStatusQueryVariables>(BityStatusDocument, options);
+      }
+export function useBityStatusLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BityStatusQuery, BityStatusQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BityStatusQuery, BityStatusQueryVariables>(BityStatusDocument, options);
+        }
+export type BityStatusQueryHookResult = ReturnType<typeof useBityStatusQuery>;
+export type BityStatusLazyQueryHookResult = ReturnType<typeof useBityStatusLazyQuery>;
+export type BityStatusQueryResult = Apollo.QueryResult<BityStatusQuery, BityStatusQueryVariables>;
 export const VaultDocument = gql`
     query vault($id: ID!) {
   vault(id: $id) {

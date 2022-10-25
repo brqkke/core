@@ -17,9 +17,6 @@ fragment UserProfile on User{
     id
     locale
     email
-    vaults {
-        ...VaultInfos
-    }
 }
 
 

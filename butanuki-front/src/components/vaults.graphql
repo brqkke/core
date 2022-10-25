@@ -1,0 +1,8 @@
+query vaults{
+    me{
+        id
+        vaults {
+            ...VaultInfos
+        }
+    }
+}
