@@ -32,7 +32,7 @@ jobs:
         # Provide the password for postgres
         env:
           POSTGRES_PASSWORD: butanuki
-        port:
+        ports:
           - 5432:5432
         # Set health checks to wait until postgres has started
         options: >-
@@ -52,7 +52,7 @@ jobs:
         run: docker build . --file Dockerfile --build-arg appVersion=${{ github.sha }} --tag ghcr.io/butanuki21/core:${{  github.sha }}
       - name: start docker
         run: |
-          docker run --name core -p 80:80 --env-file butanuki-api/.env.development \
+          docker run -d --name core -p 80:80 --env-file butanuki-api/.env.development \
             -e DB_HOST=localhost \
             -e DB_NAME=postgres \
             -e DB_PASSWORD=butanuki \
@@ -65,6 +65,6 @@ jobs:
       - name: wait for app to be up
         run: ci/wait-for-it.sh -h localhost -p 80
       - name: Test version
-        run: curl http://localhost/api/status | grep ok || docker logs core
+        run: curl http://localhost/api/status | grep ok
       - name: Logs
         run: docker logs core
