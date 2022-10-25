@@ -1,6 +1,6 @@
 import * as dotenv from "dotenv";
 
-[".env", ".env.dev" ].map((path) => dotenv.config({ path }));
+[".env.dev", ".env"].map((path) => dotenv.config({ path }));
 
 export default {
   oldDb: process.env.OLD_DATABASE_URL,

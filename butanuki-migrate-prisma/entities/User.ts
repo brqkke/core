@@ -5,16 +5,16 @@ import {
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
-} from 'typeorm';
-import { UserStatus } from './enums/UserStatus';
-import { Session } from './Session';
-import { UserRole } from './enums/UserRole';
-import { Order } from './Order';
-import { Token } from './Token';
+} from "typeorm";
+import { UserStatus } from "./enums/UserStatus";
+import { Session } from "./Session";
+import { UserRole } from "./enums/UserRole";
+import { Order } from "./Order";
+import { Token } from "./Token";
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column()
@@ -25,7 +25,7 @@ export class User {
   @Index()
   tempCode?: string;
 
-  @Column({ default: () => '0' })
+  @Column({ default: () => "0" })
   tempCodeExpireAt: number;
 
   @OneToOne(() => Token, (t) => t.user)
@@ -36,14 +36,14 @@ export class User {
   //
   // orders: Order[];
 
-  @Column({ type: 'enum', default: UserStatus.ACTIVE, enum: UserStatus })
+  @Column({ type: "enum", default: UserStatus.ACTIVE, enum: UserStatus })
   status: UserStatus = UserStatus.ACTIVE;
 
-  @Column({ type: 'enum', default: UserRole.USER, enum: UserRole })
+  @Column({ type: "enum", default: UserRole.USER, enum: UserRole })
   role: UserRole = UserRole.USER;
 
   @Column()
-  locale: string = 'en';
+  locale: string = "en";
 
   @OneToMany(() => Order, (order) => order.user)
   orders?: Order[];

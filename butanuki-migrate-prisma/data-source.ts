@@ -6,7 +6,6 @@ import { Session } from "./entities/Session";
 import { EventLog } from "./entities/EventLog";
 import { Task } from "./entities/Task";
 import conf from "./config";
-console.log(conf);
 export const AppDataSource = new DataSource({
   type: "postgres",
   host: conf.newDb.host,
