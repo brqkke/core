@@ -29,16 +29,12 @@ export class RetryRefreshTokenTask extends AbstractTask {
           lastRefreshTriedAt: LessThan(treshold),
           //last refresh tried more than 3 hours ago
         },
-        {
-          status: TokenStatus.NEED_REFRESH_RETRY,
-          refreshTriesCount: 1,
-        },
       ],
       take: 5,
     });
     for (const token of tokensToRetry) {
       await this.bityService
-        .refreshBityToken(token, true)
+        .refreshBityToken(token)
         .catch((err) => console.log(token.id, err));
     }
   }

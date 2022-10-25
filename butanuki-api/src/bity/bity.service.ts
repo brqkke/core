@@ -84,10 +84,7 @@ export class BityService {
    *            we set the token status to BROKEN and it is considered as not working anymore
    *            we send an email to the person</pre>
    */
-  async refreshBityToken(
-    token: Token,
-    forceRetryWithHistory = false,
-  ): Promise<Token | null> {
+  async refreshBityToken(token: Token): Promise<Token | null> {
     return this.db.manager.transaction(async (entityManager) => {
       const db = buildRepositories(entityManager);
       const lock = await acquireLockOnEntity(Token, token.id, entityManager);
