@@ -52,7 +52,7 @@ jobs:
         run: docker build . --file Dockerfile --build-arg appVersion=${{ github.sha }} --tag ghcr.io/butanuki21/core:${{  github.sha }}
       - name: start docker
         run: |
-          docker run -d --name core -p 80:80 --env-file butanuki-api/.env.development \
+          docker run --name core -p 80:80 --env-file butanuki-api/.env.development \
             -e DB_HOST=localhost \
             -e DB_NAME=postgres \
             -e DB_PASSWORD=butanuki \
