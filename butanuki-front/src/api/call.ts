@@ -3,7 +3,10 @@ export const CLIENT_VERSION_HEADER = "X-Client-Version";
 
 export interface ApiError {
   status: string;
-  error: string | { code: string; message: string }[];
+  error:
+    | string
+    | { code: string; message: string }
+    | { code: string; message: string }[];
 }
 
 export const call = async <T, R>(
@@ -43,14 +46,27 @@ export const call = async <T, R>(
             return {};
           }
         })
-        .then((resJ: ApiError) => {
-          return {
-            error: {
+        .then(
+          (
+            resJ: ApiError & {
+              message?:
+                | string
+                | { code: string; message: string }
+                | { code: string; message: string }[];
+            }
+          ) => {
+            console.log({
               status: res.status + "",
               error: resJ.error,
-            },
-          };
-        });
+            });
+            return {
+              error: {
+                status: res.status + "",
+                error: resJ.message ? resJ.message : resJ.error,
+              },
+            };
+          }
+        );
     }
     return res
       .text()

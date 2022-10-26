@@ -70,7 +70,8 @@
     },
     "bity": {
       "error": {
-        "input_payment_information_required": "Your bity account doesn't have an IBAN setup."
+        "input_payment_information_required": "You must verify your account and your IBAN (with Bity) before being able to setup a DCA with Butanuki.",
+        "cant_refresh_token": "Please try again. If the error persists, please disconnect your Butanuki account from Bity, then reconnect it."
       }
     }
   }
