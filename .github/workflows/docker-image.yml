@@ -19,5 +19,7 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
     - name: Build the Docker image
       run: docker build . --file Dockerfile --build-arg appVersion=${{ github.ref_name }} --tag ghcr.io/butanuki21/core:${{ github.ref_name }}
+      env:
+        DOCKER_BUILDKIT: 1
     - name: Push the Docker image
       run:  docker push ghcr.io/butanuki21/core:${{  github.ref_name }}

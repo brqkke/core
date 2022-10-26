@@ -52,6 +52,8 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build the Docker image
         run: docker build . --file Dockerfile --build-arg appVersion=${{ github.sha }} --tag ghcr.io/butanuki21/core:${{  github.sha }}
+        env:
+          DOCKER_BUILDKIT: 1
       - name: start docker
         run: |
           docker run -d --name core -p 80:80 --net="host" --env-file butanuki-api/.env.development \
