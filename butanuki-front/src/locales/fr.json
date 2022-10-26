@@ -70,7 +70,8 @@
     },
     "bity": {
       "error": {
-        "input_payment_information_required": "Votre compte bity n'a pas d'iban configuré."
+        "input_payment_information_required": "Vous devez vérifier votre compte et votre IBAN (auprès de Bity) avant de pouvoir mettre en place une épargne automatique chez Butanuki.",
+        "cant_refresh_token": "Veuillez réessayer. Si l'erreur subsiste, veuillez déconnecter votre compte Butanuki de Bity, puis le reconnecter."
       }
     }
   }

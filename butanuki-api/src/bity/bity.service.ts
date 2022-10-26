@@ -100,6 +100,10 @@ export class BityService {
         dbToken.version++;
       }
 
+      if (dbToken.status === TokenStatus.BROKEN) {
+        return null;
+      }
+
       const newToken = await this.bityClient.refreshToken(token.refreshToken);
       const newTokenHistoryCause: TokenHistoryCause = TokenHistoryCause.REFRESH;
       console.log(token.id, newToken);
@@ -169,9 +173,11 @@ export class BityService {
           tokenResult = newToken;
           return newToken.accessToken;
         }
-        throw new UnauthorizedException({
+        throw new InternalServerErrorException({
           success: false,
-          error: "Can't refresh token",
+          error: {
+            code: 'cant_refresh_token',
+          },
         });
       },
     );
