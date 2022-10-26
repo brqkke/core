@@ -18,6 +18,6 @@ export const AppDataSource = new DataSource({
   logging: true,
   entities: [User, Token, Order, Session, EventLog, Task],
   subscribers: [],
-  migrations: [],
+  migrations: ["./migrations/**/*.ts"],
   applicationName: "BTNK-migrate",
 });

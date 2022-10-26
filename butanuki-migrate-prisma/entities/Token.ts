@@ -15,6 +15,9 @@ export class Token {
   id: string;
 
   @Column()
+  version: number;
+
+  @Column()
   userId: string;
 
   @Index({ unique: true })
