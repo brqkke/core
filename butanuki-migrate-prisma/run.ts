@@ -1,20 +1,20 @@
 import "reflect-metadata";
 import * as dotenv from "dotenv";
 import { AppDataSource } from "./data-source";
-import { User } from "./entities/User";
 import { PrismaClient } from "@prisma/client";
+import { EntityManager } from "typeorm";
 import { UserRole } from "./entities/enums/UserRole";
 import { UserStatus } from "./entities/enums/UserStatus";
-import { EntityManager } from "typeorm";
-import { Order } from "./entities/Order";
 import { OrderStatus } from "./entities/enums/OrderStatus";
 import { OrderCurrency } from "./entities/enums/OrderCurrency";
-import { Token } from "./entities/Token";
 import { TokenStatus } from "./entities/enums/TokenStatus";
+import { User } from "./entities/User";
+import { Order } from "./entities/Order";
+import { Token } from "./entities/Token";
 import { Task } from "./entities/Task";
+import { Session } from "./entities/Session";
 import { EventLog, EventLogType } from "./entities/EventLog";
 
-dotenv.config();
 process.env.TZ = "UTC";
 const prisma = new PrismaClient();
 
@@ -22,7 +22,19 @@ AppDataSource.initialize()
   .then((ds) => {
     const userIdMap = new Map<number, string>();
     return ds.transaction(async (em) => {
-      const oldUsers = await prisma.user.findMany({ include: { token: true } });
+      for(const entity of [EventLog, Order, Token, Session, Task, User]) {
+        const repo =  em.getRepository(entity);
+        await repo.query(`TRUNCATE TABLE "${repo.metadata.tableName}" CASCADE`);
+      }
+      const oldUsers = await prisma.user.findMany({
+        include: { token: true },
+        // where: {
+        //   email: {
+        //     endsWith: "uazo.com"
+        //   }
+        // }
+      });
+
       for (const oldUser of oldUsers) {
         const newUser = await em.getRepository(User).save({
           email: oldUser.email,
@@ -50,6 +62,7 @@ AppDataSource.initialize()
             refreshTriesCount: token.refreshTriesCount,
             lastRefreshTriedAt: token.lastRefreshTriedAt,
             lastRefreshedAt: token.lastRefreshTriedAt,
+            version: 1
           });
         }
       }
@@ -58,7 +71,7 @@ AppDataSource.initialize()
       for (const oldTask of oldTasks) {
         await em.getRepository(Task).save({
           name: oldTask.name,
-          lastRunAt: oldTask.name,
+          lastRunAt: oldTask.lastRunAt,
         });
       }
 
@@ -70,8 +83,6 @@ AppDataSource.initialize()
           data: userIdMap.get(oldLog.data) || "",
         });
       }
-
-      // throw new Error("abort");
     });
   })
   .catch((error) => console.log(error));

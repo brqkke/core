@@ -1,2 +1,0 @@
--- AlterEnum
-ALTER TYPE "OrderStatus" ADD VALUE 'FILLED_NEED_RENEW';

@@ -43,7 +43,7 @@ export function useCall<T, R>(
       setResponse({
         error: {
           status: "ERR",
-          error: e.toString(),
+          error: `${e}`,
         },
       });
     } finally {

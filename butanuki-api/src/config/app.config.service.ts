@@ -83,6 +83,7 @@ export class AppConfigService {
       singleLoginTokenTTL: 60 * 10, // 10 minutes
       sessionTokenTTL: 60 * 60, // 1h
       backgroundAgent: {
+        disable: config.get<string>('DISABLE_SCHEDULER', 'false') === 'true',
         apiKey: config.getOrThrow<string>('BACKGROUND_AGENT_API_KEY'),
         baseUrl: config.getOrThrow<string>('BASE_URL') + '/api',
         orderCheckBatchSize: 10, //Check open orders by group of n

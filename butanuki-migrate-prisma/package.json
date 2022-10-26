@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "exec": "ts-node run.ts",
+    "typeorm": "typeorm-ts-node-commonjs -d data-source.ts",
+    "init-database": "npm run typeorm -- migration:run"
   },
   "keywords": [],
   "author": "",
