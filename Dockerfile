@@ -25,7 +25,7 @@ FROM node:16.17.1-alpine3.16 as core-prod-dependencies
 WORKDIR /app
 # Set NODE_ENV environment variable
 ENV NODE_ENV production
-COPY  --from=core-build /app/package*.json ./
+COPY butanuki-api/package*.json ./
 # Running `npm ci` removes the existing node_modules directory and passing in --only=production ensures that only the production dependencies are installed. This ensures that the node_modules directory is as optimized as possible
 RUN npm ci --omit dev --omit peer --omit optional && npm cache clean --force
 
@@ -36,7 +36,7 @@ WORKDIR /app
 # Copy the bundled code from the build stage to the production image
 COPY  --from=core-prod-dependencies /app/node_modules ./node_modules
 COPY  --from=core-build /app/dist ./dist
-COPY  --from=core-prod-dependencies /app/*.json ./
+COPY butanuki-api/*.json ./
 COPY  --from=front-build /app/build ./front-build
 
 ARG appVersion
