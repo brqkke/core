@@ -20,20 +20,28 @@ export class BityClientService {
       refresh_token: refreshToken,
     });
     const r = await firstValueFrom(
-      this.http.post<ClientOAuth2.Data | { error: any }>(
-        this.config.config.bity.oauthConfig.accessTokenUri,
-        body,
-        {
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          validateStatus: () => true,
-        },
-      ),
+      this.http.post<
+        | {
+            access_token: string;
+            expires_in: string;
+            refresh_token?: string;
+            scope: string;
+            token_type: string;
+          }
+        | { error: any }
+      >(this.config.config.bity.oauthConfig.accessTokenUri, body, {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        validateStatus: () => true,
+      }),
     );
     console.log('refreshed token', body, r.data, r.status);
-    if (r.status >= 400) {
+    if (r.status >= 400 || 'error' in r.data) {
       return null;
     }
 
+    if (!r.data.refresh_token) {
+      r.data.refresh_token = refreshToken; //If the refresh token is not returned, use the old one
+    }
     return this.getBityOAuthClient().createToken(r.data);
   }
 
