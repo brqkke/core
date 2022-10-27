@@ -1,11 +1,11 @@
 import { MainLayout } from "../../layout/MainLayout";
 import React, { useCallback, useState } from "react";
-import { ApiError } from "../../api/call";
 import { useHistory, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import { LoggedLayout } from "../../layout/LoggedLayout";
 import { ApiErrorAlert } from "../../components/ApiErrorAlert";
 import {
+  ErrorType,
   useAddOrderMutation,
   useBityStatusQuery,
   useOrderQuery,
@@ -46,7 +46,7 @@ export function OrderSettings() {
   const [cryptoAddress, setCryptoAddress] = useState("");
   const [name, setName] = useState("");
 
-  const [error, setError] = useState<ApiError | undefined>();
+  const [error, setError] = useState<ErrorType | undefined>();
 
   const history = useHistory();
 
@@ -58,6 +58,9 @@ export function OrderSettings() {
           orderTemplateId: orderId,
           data: { amount, cryptoAddress, name },
         },
+        onError: (error) => {
+          setError(error.message as ErrorType);
+        },
       });
     } else {
       await placeOrder({
@@ -68,6 +71,9 @@ export function OrderSettings() {
         onCompleted: (data) => {
           const { vaultId, id: orderId } = data.createOrder;
           history.replace(`/vault/${vaultId}/edit-order/${orderId}`);
+        },
+        onError: (error) => {
+          setError(error.message as ErrorType);
         },
       });
     }

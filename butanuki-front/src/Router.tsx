@@ -3,9 +3,9 @@ import { Login } from "./pages/Login";
 import { UserContextProvider } from "./context/UserContext";
 import { LoginValidate } from "./pages/LoginValidate";
 import { AppHome } from "./pages/app/AppHome";
-import { LinkBity } from "./pages/app/LinkBity";
 import { OrderSettings } from "./pages/app/OrderSettings";
 import { useEffect } from "react";
+import { LinkBityPage } from "./pages/app/LinkBity/LinkBityPage";
 
 export function Router() {
   return (
@@ -41,7 +41,7 @@ function AppRouter() {
             exact
             component={OrderSettings}
           />
-          <Route path={"/auth/bity/callback"} exact component={LinkBity} />
+          <Route path={"/auth/bity/callback"} exact component={LinkBityPage} />
           <Route path={"*"} exact component={NotFound} />
         </Switch>
       </BrowserRouter>

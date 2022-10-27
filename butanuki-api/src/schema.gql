@@ -74,6 +74,16 @@ type Query {
   orderTemplate(id: ID!): OrderTemplate!
   linkUrl: String!
   vault(id: ID!): Vault!
+  errors: [ErrorType!]!
+}
+
+"""Error type"""
+enum ErrorType {
+  NeedVerifiedBityAccount
+  CantRefreshBityToken
+  ButanukiAccountPreviouslyLinkedToOtherBityAccount
+  UnknownBityError
+  Unknown
 }
 
 type Mutation {

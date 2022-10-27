@@ -16,6 +16,7 @@ import { VaultModule } from './vault/vault.module';
 import { DataSource } from 'typeorm';
 import { buildDataloaders } from './dataloader/dataloaders';
 import { AppConfigService } from './config/app.config.service';
+import { ErrorModule } from './error/error.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { AppConfigService } from './config/app.config.service';
     DatabaseModule,
     UserModule,
     VaultModule,
+    ErrorModule,
   ],
   controllers: [AppController],
 })

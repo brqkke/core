@@ -12,6 +12,7 @@ export class BityLinkResolver {
   @Mutation(() => User)
   async unlinkBity(@CurrentUser() user: User): Promise<User> {
     await this.bity.removeToken(user);
+    user.token = undefined;
     return user;
   }
 

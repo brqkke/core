@@ -39,6 +39,15 @@ export type CreateOrderInput = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+/** Error type */
+export enum ErrorType {
+  ButanukiAccountPreviouslyLinkedToOtherBityAccount = 'ButanukiAccountPreviouslyLinkedToOtherBityAccount',
+  CantRefreshBityToken = 'CantRefreshBityToken',
+  NeedVerifiedBityAccount = 'NeedVerifiedBityAccount',
+  Unknown = 'Unknown',
+  UnknownBityError = 'UnknownBityError'
+}
+
 export type Mutation = {
   __typename?: 'Mutation';
   addVault: Vault;
@@ -123,6 +132,7 @@ export type OrderTemplate = {
 
 export type Query = {
   __typename?: 'Query';
+  errors: Array<ErrorType>;
   linkUrl: Scalars['String'];
   me: User;
   orderTemplate: OrderTemplate;

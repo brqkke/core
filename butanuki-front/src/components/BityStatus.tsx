@@ -5,18 +5,8 @@ import {
   useBityLinkUrlLazyQuery,
   useUnlinkBityMutation,
 } from "../generated/graphql";
-
-function ClickHere<T>(props: {
-  onClick: () => Promise<T>;
-  level: "success" | "warning" | "primary" | "danger";
-}) {
-  const { t } = useTranslation();
-  return (
-    <button onClick={props.onClick} className={`btn btn-${props.level}`}>
-      {t("app.home.click_here")}
-    </button>
-  );
-}
+import { LoadingBtn } from "./LoadingBtn";
+import { LinkBityBtn } from "./LinkBityBtn";
 
 export function BityStatus({ bityStatus }: { bityStatus: BityLinkStatus }) {
   const [loadLinkUrl] = useBityLinkUrlLazyQuery();
@@ -32,15 +22,18 @@ export function BityStatus({ bityStatus }: { bityStatus: BityLinkStatus }) {
 
   const linkBtn = (
     <p>
-      {t("app.home.bity.not_linked")}{" "}
-      <ClickHere onClick={linkAccount} level={"success"} />{" "}
+      {t("app.home.bity.not_linked")} <LinkBityBtn />{" "}
       {t("app.home.bity.to_link")}
     </p>
   );
   const unlinkBtn = (
     <p>
       {t("app.home.bity.linked")},{" "}
-      <ClickHere onClick={unlinkAccount} level={"danger"} />{" "}
+      <LoadingBtn
+        onClick={unlinkAccount}
+        level={"danger"}
+        text={t("app.home.click_here")}
+      />{" "}
       {t("app.home.bity.to_unlink")}
     </p>
   );
@@ -48,7 +41,11 @@ export function BityStatus({ bityStatus }: { bityStatus: BityLinkStatus }) {
     <div className={"alert alert-danger"}>
       {t("app.home.bity.broken")}
       <br />
-      <ClickHere onClick={linkAccount} level={"success"} />{" "}
+      <LoadingBtn
+        onClick={linkAccount}
+        level={"success"}
+        text={t("app.home.click_here")}
+      />{" "}
       {t("app.home.bity.to_link")}
     </div>
   );

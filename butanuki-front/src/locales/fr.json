@@ -38,7 +38,12 @@
   "app": {
     "loading": "Chargement",
     "error": {
-      "loading": "Erreur pendant le chargement"
+      "loading": "Erreur pendant le chargement",
+      "ButanukiAccountPreviouslyLinkedToOtherBityAccount": "Ce compte Butanuki était déjà lié à un autre compte Bity.",
+      "CantRefreshBityToken": "Veuillez réessayer. Si l'erreur subsiste, veuillez déconnecter votre compte Butanuki de Bity, puis le reconnecter.",
+      "NeedVerifiedBityAccount": "Vous devez vérifier votre compte et votre IBAN (auprès de Bity) avant de pouvoir mettre en place une épargne automatique chez Butanuki.",
+      "UnknownBityError": "Veuillez réessayer. Si l'erreur subsiste, veuillez déconnecter votre compte Butanuki de Bity, puis le reconnecter.",
+      "Unknown": "Une erreur est survenue. Merci de rééssayer plus tard"
     },
     "login": {
       "enter_email": "Entrez votre adresse email pour recevoir un lien de connexion unique",
@@ -56,6 +61,7 @@
         "not_setup": "Épargne récurrente Bitcoin non configurée"
       },
       "click_here": "Cliquez ici",
+      "try_again": "Rééssayer",
       "setup_dca": "Mettre en place le DCA"
     },
     "order": {
