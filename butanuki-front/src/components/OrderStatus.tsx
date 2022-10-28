@@ -5,6 +5,7 @@ import {
   OrderInfosFragment,
   OrderTemplateInfosFragment,
 } from "../generated/graphql";
+import { LoadingBtn } from "./LoadingBtn";
 
 export function OrderStatus({
   disabled,
@@ -28,9 +29,12 @@ export function OrderStatus({
       <div className="col-8">
         {!disabled && (
           <div className="btn-toolbar justify-content-end">
-            <button className="btn btn-sm btn-danger" onClick={onDelete}>
-              X
-            </button>
+            <LoadingBtn
+              size={"xs"}
+              level={"danger"}
+              onClick={onDelete}
+              text={"X"}
+            />
           </div>
         )}
       </div>

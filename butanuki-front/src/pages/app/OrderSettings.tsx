@@ -14,6 +14,7 @@ import {
 } from "../../generated/graphql";
 import { OrderStatus } from "../../components/OrderStatus";
 import { BityStatus } from "../../components/BityStatus";
+import { LoadingBtn } from "../../components/LoadingBtn";
 
 export function OrderSettings() {
   const { vaultId, orderId } = useParams<{
@@ -222,13 +223,13 @@ export function OrderSettings() {
             >
               {t("app.order.go_back")}
             </button>
-            <button
+            <LoadingBtn
+              level={"primary"}
+              text={t("app.order.save")}
+              loading={saveLoading}
+              disabled={!addressIsValid || !amountIsValid}
               type={"submit"}
-              disabled={!addressIsValid || !amountIsValid || saveLoading}
-              className={"btn btn-primary"}
-            >
-              {t("app.order.save")}
-            </button>
+            />
           </form>
         </div>
       </div>

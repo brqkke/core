@@ -1,25 +1,38 @@
-export function LoadingBtn<T>(props: {
-  onClick: () => Promise<T>;
+export function LoadingBtn<T>({
+  size = "md",
+  loading,
+  text,
+  onClick,
+  level,
+  disabled,
+  type,
+}: {
+  onClick?: () => T | Promise<T>;
   level: "success" | "warning" | "primary" | "danger";
+  size?: "sm" | "lg" | "md" | "xs";
   loading?: boolean;
   text: string;
+  disabled?: boolean;
+  type?: "button" | "submit" | "reset";
 }) {
   return (
     <button
-      onClick={props.onClick}
-      className={`btn btn-${props.level}`}
-      disabled={props.loading}
+      onClick={onClick}
+      className={`btn btn-${size} btn-${level}`}
+      disabled={loading || disabled}
+      type={type}
     >
-      {props.loading && (
+      {text}
+      {loading && (
         <>
+          {" "}
           <span
             className="spinner-border spinner-border-sm"
             role="status"
             aria-hidden="true"
-          />{" "}
+          />
         </>
       )}
-      {props.text}
     </button>
   );
 }
