@@ -25,10 +25,11 @@ export function ConfigContextProvider({
     undefined
   );
 
-  const [locale, setLocale] = useState("en");
+  const [locale, setLocale] = useState("fr");
   const { i18n } = useTranslation();
 
   useEffect(() => {
+    console.log("effect config context", "i18n.changeLanguage", locale);
     i18n.changeLanguage(locale);
   }, [locale, i18n]);
 
@@ -38,7 +39,7 @@ export function ConfigContextProvider({
         ConfigContextProps & {
           locale: string;
         }
-      >("/config");
+      >("/config", true, { credentials: "include", mode: "no-cors" });
       if (r.response) {
         setConfig(r.response);
         setLocale(r.response.locale);

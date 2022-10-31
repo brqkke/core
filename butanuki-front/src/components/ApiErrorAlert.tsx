@@ -3,10 +3,14 @@ import { Alert } from "./Alert";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import isArray from "lodash/isArray";
+import { ErrorType } from "../generated/graphql";
 
-export function ApiErrorAlert({ error }: { error: ApiError }) {
+export function ApiErrorAlert({ error }: { error: ApiError | ErrorType }) {
   const { t } = useTranslation();
   const messages = useMemo<string[]>(() => {
+    if (typeof error === "string") {
+      return [t(`app.error.${error}`)];
+    }
     if (typeof error.error === "string") {
       return [error.error];
     }
@@ -24,7 +28,7 @@ export function ApiErrorAlert({ error }: { error: ApiError }) {
   return (
     <>
       {messages.map((message) => (
-        <Alert level={"danger"} message={message} />
+        <Alert key={message} level={"danger"} message={message} />
       ))}
     </>
   );

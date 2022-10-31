@@ -22,6 +22,7 @@ export class AppConfigService {
       baseUrl: config.getOrThrow<string>('BASE_URL'),
       nodeEnv: config.getOrThrow<string>('NODE_ENV'),
       db: {
+        useMockDb: config.get('DB_USE_MOCK', 'false') === 'true',
         host: config.getOrThrow<string>('DB_HOST'),
         port: parseInt(config.getOrThrow<string>('DB_PORT')),
         username: config.getOrThrow<string>('DB_USER'),

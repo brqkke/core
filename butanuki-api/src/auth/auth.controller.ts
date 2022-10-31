@@ -9,7 +9,7 @@ import {
 import { EmailLoginDTO, EmailLoginVerifyDTO } from '../dto/EmailLoginDTO';
 import { DataSource } from 'typeorm';
 import { RecaptchaService } from '../services/RecaptchaService';
-import { UserService } from '../services/UserService';
+import { UserService } from '../user/user.service';
 import { User } from '../entities/User';
 import { CurrentUser, Roles } from '../decorator/user.decorator';
 import { UserRole } from '../entities/enums/UserRole';

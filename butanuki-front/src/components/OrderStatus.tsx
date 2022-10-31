@@ -1,73 +1,68 @@
-import { useCall } from "../api/hook";
 import { Link } from "react-router-dom";
 import { PaymentDetails } from "./PaymentDetails";
 import { useTranslation } from "react-i18next";
+import {
+  OrderInfosFragment,
+  OrderTemplateInfosFragment,
+} from "../generated/graphql";
+import { DeleteBtnWithConfirm } from "./Modal";
 
-export function OrderStatus({ disabled }: { disabled?: boolean }) {
+export function OrderStatus({
+  disabled,
+  order,
+  template,
+  onDelete,
+}: {
+  disabled?: boolean;
+  order: OrderInfosFragment;
+  template: OrderTemplateInfosFragment;
+  onDelete?: () => Promise<unknown>;
+}) {
   const { t } = useTranslation();
-  const { loading, response, error } = useCall<
-    undefined,
-    {
-      order: {
-        amount: number;
-        currency: string;
-        reference: string;
-        bankDetails: {
-          iban: string;
-          swift_bic: string;
-          recipient: string;
-          account_number: string;
-          bank_code: string;
-          bank_address: string;
-        };
-        redactedCryptoAddress?: string;
-      };
-    }
-  >("GET", "/bity/order");
 
-  if (loading) {
-    return <p>{t("app.loading")}</p>;
-  }
-
-  if (error && error.status === "404") {
-    return (
-      <p>
-        {t("app.home.bity.not_setup")}
-        <Link to={"/order-settings"} className={"btn btn-success"}>
-          {t("app.home.setup_dca")}
-        </Link>
-      </p>
-    );
-  }
-
-  if (response) {
-    return (
-      <>
+  return (
+    <div
+      className="row p-2 m-2"
+      style={{ border: "1px solid gray", borderRadius: "5px" }}
+    >
+      <div className="col-4">{!!template.name && <h4>{template.name}</h4>}</div>
+      <div className="col-8">
+        {!disabled && onDelete && (
+          <div className="btn-toolbar justify-content-end">
+            <DeleteBtnWithConfirm onDelete={onDelete} />
+          </div>
+        )}
+      </div>
+      <div className="col-6">
         <p>
-          {t("app.order.amount")} : {response.order.amount}{" "}
-          {response.order.currency}
-          {!!response.order.redactedCryptoAddress && (
+          {t("app.order.amount")} : {order.amount} {order.currency}
+          {!!order.redactedCryptoAddress && (
             <>
               <br />
-              {t("app.order.crypto_address")} :{" "}
-              {response.order.redactedCryptoAddress}
+              {t("app.order.crypto_address")} : {order.redactedCryptoAddress}
             </>
           )}
           <br />
-          <Link
-            to={"/order-settings"}
-            className={`btn btn-primary btn-sm ${disabled ? "disabled" : ""}`}
-          >
-            {t("app.order.change_amount")}
-          </Link>
-          <br />
-          {t("app.order.reference")} : <b>{response.order.reference}</b>
+          {!disabled && (
+            <>
+              <Link
+                to={`/vault/${template.vaultId}/edit-order/${order.orderTemplateId}`}
+                className={`btn btn-primary btn-sm ${
+                  disabled ? "disabled" : ""
+                }`}
+              >
+                {t("app.order.change_amount")}
+              </Link>
+              <br />
+            </>
+          )}
+          {t("app.order.reference")} : <b>{order.transferLabel}</b>
           <br />
         </p>
-        <PaymentDetails {...response.order.bankDetails} />
-      </>
-    );
-  }
-
-  return null;
+      </div>
+      <div className="col-6">
+        <PaymentDetails {...order.bankDetails} />
+      </div>
+    </div>
+  );
 }

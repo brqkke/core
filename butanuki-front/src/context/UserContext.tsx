@@ -1,58 +1,67 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { Redirect } from "react-router";
-import { get } from "../api/call";
+import { createContext, useContext, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { useMeQuery, UserProfileFragment } from "../generated/graphql";
+import { Redirect } from "react-router";
+import { Alert } from "../components/Alert";
 
-const UserContext = createContext<{ email: string }>({ email: "dummy" });
+const UserContext = createContext<UserProfileFragment>(
+  {} as UserProfileFragment
+);
 
 export function UserContextProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [user, setUser] = useState<{ email: string } | null | undefined>(
-    undefined
-  );
-  const [locale, setLocale] = useState("en");
+  const { data, loading, error } = useMeQuery();
   const { i18n } = useTranslation();
 
   useEffect(() => {
-    i18n.changeLanguage(locale);
-  }, [locale, i18n]);
-
-  useEffect(() => {
-    const sessionKey = window.localStorage.getItem("sessionKey");
-    if (!sessionKey) {
-      setUser(null);
-      return;
+    if (data?.me) {
+      console.log("effect usercontext", "i18n.changeLanguage", data.me.locale);
+      i18n.changeLanguage(data.me.locale);
     }
+  }, [i18n, data]);
 
-    (async () => {
-      const response = await get<{ email: string; locale: string }>("/auth/me");
-      if (response.error) {
-        setUser(null);
-        return;
-      }
+  // useEffect(() => {
+  //   const sessionKey = window.localStorage.getItem("sessionKey");
+  //   if (!sessionKey) {
+  //     setUser(null);
+  //     return;
+  //   }
+  //
+  //   (async () => {
+  //     const response = await get<{ email: string; locale: string }>("/auth/me");
+  //     if (response.error) {
+  //       setUser(null);
+  //       return;
+  //     }
+  //
+  //     if (response.response?.email) {
+  //       setUser(response.response);
+  //       setLocale(response.response.locale);
+  //       return;
+  //     }
+  //
+  //     setUser(null);
+  //   })();
+  // }, []);
 
-      if (response.response?.email) {
-        setUser(response.response);
-        setLocale(response.response.locale);
-        return;
-      }
-
-      setUser(null);
-    })();
-  }, []);
-
-  if (user === undefined) {
+  if (loading) {
     return <p>Loading</p>;
   }
 
-  if (user === null) {
+  if (error) {
+    return <Alert message={error.message} level={"danger"} />;
+  }
+
+  if (!data?.me) {
     return <Redirect to={"/login"} />;
   }
 
-  return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={data.me}>{children}</UserContext.Provider>
+  );
 }
 
 export function useUserContext() {

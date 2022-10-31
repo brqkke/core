@@ -11,15 +11,16 @@ export class UserService {
   }
 
   async findUserOrInit(email: string): Promise<User> {
+    const lowerCaseEmail = email.toLowerCase();
     let user = await this.repository.findOneBy({
-      email,
+      email: lowerCaseEmail,
       status: UserStatus.ACTIVE,
     });
     if (user) {
       return user;
     }
     user = new User();
-    user.email = email;
+    user.email = lowerCaseEmail;
     return this.repository.save(user);
   }
 

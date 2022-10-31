@@ -38,7 +38,12 @@
   "app": {
     "loading": "Loading",
     "error": {
-      "loading": "Error while loading"
+      "loading": "Error while loading",
+      "ButanukiAccountPreviouslyLinkedToOtherBityAccount": "This Butanuki account was previously linked to another Bity account.",
+      "CantRefreshBityToken": "Please try again. If the error persists, please disconnect your Butanuki account from Bity, then reconnect it.",
+      "NeedVerifiedBityAccount": "You must verify your account and your IBAN (with Bity) before being able to setup a DCA with Butanuki.",
+      "Unknown": "An unknown error occured. Please try again later.",
+      "UnknownBityError": "Please try again. If the error persists, please disconnect your Butanuki account from Bity, then reconnect it."
     },
     "login": {
       "enter_email": "Enter your email to receive a unique login link",
@@ -56,6 +61,7 @@
         "not_setup": "DCA not setup"
       },
       "click_here": "Click here",
+      "try_again": "Try again",
       "setup_dca": "Setup DCA"
     },
     "order": {
@@ -66,7 +72,27 @@
       "crypto_address_desc": "Receiving Bitcoin address",
       "save": "Save",
       "go_back": "Go back",
-      "warning_reset": "Warning, you will get a new Bank Transfer Reference"
+      "warning_reset": "Warning, you will get a new Bank Transfer Reference",
+      "create_order_text": "Need to buy more?",
+      "create_order": "Add a new order",
+      "name": "Name",
+      "name_placeholder": "You can set a name for this order to easily find it",
+      "editing": "Editing you order {{name}}",
+      "creating": "Creating a new order in your piggy bank {{name}}"
+    },
+    "vault": {
+      "add": "Add a new piggy bank",
+      "name": "Name",
+      "name_placeholder": "Name of this piggy bank",
+      "currency": "Currency"
+    },
+    "action": {
+      "submit": "Submit",
+      "save": "Save",
+      "go_back": "Go back",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "confirmDelete": "Confirm deletion?"
     },
     "bity": {
       "error": {

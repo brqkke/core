@@ -8,7 +8,7 @@ import { MailerModule } from '../emails/mailer.module';
 import { AuthController } from './auth.controller';
 import { RecaptchaService } from '../services/RecaptchaService';
 import { HttpModule } from '@nestjs/axios';
-import { UserModule } from '../user.module';
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [AppConfigModule, MailerModule, HttpModule, UserModule],

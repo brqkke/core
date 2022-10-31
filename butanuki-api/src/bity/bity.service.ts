@@ -1,10 +1,4 @@
-import {
-  forwardRef,
-  Inject,
-  Injectable,
-  InternalServerErrorException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { AppConfigService } from '../config/app.config.service';
 import { HttpService } from '@nestjs/axios';
 import ClientOAuth2 from 'client-oauth2';
@@ -26,6 +20,7 @@ import { Order } from '../entities/Order';
 import { EventLogType } from '../entities/EventLog';
 import { TokenHistoryCause } from '../entities/enums/TokenHistoryCause';
 import { TokenHistory } from '../entities/TokenHistory';
+import { ErrorType, makeError } from '../error/ErrorTypes';
 
 export type GetOrderResponse =
   paths['/orders/{order_uuid}']['get']['responses']['200']['content']['application/json'];
@@ -54,13 +49,7 @@ export class BityService {
   getTokenFromCodeRedirectUrl(
     redirectUrl: string,
   ): Promise<ClientOAuth2.Token | null> {
-    return this.bityClient
-      .getBityOAuthClient()
-      .code.getToken(redirectUrl)
-      .catch((err) => {
-        console.error(err);
-        return null;
-      });
+    return this.bityClient.getBityOAuthClient().code.getToken(redirectUrl);
   }
 
   /**
@@ -173,12 +162,7 @@ export class BityService {
           tokenResult = newToken;
           return newToken.accessToken;
         }
-        throw new InternalServerErrorException({
-          success: false,
-          error: {
-            code: 'cant_refresh_token',
-          },
-        });
+        throw makeError(ErrorType.CantRefreshBityToken);
       },
     );
     return { newToken: tokenResult, response };
@@ -203,9 +187,9 @@ export class BityService {
   async useTokenOnUser(token: ClientOAuth2.Token, user: User): Promise<Token> {
     //does token belong to user
     if (!(await this.canUserUseToken(token, user))) {
-      throw new UnauthorizedException({
-        error: 'account has order linked to another bity account',
-      });
+      throw makeError(
+        ErrorType.ButanukiAccountPreviouslyLinkedToOtherBityAccount,
+      );
     }
 
     return this.db.manager.transaction(
@@ -286,7 +270,15 @@ export class BityService {
     if (response.status !== 201 || !orderLocation) {
       if (response.data.errors?.length) {
         console.info(response.data.errors);
-        throw new InternalServerErrorException(response.data.errors);
+        if (
+          response.data.errors.some(
+            (e: any) => e.code === 'input_payment_information_required',
+          )
+        ) {
+          throw makeError(ErrorType.NeedVerifiedBityAccount);
+        } else {
+          throw makeError(ErrorType.UnknownBityError);
+        }
       }
       return null;
     }

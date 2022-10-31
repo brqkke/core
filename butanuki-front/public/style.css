@@ -281,3 +281,9 @@ nav-header a:hover {
   color: #f90;
   text-decoration: underline dotted;
 }
+
+.btn-xs{
+  padding: 0.2rem 0.5rem;
+  font-size: 0.7rem;
+  line-height: 0.7rem;
+}

@@ -1,11 +1,6 @@
-export function PaymentDetails(props: {
-  iban: string;
-  swift_bic: string;
-  recipient: string;
-  account_number: string;
-  bank_code: string;
-  bank_address: string;
-}) {
+import { BityPaymentDetails } from "../generated/graphql";
+
+export function PaymentDetails(props: BityPaymentDetails) {
   return (
     <p>
       IBAN : <b>{props.iban}</b>

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { TaskRunner } from './TaskRunner';
 import { AbstractTask } from './Task';
+import { wait } from '../utils';
 
 @Injectable()
 export class SchedulerService {
@@ -31,13 +32,12 @@ export class SchedulerService {
         const { took } = await task._run();
         task.log('Took ' + took / 1000 + ' s');
         totalRealRun += took;
-        await new Promise((r) => setTimeout(r, 1000));
+        await wait(1000);
       }
       const loopDone = Date.now();
       console.log('Loop ended, took : ' + (loopDone - loopStart) / 1000 + ' s');
       console.log('Took (real) ' + totalRealRun / 1000 + ' s');
-      await new Promise((r) => setTimeout(r, 2000));
+      await wait(2000);
     }
   }
 }
-const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));

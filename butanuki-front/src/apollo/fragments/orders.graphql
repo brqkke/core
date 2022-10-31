@@ -1,0 +1,63 @@
+fragment VaultShortInfos on Vault{
+    id
+    currency
+    name
+}
+fragment BityStatus on User{
+    id
+    bityTokenStatus {
+        linked
+        linkStatus
+    }
+}
+
+
+fragment UserProfile on User{
+    ...BityStatus
+    id
+    locale
+    email
+}
+
+
+fragment VaultInfos on Vault{
+    id
+    currency
+    name
+    orderTemplates {
+        ...OrderTemplateInfos
+    }
+}
+
+fragment BankDetails on BityPaymentDetails{
+    account_number
+    bank_address
+    bank_code
+    iban
+    recipient
+    swift_bic
+
+}
+
+fragment OrderInfos on Order{
+    id
+    amount
+    currency
+    bankDetails {
+        ...BankDetails
+    }
+    redactedCryptoAddress
+    status
+    transferLabel
+    orderTemplateId
+}
+
+fragment OrderTemplateInfos on OrderTemplate{
+    id
+    name
+    amount
+    vaultId
+    activeOrder {
+        ...OrderInfos
+    }
+}

@@ -7,16 +7,18 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserStatus } from './enums/UserStatus';
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Session } from './Session';
 import { UserRole } from './enums/UserRole';
 import { Order } from './Order';
 import { Token } from './Token';
+import { Vault } from './Vault';
 
 @Entity()
 @ObjectType()
 export class User {
   @PrimaryGeneratedColumn('uuid')
+  @Field(() => ID)
   id: string;
 
   @Column()
@@ -46,8 +48,14 @@ export class User {
   role: UserRole = UserRole.USER;
 
   @Column()
-  locale: string = 'en';
+  @Field(() => String)
+  locale: string = 'fr';
 
   @OneToMany(() => Order, (order) => order.user)
   orders?: Order[];
+
+  @OneToMany(() => Vault, (vault) => vault.user)
+  vaults?: Vault[];
 }
+
+export type UserWithToken = User & { token: Token };

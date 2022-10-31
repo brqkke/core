@@ -1,67 +1,39 @@
 import { useCallback } from "react";
-import { deleteCall, get } from "../api/call";
 import { useTranslation } from "react-i18next";
+import {
+  BityLinkStatus,
+  useBityLinkUrlLazyQuery,
+  useUnlinkBityMutation,
+} from "../generated/graphql";
+import { LoadingBtn } from "./LoadingBtn";
+import { LinkBityBtn } from "./LinkBityBtn";
 
-const BITY_GET_LINK_URL_ENDPOINT = "/bity/link/";
-
-function ClickHere(props: {
-  onClick: () => Promise<void>;
-  level: "success" | "warning" | "primary" | "danger";
-}) {
+export function BityStatus({ bityStatus }: { bityStatus: BityLinkStatus }) {
+  const [loadLinkUrl] = useBityLinkUrlLazyQuery();
+  const [unlinkAccount] = useUnlinkBityMutation();
   const { t } = useTranslation();
-  return (
-    <button onClick={props.onClick} className={`btn btn-${props.level}`}>
-      {t("app.home.click_here")}
-    </button>
-  );
-}
 
-export function BityStatus({
-  bityStatus,
-  onDelete,
-}: {
-  bityStatus:
-    | {
-        linked: boolean;
-        linkStatus: "ACTIVE" | "BROKEN" | "NEED_REFRESH_RETRY";
-      }
-    | null
-    | undefined;
-  onDelete: () => void;
-}) {
   const linkAccount = useCallback(async () => {
-    const r = await get<{ redirectUrl: string }>(BITY_GET_LINK_URL_ENDPOINT);
-    if (r.response) {
-      window.location.href = r.response.redirectUrl;
+    const result = await loadLinkUrl();
+    if (result.data) {
+      window.location.href = result.data.linkUrl;
     }
-  }, []);
-
-  const unlinkAccount = useCallback(async () => {
-    await deleteCall<undefined>(BITY_GET_LINK_URL_ENDPOINT);
-    onDelete();
-  }, [onDelete]);
-
-  const { t } = useTranslation();
-
-  if (bityStatus === undefined) {
-    return <p>{t("app.loading")}</p>;
-  }
-
-  if (bityStatus === null) {
-    return <p>{t("app.error.loading")}</p>;
-  }
+  }, [loadLinkUrl]);
 
   const linkBtn = (
     <p>
-      {t("app.home.bity.not_linked")}{" "}
-      <ClickHere onClick={linkAccount} level={"success"} />{" "}
+      {t("app.home.bity.not_linked")} <LinkBityBtn />{" "}
       {t("app.home.bity.to_link")}
     </p>
   );
   const unlinkBtn = (
     <p>
       {t("app.home.bity.linked")},{" "}
-      <ClickHere onClick={unlinkAccount} level={"danger"} />{" "}
+      <LoadingBtn
+        onClick={unlinkAccount}
+        level={"danger"}
+        text={t("app.home.click_here")}
+      />{" "}
       {t("app.home.bity.to_unlink")}
     </p>
   );
@@ -69,7 +41,11 @@ export function BityStatus({
     <div className={"alert alert-danger"}>
       {t("app.home.bity.broken")}
       <br />
-      <ClickHere onClick={linkAccount} level={"success"} />{" "}
+      <LoadingBtn
+        onClick={linkAccount}
+        level={"success"}
+        text={t("app.home.click_here")}
+      />{" "}
       {t("app.home.bity.to_link")}
     </div>
   );

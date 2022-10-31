@@ -12,6 +12,10 @@ import { BityService } from '../bity/bity.service';
 import { Token } from '../entities/Token';
 import { Order } from '../entities/Order';
 import { TokenStatus } from '../entities/enums/TokenStatus';
+import { OrderTemplate } from '../entities/OrderTemplate';
+
+export const IsOrderStatusActive = () =>
+  In<OrderStatus>([OrderStatus.FILLED_NEED_RENEW, OrderStatus.OPEN]);
 
 @Injectable()
 export class OrderService {
@@ -30,6 +34,46 @@ export class OrderService {
         ...(onlyActive
           ? { status: In([OrderStatus.FILLED_NEED_RENEW, OrderStatus.OPEN]) }
           : {}),
+      },
+      order: { createdAt: 'DESC' },
+    });
+  }
+
+  async getVaultOrderTemplates(vaultId: string): Promise<OrderTemplate[]> {
+    return this.db.orderTemplate.find({
+      where: {
+        vaultId,
+        orders: {
+          status: IsOrderStatusActive(),
+        },
+      },
+      order: { createdAt: 'DESC' },
+    });
+  }
+
+  async getActiveOrderForTemplate(templateId: string): Promise<Order | null> {
+    return this.db.order.findOne({
+      where: {
+        orderTemplateId: templateId,
+        status: IsOrderStatusActive(),
+      },
+      order: { createdAt: 'DESC' },
+    });
+  }
+
+  async getOrderTemplate(
+    userId: string,
+    orderTemplateId: string,
+  ): Promise<OrderTemplate> {
+    return this.db.orderTemplate.findOneOrFail({
+      where: {
+        vault: {
+          userId,
+        },
+        id: orderTemplateId,
+        orders: {
+          status: IsOrderStatusActive(),
+        },
       },
       order: { createdAt: 'DESC' },
     });
@@ -104,39 +148,18 @@ export class OrderService {
     });
   }
 
-  async getMostRecentActiveOrder(userId: string) {
-    return this.getMostRecentOrder(userId, true);
-  }
-
-  async openOrdersAlreadyExists({
-    currency,
-    userId,
-    amount,
-  }: {
-    currency: OrderCurrency;
-    userId: string;
-    amount: number;
-  }) {
-    return await this.db.order.count({
-      where: {
-        currency,
-        userId,
-        amount,
-        status: In([OrderStatus.FILLED_NEED_RENEW, OrderStatus.OPEN]),
-      },
-    });
-  }
-
   async placeBityOrder({
     amount,
     cryptoAddress,
     token,
     currency,
+    template,
   }: {
     currency: OrderCurrency;
     amount: number;
     cryptoAddress: string;
     token: Token;
+    template: OrderTemplate;
   }) {
     const bityOrder = await this.bity.placeBityOrder({
       amount,
@@ -162,22 +185,31 @@ export class OrderService {
         currency,
         bankDetails: JSON.stringify(bityOrder.payment_details),
         redactedCryptoAddress: redactCryptoAddress(cryptoAddress),
+        orderTemplateId: template.id,
       });
-      await this.saveOrderAndSetOldToCancelled(newOrder);
+      await this.saveOrderAndTemplateAndSetOldOrderToCancelled(
+        newOrder,
+        template,
+      );
       return newOrder;
     }
 
     return null;
   }
 
-  protected saveOrderAndSetOldToCancelled(order: Order) {
+  protected saveOrderAndTemplateAndSetOldOrderToCancelled(
+    order: Order,
+    template: OrderTemplate,
+  ) {
     return this.db.em.transaction('SERIALIZABLE', async (entityManager) => {
       const db = buildRepositories(entityManager);
       await db.order.save(order);
+      await db.orderTemplate.save(template);
       await db.order.update(
         {
           userId: order.userId,
           id: Not(order.id),
+          orderTemplateId: template.id,
           status: In([OrderStatus.FILLED_NEED_RENEW, OrderStatus.OPEN]),
         },
         { status: OrderStatus.CANCELLED },

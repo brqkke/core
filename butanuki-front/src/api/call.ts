@@ -12,7 +12,9 @@ export interface ApiError {
 export const call = async <T, R>(
   method: string,
   path: string,
-  req?: T
+  req?: T,
+  noCredentials?: boolean,
+  options?: RequestInit
 ): Promise<{
   response?: R;
   error?: ApiError;
@@ -22,18 +24,20 @@ export const call = async <T, R>(
     Accept: "application/json",
     [CLIENT_VERSION_HEADER]: process.env.REACT_APP_BUILD_TAG || "",
   };
-  const sessionKey = window.localStorage.getItem("sessionKey");
-  if (sessionKey) {
-    headers["Authorization"] = sessionKey;
+  if (!noCredentials) {
+    const sessionKey = window.localStorage.getItem("sessionKey");
+    if (sessionKey) {
+      headers["Authorization"] = sessionKey;
+    }
   }
 
   return await fetch(baseUrl + path, {
     method: method,
     headers,
     body: req && JSON.stringify(req),
+    ...options,
   }).then((res) => {
     if (!res.ok) {
-      console.log(res.ok);
       return res
         .text()
         .then((text) => {
@@ -78,11 +82,13 @@ export const call = async <T, R>(
 };
 
 export const get = async <R>(
-  path: string
+  path: string,
+  noCredentials?: boolean,
+  options?: RequestInit
 ): Promise<{
   response?: R;
   error?: ApiError;
-}> => await call<undefined, R>("GET", path, undefined);
+}> => await call<undefined, R>("GET", path, undefined, noCredentials, options);
 
 export const post = async <T, R>(
   path: string,

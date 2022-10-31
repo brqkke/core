@@ -39,7 +39,7 @@ export function useCall<T, R>(
       } else {
         return;
       }
-    } catch (e) {
+    } catch (e: unknown) {
       setResponse({
         error: {
           status: "ERR",

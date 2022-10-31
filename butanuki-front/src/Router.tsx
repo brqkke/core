@@ -1,11 +1,11 @@
-import { Switch, Route, BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Login } from "./pages/Login";
 import { UserContextProvider } from "./context/UserContext";
 import { LoginValidate } from "./pages/LoginValidate";
 import { AppHome } from "./pages/app/AppHome";
-import { LinkBity } from "./pages/app/LinkBity";
 import { OrderSettings } from "./pages/app/OrderSettings";
 import { useEffect } from "react";
+import { LinkBityPage } from "./pages/app/LinkBity/LinkBityPage";
 
 export function Router() {
   return (
@@ -31,7 +31,17 @@ function AppRouter() {
         <Switch>
           <Route path={"/"} exact component={AppHome} />
           <Route path={"/order-settings"} exact component={OrderSettings} />
-          <Route path={"/auth/bity/callback"} exact component={LinkBity} />
+          <Route
+            path={"/vault/:vaultId/new-order"}
+            exact
+            component={OrderSettings}
+          />
+          <Route
+            path={"/vault/:vaultId/edit-order/:orderId"}
+            exact
+            component={OrderSettings}
+          />
+          <Route path={"/auth/bity/callback"} exact component={LinkBityPage} />
           <Route path={"*"} exact component={NotFound} />
         </Switch>
       </BrowserRouter>
@@ -44,7 +54,6 @@ function NotFound() {
 }
 
 function Logout() {
-  console.log("Logout");
   useEffect(() => {
     window.localStorage.removeItem("sessionKey");
     window.location.href = "/";
