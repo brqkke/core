@@ -5,7 +5,7 @@ import {
   OrderInfosFragment,
   OrderTemplateInfosFragment,
 } from "../generated/graphql";
-import { LoadingBtn } from "./LoadingBtn";
+import { DeleteBtnWithConfirm } from "./Modal";
 
 export function OrderStatus({
   disabled,
@@ -16,7 +16,7 @@ export function OrderStatus({
   disabled?: boolean;
   order: OrderInfosFragment;
   template: OrderTemplateInfosFragment;
-  onDelete?: () => void;
+  onDelete?: () => Promise<unknown>;
 }) {
   const { t } = useTranslation();
 
@@ -27,14 +27,9 @@ export function OrderStatus({
     >
       <div className="col-4">{!!template.name && <h4>{template.name}</h4>}</div>
       <div className="col-8">
-        {!disabled && (
+        {!disabled && onDelete && (
           <div className="btn-toolbar justify-content-end">
-            <LoadingBtn
-              size={"xs"}
-              level={"danger"}
-              onClick={onDelete}
-              text={"X"}
-            />
+            <DeleteBtnWithConfirm onDelete={onDelete} />
           </div>
         )}
       </div>

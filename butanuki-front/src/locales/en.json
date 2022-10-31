@@ -90,7 +90,9 @@
       "submit": "Submit",
       "save": "Save",
       "go_back": "Go back",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "confirmDelete": "Confirm deletion?"
     },
     "bity": {
       "error": {

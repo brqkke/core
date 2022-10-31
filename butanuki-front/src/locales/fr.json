@@ -90,7 +90,9 @@
       "submit": "Envoyer",
       "save": "Enregistrer",
       "go_back": "Retour",
-      "cancel": "Annuler"
+      "cancel": "Annuler",
+      "delete": "Supprimer",
+      "confirmDelete": "Confirmer la suppression ?"
     },
     "bity": {
       "error": {

@@ -1,7 +1,7 @@
 import { VaultInfosFragment } from "../generated/graphql";
 import { useCallback } from "react";
 import { VaultOrders } from "./VaultOrders";
-import { LoadingBtn } from "./LoadingBtn";
+import { DeleteBtnWithConfirm } from "./Modal";
 
 export function VaultStatus({
   disabled,
@@ -10,10 +10,10 @@ export function VaultStatus({
 }: {
   disabled: boolean;
   vault: VaultInfosFragment;
-  onDeleteVault: (id: string) => void;
+  onDeleteVault: (id: string) => void | Promise<void>;
 }) {
   const onDelete = useCallback(() => {
-    onDeleteVault(vault.id);
+    return onDeleteVault(vault.id);
   }, [vault.id, onDeleteVault]);
 
   return (
@@ -23,13 +23,7 @@ export function VaultStatus({
           <h3>
             {vault.name} -{" "}
             <small>
-              {vault.currency}{" "}
-              <LoadingBtn
-                size={"xs"}
-                level={"danger"}
-                onClick={onDelete}
-                text={"X"}
-              />
+              {vault.currency} <DeleteBtnWithConfirm onDelete={onDelete} />
             </small>
           </h3>
         </div>

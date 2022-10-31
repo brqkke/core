@@ -1,4 +1,3 @@
-import { MainLayout } from "../../layout/MainLayout";
 import React, { useCallback, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
@@ -93,13 +92,13 @@ export function OrderSettings() {
 
   if (vault.loading || !vault.data || order.loading) {
     return (
-      <MainLayout>
+      <LoggedLayout>
         <div className="row">
           <div className="col-md-6">
             <p>{t("app.loading")}</p>
           </div>
         </div>
-      </MainLayout>
+      </LoggedLayout>
     );
   }
 
@@ -109,7 +108,6 @@ export function OrderSettings() {
   const amountIsValid = (amountChanged && !!amount) || !amountChanged;
   const addressIsValid = (!amountChanged && !addressChanged) || addressChanged;
 
-  console.log({ addressChanged, addressIsValid, amountChanged, amountIsValid });
   return (
     <LoggedLayout>
       <div className="row">
@@ -130,7 +128,7 @@ export function OrderSettings() {
         </div>
       )}
       <div className="row">
-        <div className="col-md-6">
+        <div className="col-md-12">
           <br />
           {error && <ApiErrorAlert error={error} />}
           <form

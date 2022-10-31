@@ -1,3 +1,13 @@
+export interface LoadingBtnProps<T> {
+  onClick?: () => T | Promise<T>;
+  level: "success" | "warning" | "primary" | "danger";
+  size?: "sm" | "lg" | "md" | "xs";
+  loading?: boolean;
+  text: string;
+  disabled?: boolean;
+  type?: "button" | "submit" | "reset";
+}
+
 export function LoadingBtn<T>({
   size = "md",
   loading,
@@ -6,15 +16,7 @@ export function LoadingBtn<T>({
   level,
   disabled,
   type,
-}: {
-  onClick?: () => T | Promise<T>;
-  level: "success" | "warning" | "primary" | "danger";
-  size?: "sm" | "lg" | "md" | "xs";
-  loading?: boolean;
-  text: string;
-  disabled?: boolean;
-  type?: "button" | "submit" | "reset";
-}) {
+}: LoadingBtnProps<T>) {
   return (
     <button
       onClick={onClick}
