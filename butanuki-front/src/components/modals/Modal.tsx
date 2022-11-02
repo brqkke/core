@@ -5,10 +5,11 @@ import BSModal from "react-bootstrap/Modal";
 
 interface ModalProps<T> {
   open: boolean;
-  text: string;
+  text?: string;
   title: string;
   onClose: () => void;
   confirmBtnProps: LoadingBtnProps<T>;
+  children?: React.ReactNode;
 }
 
 export function Modal<T>(props: ModalProps<T>) {
@@ -19,7 +20,8 @@ export function Modal<T>(props: ModalProps<T>) {
         <BSModal.Title>{props.title}</BSModal.Title>
       </BSModal.Header>
       <BSModal.Body>
-        <p>{props.text}</p>
+        {props.children}
+        {props.text && <p>{props.text}</p>}
       </BSModal.Body>
       <BSModal.Footer>
         <button

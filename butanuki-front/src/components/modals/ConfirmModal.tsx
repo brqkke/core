@@ -1,5 +1,8 @@
-import React, { useCallback, useState } from "react";
+import React, { useEffect } from "react";
 import { Modal } from "./Modal";
+import { MutationResult } from "@apollo/client/react/types/types";
+import { ApiErrorAlert } from "../alerts/ApiErrorAlert";
+import { ErrorType } from "../../generated/graphql";
 
 interface ConfirmModalProps {
   open: boolean;
@@ -10,6 +13,7 @@ interface ConfirmModalProps {
   confirmBtnText: string;
   confirmBtnLevel: "success" | "warning" | "primary" | "danger";
   confirmBtnSize?: "sm" | "lg" | "md" | "xs";
+  mutationResult: MutationResult<unknown>;
 }
 
 export function ConfirmModal({
@@ -21,22 +25,21 @@ export function ConfirmModal({
   onClose,
   title,
   open,
+  mutationResult: { loading, error, reset },
 }: ConfirmModalProps) {
-  const [loading, setLoading] = useState(false);
-  const confirm = useCallback(async () => {
-    setLoading(true);
-    await onConfirm();
-    setLoading(false);
-  }, [onConfirm]);
+  useEffect(() => {
+    if (!open) {
+      reset();
+    }
+  }, [open, reset]);
 
   return (
     <Modal
-      text={text}
       title={title}
       open={open}
       onClose={onClose}
       confirmBtnProps={{
-        onClick: confirm,
+        onClick: onConfirm,
         level: confirmBtnLevel,
         size: confirmBtnSize,
         loading,
@@ -44,6 +47,9 @@ export function ConfirmModal({
         disabled: loading,
         type: "button",
       }}
-    />
+    >
+      {error && <ApiErrorAlert error={error.message as ErrorType} />}
+      <p>{text}</p>
+    </Modal>
   );
 }
