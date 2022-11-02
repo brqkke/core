@@ -7,7 +7,7 @@ import { IsOrderStatusActive } from '../order/order.service';
 export class MigrateScriptService {
   constructor(private data: DataSource) {}
 
-  public async initVaults(dryRunArg = 'false') {
+  public async initVaults(dryRunArg = 'true') {
     const dryRun = dryRunArg !== 'false';
     await this.data.manager.transaction(async (manager) => {
       const db = buildRepositories(manager);
