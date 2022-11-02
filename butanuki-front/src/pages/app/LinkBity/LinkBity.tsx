@@ -2,9 +2,9 @@ import { Redirect, useHistory, useLocation } from "react-router";
 import React, { useEffect, useState } from "react";
 import { ErrorType, useLinkBityMutation } from "../../../generated/graphql";
 import { useTranslation } from "react-i18next";
-import { ApiErrorAlert } from "../../../components/ApiErrorAlert";
-import { Alert } from "../../../components/Alert";
-import { LinkBityBtn } from "../../../components/LinkBityBtn";
+import { ApiErrorAlert } from "../../../components/alerts/ApiErrorAlert";
+import { Alert } from "../../../components/alerts/Alert";
+import { LinkBityBtn } from "../../../components/buttons/BityBtn/LinkBityBtn";
 
 export function LinkBity() {
   const location = useLocation();

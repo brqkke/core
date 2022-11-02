@@ -1,8 +1,8 @@
-import { BityStatus } from "../../components/BityStatus";
-import { LoggedLayout } from "../../layout/LoggedLayout";
-import { useUserContext } from "../../context/UserContext";
-import { Vaults } from "../../components/Vaults";
-import { TokenStatus } from "../../generated/graphql";
+import { BityStatus } from "../../../components/BityStatus";
+import { LoggedLayout } from "../../../layout/LoggedLayout";
+import { useUserContext } from "../../../context/UserContext";
+import { Vaults } from "./Vaults/Vaults";
+import { TokenStatus } from "../../../generated/graphql";
 
 export function AppHome() {
   const user = useUserContext();

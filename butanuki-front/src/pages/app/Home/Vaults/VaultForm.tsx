@@ -1,4 +1,4 @@
-import { OrderCurrency, VaultInput } from "../generated/graphql";
+import { OrderCurrency, VaultInput } from "../../../../generated/graphql";
 import { ChangeEvent, FormEvent, useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 

@@ -1,12 +1,17 @@
-import { useBityLinkUrlLazyQuery } from "../generated/graphql";
+import {
+  useBityLinkUrlLazyQuery,
+  useUnlinkBityMutation,
+} from "../../../generated/graphql";
 import { useCallback } from "react";
-import { LoadingBtn } from "./LoadingBtn";
+import { LoadingBtn } from "../LoadingBtn";
 import { useTranslation } from "react-i18next";
 
 export const LinkBityBtn = ({
   variant = "click-here",
+  colorVariant,
 }: {
   variant?: "click-here" | "try-again";
+  colorVariant?: "success" | "danger" | "warning";
 }) => {
   const { t } = useTranslation();
   const [loadLinkUrl, { loading }] = useBityLinkUrlLazyQuery({
@@ -24,7 +29,7 @@ export const LinkBityBtn = ({
       return (
         <LoadingBtn
           onClick={linkAccount}
-          level={"warning"}
+          level={colorVariant || "warning"}
           text={t("app.home.try_again")}
           loading={loading}
         />
@@ -34,10 +39,23 @@ export const LinkBityBtn = ({
       return (
         <LoadingBtn
           onClick={linkAccount}
-          level={"success"}
+          level={colorVariant || "success"}
           text={t("app.home.click_here")}
           loading={loading}
         />
       );
   }
+};
+
+export const UnlinkBityBtn = () => {
+  const [unlinkAccount, { loading: unlinkLoading }] = useUnlinkBityMutation();
+  const { t } = useTranslation();
+  return (
+    <LoadingBtn
+      onClick={unlinkAccount}
+      level={"danger"}
+      loading={unlinkLoading}
+      text={t("app.home.click_here")}
+    />
+  );
 };

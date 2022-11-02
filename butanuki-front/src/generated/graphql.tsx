@@ -179,11 +179,11 @@ export type VaultInput = {
   name: Scalars['String'];
 };
 
-export type VaultShortInfosFragment = { __typename?: 'Vault', id: string, currency: string, name: string };
+export type UserProfileFragment = { __typename?: 'User', id: string, locale: string, email: string, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } };
 
 export type BityStatusFragment = { __typename?: 'User', id: string, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } };
 
-export type UserProfileFragment = { __typename?: 'User', id: string, locale: string, email: string, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } };
+export type VaultShortInfosFragment = { __typename?: 'Vault', id: string, currency: string, name: string };
 
 export type VaultInfosFragment = { __typename?: 'Vault', id: string, currency: string, name: string, orderTemplates: Array<{ __typename?: 'OrderTemplate', id: string, name: string, amount: number, vaultId: string, activeOrder?: { __typename?: 'Order', id: string, amount: number, currency: OrderCurrency, redactedCryptoAddress?: string | null, status: string, transferLabel: string, orderTemplateId?: string | null, bankDetails?: { __typename?: 'BityPaymentDetails', account_number?: string | null, bank_address?: string | null, bank_code?: string | null, iban?: string | null, recipient?: string | null, swift_bic?: string | null } | null } | null }> };
 
@@ -193,29 +193,27 @@ export type OrderInfosFragment = { __typename?: 'Order', id: string, amount: num
 
 export type OrderTemplateInfosFragment = { __typename?: 'OrderTemplate', id: string, name: string, amount: number, vaultId: string, activeOrder?: { __typename?: 'Order', id: string, amount: number, currency: OrderCurrency, redactedCryptoAddress?: string | null, status: string, transferLabel: string, orderTemplateId?: string | null, bankDetails?: { __typename?: 'BityPaymentDetails', account_number?: string | null, bank_address?: string | null, bank_code?: string | null, iban?: string | null, recipient?: string | null, swift_bic?: string | null } | null } | null };
 
-export type UnlinkBityMutationVariables = Exact<{ [key: string]: never; }>;
-
-
-export type UnlinkBityMutation = { __typename?: 'Mutation', unlinkBity: { __typename?: 'User', id: string, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } } };
-
-export type LinkBityMutationVariables = Exact<{
-  redirectedFrom: Scalars['String'];
-}>;
-
-
-export type LinkBityMutation = { __typename?: 'Mutation', linkBity: { __typename?: 'User', id: string, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } } };
-
-export type BityLinkUrlQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type BityLinkUrlQuery = { __typename?: 'Query', linkUrl: string };
-
 export type UpdateLocaleMutationVariables = Exact<{
   locale: Scalars['String'];
 }>;
 
 
 export type UpdateLocaleMutation = { __typename?: 'Mutation', updateLocale: { __typename?: 'User', locale: string, id: string } };
+
+export type UnlinkBityMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UnlinkBityMutation = { __typename?: 'Mutation', unlinkBity: { __typename?: 'User', id: string, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } } };
+
+export type BityLinkUrlQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type BityLinkUrlQuery = { __typename?: 'Query', linkUrl: string };
+
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, locale: string, email: string, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } } };
 
 export type AddVaultMutationVariables = Exact<{
   data: VaultInput;
@@ -236,10 +234,19 @@ export type VaultsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type VaultsQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, vaults: Array<{ __typename?: 'Vault', id: string, currency: string, name: string, orderTemplates: Array<{ __typename?: 'OrderTemplate', id: string, name: string, amount: number, vaultId: string, activeOrder?: { __typename?: 'Order', id: string, amount: number, currency: OrderCurrency, redactedCryptoAddress?: string | null, status: string, transferLabel: string, orderTemplateId?: string | null, bankDetails?: { __typename?: 'BityPaymentDetails', account_number?: string | null, bank_address?: string | null, bank_code?: string | null, iban?: string | null, recipient?: string | null, swift_bic?: string | null } | null } | null }> }> } };
 
-export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+export type DeleteOrderMutationVariables = Exact<{
+  orderTemplateId: Scalars['ID'];
+}>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, locale: string, email: string, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } } };
+export type DeleteOrderMutation = { __typename?: 'Mutation', deleteOrderTemplate: { __typename?: 'OrderTemplate', id: string } };
+
+export type LinkBityMutationVariables = Exact<{
+  redirectedFrom: Scalars['String'];
+}>;
+
+
+export type LinkBityMutation = { __typename?: 'Mutation', linkBity: { __typename?: 'User', id: string, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } } };
 
 export type BityStatusQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -269,13 +276,6 @@ export type UpdateOrderMutationVariables = Exact<{
 
 export type UpdateOrderMutation = { __typename?: 'Mutation', updateOrderTemplate: { __typename?: 'OrderTemplate', id: string, name: string, amount: number, vaultId: string, activeOrder?: { __typename?: 'Order', id: string, amount: number, currency: OrderCurrency, redactedCryptoAddress?: string | null, status: string, transferLabel: string, orderTemplateId?: string | null, bankDetails?: { __typename?: 'BityPaymentDetails', account_number?: string | null, bank_address?: string | null, bank_code?: string | null, iban?: string | null, recipient?: string | null, swift_bic?: string | null } | null } | null } };
 
-export type DeleteOrderMutationVariables = Exact<{
-  orderTemplateId: Scalars['ID'];
-}>;
-
-
-export type DeleteOrderMutation = { __typename?: 'Mutation', deleteOrderTemplate: { __typename?: 'OrderTemplate', id: string } };
-
 export type OrderQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -283,13 +283,6 @@ export type OrderQueryVariables = Exact<{
 
 export type OrderQuery = { __typename?: 'Query', orderTemplate: { __typename?: 'OrderTemplate', id: string, name: string, amount: number, vaultId: string, activeOrder?: { __typename?: 'Order', id: string, amount: number, currency: OrderCurrency, redactedCryptoAddress?: string | null, status: string, transferLabel: string, orderTemplateId?: string | null, bankDetails?: { __typename?: 'BityPaymentDetails', account_number?: string | null, bank_address?: string | null, bank_code?: string | null, iban?: string | null, recipient?: string | null, swift_bic?: string | null } | null } | null } };
 
-export const VaultShortInfosFragmentDoc = gql`
-    fragment VaultShortInfos on Vault {
-  id
-  currency
-  name
-}
-    `;
 export const BityStatusFragmentDoc = gql`
     fragment BityStatus on User {
   id
@@ -307,6 +300,13 @@ export const UserProfileFragmentDoc = gql`
   email
 }
     ${BityStatusFragmentDoc}`;
+export const VaultShortInfosFragmentDoc = gql`
+    fragment VaultShortInfos on Vault {
+  id
+  currency
+  name
+}
+    `;
 export const BankDetailsFragmentDoc = gql`
     fragment BankDetails on BityPaymentDetails {
   account_number
@@ -352,103 +352,6 @@ export const VaultInfosFragmentDoc = gql`
   }
 }
     ${OrderTemplateInfosFragmentDoc}`;
-export const UnlinkBityDocument = gql`
-    mutation unlinkBity {
-  unlinkBity {
-    ...BityStatus
-  }
-}
-    ${BityStatusFragmentDoc}`;
-export type UnlinkBityMutationFn = Apollo.MutationFunction<UnlinkBityMutation, UnlinkBityMutationVariables>;
-
-/**
- * __useUnlinkBityMutation__
- *
- * To run a mutation, you first call `useUnlinkBityMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUnlinkBityMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [unlinkBityMutation, { data, loading, error }] = useUnlinkBityMutation({
- *   variables: {
- *   },
- * });
- */
-export function useUnlinkBityMutation(baseOptions?: Apollo.MutationHookOptions<UnlinkBityMutation, UnlinkBityMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UnlinkBityMutation, UnlinkBityMutationVariables>(UnlinkBityDocument, options);
-      }
-export type UnlinkBityMutationHookResult = ReturnType<typeof useUnlinkBityMutation>;
-export type UnlinkBityMutationResult = Apollo.MutationResult<UnlinkBityMutation>;
-export type UnlinkBityMutationOptions = Apollo.BaseMutationOptions<UnlinkBityMutation, UnlinkBityMutationVariables>;
-export const LinkBityDocument = gql`
-    mutation linkBity($redirectedFrom: String!) {
-  linkBity(redirectedFrom: $redirectedFrom) {
-    ...BityStatus
-  }
-}
-    ${BityStatusFragmentDoc}`;
-export type LinkBityMutationFn = Apollo.MutationFunction<LinkBityMutation, LinkBityMutationVariables>;
-
-/**
- * __useLinkBityMutation__
- *
- * To run a mutation, you first call `useLinkBityMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useLinkBityMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [linkBityMutation, { data, loading, error }] = useLinkBityMutation({
- *   variables: {
- *      redirectedFrom: // value for 'redirectedFrom'
- *   },
- * });
- */
-export function useLinkBityMutation(baseOptions?: Apollo.MutationHookOptions<LinkBityMutation, LinkBityMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<LinkBityMutation, LinkBityMutationVariables>(LinkBityDocument, options);
-      }
-export type LinkBityMutationHookResult = ReturnType<typeof useLinkBityMutation>;
-export type LinkBityMutationResult = Apollo.MutationResult<LinkBityMutation>;
-export type LinkBityMutationOptions = Apollo.BaseMutationOptions<LinkBityMutation, LinkBityMutationVariables>;
-export const BityLinkUrlDocument = gql`
-    query bityLinkUrl {
-  linkUrl
-}
-    `;
-
-/**
- * __useBityLinkUrlQuery__
- *
- * To run a query within a React component, call `useBityLinkUrlQuery` and pass it any options that fit your needs.
- * When your component renders, `useBityLinkUrlQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useBityLinkUrlQuery({
- *   variables: {
- *   },
- * });
- */
-export function useBityLinkUrlQuery(baseOptions?: Apollo.QueryHookOptions<BityLinkUrlQuery, BityLinkUrlQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<BityLinkUrlQuery, BityLinkUrlQueryVariables>(BityLinkUrlDocument, options);
-      }
-export function useBityLinkUrlLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BityLinkUrlQuery, BityLinkUrlQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<BityLinkUrlQuery, BityLinkUrlQueryVariables>(BityLinkUrlDocument, options);
-        }
-export type BityLinkUrlQueryHookResult = ReturnType<typeof useBityLinkUrlQuery>;
-export type BityLinkUrlLazyQueryHookResult = ReturnType<typeof useBityLinkUrlLazyQuery>;
-export type BityLinkUrlQueryResult = Apollo.QueryResult<BityLinkUrlQuery, BityLinkUrlQueryVariables>;
 export const UpdateLocaleDocument = gql`
     mutation updateLocale($locale: String!) {
   updateLocale(locale: $locale) {
@@ -483,6 +386,104 @@ export function useUpdateLocaleMutation(baseOptions?: Apollo.MutationHookOptions
 export type UpdateLocaleMutationHookResult = ReturnType<typeof useUpdateLocaleMutation>;
 export type UpdateLocaleMutationResult = Apollo.MutationResult<UpdateLocaleMutation>;
 export type UpdateLocaleMutationOptions = Apollo.BaseMutationOptions<UpdateLocaleMutation, UpdateLocaleMutationVariables>;
+export const UnlinkBityDocument = gql`
+    mutation unlinkBity {
+  unlinkBity {
+    ...BityStatus
+  }
+}
+    ${BityStatusFragmentDoc}`;
+export type UnlinkBityMutationFn = Apollo.MutationFunction<UnlinkBityMutation, UnlinkBityMutationVariables>;
+
+/**
+ * __useUnlinkBityMutation__
+ *
+ * To run a mutation, you first call `useUnlinkBityMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnlinkBityMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unlinkBityMutation, { data, loading, error }] = useUnlinkBityMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUnlinkBityMutation(baseOptions?: Apollo.MutationHookOptions<UnlinkBityMutation, UnlinkBityMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UnlinkBityMutation, UnlinkBityMutationVariables>(UnlinkBityDocument, options);
+      }
+export type UnlinkBityMutationHookResult = ReturnType<typeof useUnlinkBityMutation>;
+export type UnlinkBityMutationResult = Apollo.MutationResult<UnlinkBityMutation>;
+export type UnlinkBityMutationOptions = Apollo.BaseMutationOptions<UnlinkBityMutation, UnlinkBityMutationVariables>;
+export const BityLinkUrlDocument = gql`
+    query bityLinkUrl {
+  linkUrl
+}
+    `;
+
+/**
+ * __useBityLinkUrlQuery__
+ *
+ * To run a query within a React component, call `useBityLinkUrlQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBityLinkUrlQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBityLinkUrlQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useBityLinkUrlQuery(baseOptions?: Apollo.QueryHookOptions<BityLinkUrlQuery, BityLinkUrlQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BityLinkUrlQuery, BityLinkUrlQueryVariables>(BityLinkUrlDocument, options);
+      }
+export function useBityLinkUrlLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BityLinkUrlQuery, BityLinkUrlQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BityLinkUrlQuery, BityLinkUrlQueryVariables>(BityLinkUrlDocument, options);
+        }
+export type BityLinkUrlQueryHookResult = ReturnType<typeof useBityLinkUrlQuery>;
+export type BityLinkUrlLazyQueryHookResult = ReturnType<typeof useBityLinkUrlLazyQuery>;
+export type BityLinkUrlQueryResult = Apollo.QueryResult<BityLinkUrlQuery, BityLinkUrlQueryVariables>;
+export const MeDocument = gql`
+    query me {
+  me {
+    ...UserProfile
+  }
+}
+    ${UserProfileFragmentDoc}`;
+
+/**
+ * __useMeQuery__
+ *
+ * To run a query within a React component, call `useMeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+      }
+export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+        }
+export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
+export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
+export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const AddVaultDocument = gql`
     mutation addVault($data: VaultInput!) {
   addVault(data: $data) {
@@ -586,40 +587,72 @@ export function useVaultsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Vau
 export type VaultsQueryHookResult = ReturnType<typeof useVaultsQuery>;
 export type VaultsLazyQueryHookResult = ReturnType<typeof useVaultsLazyQuery>;
 export type VaultsQueryResult = Apollo.QueryResult<VaultsQuery, VaultsQueryVariables>;
-export const MeDocument = gql`
-    query me {
-  me {
-    ...UserProfile
+export const DeleteOrderDocument = gql`
+    mutation deleteOrder($orderTemplateId: ID!) {
+  deleteOrderTemplate(orderTemplateId: $orderTemplateId) {
+    id
   }
 }
-    ${UserProfileFragmentDoc}`;
+    `;
+export type DeleteOrderMutationFn = Apollo.MutationFunction<DeleteOrderMutation, DeleteOrderMutationVariables>;
 
 /**
- * __useMeQuery__
+ * __useDeleteOrderMutation__
  *
- * To run a query within a React component, call `useMeQuery` and pass it any options that fit your needs.
- * When your component renders, `useMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
+ * To run a mutation, you first call `useDeleteOrderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteOrderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const { data, loading, error } = useMeQuery({
+ * const [deleteOrderMutation, { data, loading, error }] = useDeleteOrderMutation({
  *   variables: {
+ *      orderTemplateId: // value for 'orderTemplateId'
  *   },
  * });
  */
-export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
+export function useDeleteOrderMutation(baseOptions?: Apollo.MutationHookOptions<DeleteOrderMutation, DeleteOrderMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+        return Apollo.useMutation<DeleteOrderMutation, DeleteOrderMutationVariables>(DeleteOrderDocument, options);
       }
-export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
-        }
-export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
-export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
-export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export type DeleteOrderMutationHookResult = ReturnType<typeof useDeleteOrderMutation>;
+export type DeleteOrderMutationResult = Apollo.MutationResult<DeleteOrderMutation>;
+export type DeleteOrderMutationOptions = Apollo.BaseMutationOptions<DeleteOrderMutation, DeleteOrderMutationVariables>;
+export const LinkBityDocument = gql`
+    mutation linkBity($redirectedFrom: String!) {
+  linkBity(redirectedFrom: $redirectedFrom) {
+    ...BityStatus
+  }
+}
+    ${BityStatusFragmentDoc}`;
+export type LinkBityMutationFn = Apollo.MutationFunction<LinkBityMutation, LinkBityMutationVariables>;
+
+/**
+ * __useLinkBityMutation__
+ *
+ * To run a mutation, you first call `useLinkBityMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLinkBityMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [linkBityMutation, { data, loading, error }] = useLinkBityMutation({
+ *   variables: {
+ *      redirectedFrom: // value for 'redirectedFrom'
+ *   },
+ * });
+ */
+export function useLinkBityMutation(baseOptions?: Apollo.MutationHookOptions<LinkBityMutation, LinkBityMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LinkBityMutation, LinkBityMutationVariables>(LinkBityDocument, options);
+      }
+export type LinkBityMutationHookResult = ReturnType<typeof useLinkBityMutation>;
+export type LinkBityMutationResult = Apollo.MutationResult<LinkBityMutation>;
+export type LinkBityMutationOptions = Apollo.BaseMutationOptions<LinkBityMutation, LinkBityMutationVariables>;
 export const BityStatusDocument = gql`
     query bityStatus {
   me {
@@ -764,39 +797,6 @@ export function useUpdateOrderMutation(baseOptions?: Apollo.MutationHookOptions<
 export type UpdateOrderMutationHookResult = ReturnType<typeof useUpdateOrderMutation>;
 export type UpdateOrderMutationResult = Apollo.MutationResult<UpdateOrderMutation>;
 export type UpdateOrderMutationOptions = Apollo.BaseMutationOptions<UpdateOrderMutation, UpdateOrderMutationVariables>;
-export const DeleteOrderDocument = gql`
-    mutation deleteOrder($orderTemplateId: ID!) {
-  deleteOrderTemplate(orderTemplateId: $orderTemplateId) {
-    id
-  }
-}
-    `;
-export type DeleteOrderMutationFn = Apollo.MutationFunction<DeleteOrderMutation, DeleteOrderMutationVariables>;
-
-/**
- * __useDeleteOrderMutation__
- *
- * To run a mutation, you first call `useDeleteOrderMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteOrderMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteOrderMutation, { data, loading, error }] = useDeleteOrderMutation({
- *   variables: {
- *      orderTemplateId: // value for 'orderTemplateId'
- *   },
- * });
- */
-export function useDeleteOrderMutation(baseOptions?: Apollo.MutationHookOptions<DeleteOrderMutation, DeleteOrderMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteOrderMutation, DeleteOrderMutationVariables>(DeleteOrderDocument, options);
-      }
-export type DeleteOrderMutationHookResult = ReturnType<typeof useDeleteOrderMutation>;
-export type DeleteOrderMutationResult = Apollo.MutationResult<DeleteOrderMutation>;
-export type DeleteOrderMutationOptions = Apollo.BaseMutationOptions<DeleteOrderMutation, DeleteOrderMutationVariables>;
 export const OrderDocument = gql`
     query order($id: ID!) {
   orderTemplate(id: $id) {

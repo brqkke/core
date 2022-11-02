@@ -1,4 +1,3 @@
-
 query vault($id: ID!){
     vault(id: $id){
         ...VaultShortInfos
@@ -22,13 +21,6 @@ mutation updateOrder($data: OrderInput!, $orderTemplateId: ID!){
         ...OrderTemplateInfos
     }
 }
-
-mutation deleteOrder($orderTemplateId: ID!){
-    deleteOrderTemplate(orderTemplateId: $orderTemplateId){
-        id
-    }
-}
-
 
 query order($id: ID!){
     orderTemplate(id: $id){

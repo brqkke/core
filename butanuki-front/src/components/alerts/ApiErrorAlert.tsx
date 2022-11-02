@@ -1,9 +1,9 @@
-import { ApiError } from "../api/call";
+import { ApiError } from "../../api/call";
 import { Alert } from "./Alert";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import isArray from "lodash/isArray";
-import { ErrorType } from "../generated/graphql";
+import { ErrorType } from "../../generated/graphql";
 
 export function ApiErrorAlert({ error }: { error: ApiError | ErrorType }) {
   const { t } = useTranslation();

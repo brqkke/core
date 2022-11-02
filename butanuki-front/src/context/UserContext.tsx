@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useMeQuery, UserProfileFragment } from "../generated/graphql";
 import { Redirect } from "react-router";
-import { Alert } from "../components/Alert";
+import { Alert } from "../components/alerts/Alert";
 
 const UserContext = createContext<UserProfileFragment>(
   {} as UserProfileFragment

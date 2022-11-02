@@ -4,8 +4,8 @@ import { useTranslation } from "react-i18next";
 import {
   OrderInfosFragment,
   OrderTemplateInfosFragment,
-} from "../generated/graphql";
-import { DeleteBtnWithConfirm } from "./Modal";
+} from "../../generated/graphql";
+import { DeleteBtnWithConfirm } from "../buttons/DeleteBtnWithConfirm";
 
 export function OrderStatus({
   disabled,

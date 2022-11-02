@@ -1,7 +1,7 @@
 import { VaultInfosFragment } from "../generated/graphql";
 import { useCallback } from "react";
-import { VaultOrders } from "./VaultOrders";
-import { DeleteBtnWithConfirm } from "./Modal";
+import { VaultOrders } from "../pages/app/Home/Vaults/VaultOrders";
+import { DeleteBtnWithConfirm } from "./buttons/DeleteBtnWithConfirm";
 
 export function VaultStatus({
   disabled,
@@ -10,7 +10,7 @@ export function VaultStatus({
 }: {
   disabled: boolean;
   vault: VaultInfosFragment;
-  onDeleteVault: (id: string) => void | Promise<void>;
+  onDeleteVault: (id: string) => unknown | Promise<unknown>;
 }) {
   const onDelete = useCallback(() => {
     return onDeleteVault(vault.id);

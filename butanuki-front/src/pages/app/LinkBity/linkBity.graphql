@@ -1,15 +1,5 @@
-mutation unlinkBity{
-    unlinkBity {
-        ...BityStatus
-    }
-}
-
 mutation linkBity($redirectedFrom: String!){
     linkBity(redirectedFrom: $redirectedFrom){
         ...BityStatus
     }
-}
-
-query bityLinkUrl{
-    linkUrl
 }

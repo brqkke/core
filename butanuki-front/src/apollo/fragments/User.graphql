@@ -1,0 +1,14 @@
+fragment UserProfile on User{
+    ...BityStatus
+    id
+    locale
+    email
+}
+
+fragment BityStatus on User{
+    id
+    bityTokenStatus {
+        linked
+        linkStatus
+    }
+}

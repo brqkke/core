@@ -1,0 +1,14 @@
+query vaults{
+    me{
+        id
+        vaults {
+            ...VaultInfos
+        }
+    }
+}
+
+mutation deleteOrder($orderTemplateId: ID!){
+    deleteOrderTemplate(orderTemplateId: $orderTemplateId){
+        id
+    }
+}

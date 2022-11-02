@@ -1,10 +1,10 @@
 import {
   useDeleteOrderMutation,
   VaultInfosFragment,
-} from "../generated/graphql";
+} from "../../../../generated/graphql";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { OrderStatus } from "./OrderStatus";
+import { OrderStatus } from "../../../../components/orders/OrderStatus";
 
 interface Props {
   vault: VaultInfosFragment;

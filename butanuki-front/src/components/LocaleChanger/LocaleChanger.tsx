@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
-import { useConfigContext } from "../context/ConfigContext";
+import { useConfigContext } from "../../context/ConfigContext";
 import React from "react";
-import { useUpdateLocaleMutation } from "../generated/graphql";
+import { useUpdateLocaleMutation } from "../../generated/graphql";
 
 const setLangCookie = (locale: string) => {
   window.document.cookie =

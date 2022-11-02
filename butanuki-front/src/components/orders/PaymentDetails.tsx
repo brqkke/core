@@ -1,4 +1,4 @@
-import { BityPaymentDetails } from "../generated/graphql";
+import { BityPaymentDetails } from "../../generated/graphql";
 
 export function PaymentDetails(props: BityPaymentDetails) {
   return (

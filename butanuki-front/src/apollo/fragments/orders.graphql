@@ -1,34 +1,3 @@
-fragment VaultShortInfos on Vault{
-    id
-    currency
-    name
-}
-fragment BityStatus on User{
-    id
-    bityTokenStatus {
-        linked
-        linkStatus
-    }
-}
-
-
-fragment UserProfile on User{
-    ...BityStatus
-    id
-    locale
-    email
-}
-
-
-fragment VaultInfos on Vault{
-    id
-    currency
-    name
-    orderTemplates {
-        ...OrderTemplateInfos
-    }
-}
-
 fragment BankDetails on BityPaymentDetails{
     account_number
     bank_address
@@ -36,7 +5,6 @@ fragment BankDetails on BityPaymentDetails{
     iban
     recipient
     swift_bic
-
 }
 
 fragment OrderInfos on Order{

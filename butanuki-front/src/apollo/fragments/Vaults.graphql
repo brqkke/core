@@ -1,0 +1,14 @@
+fragment VaultShortInfos on Vault{
+    id
+    currency
+    name
+}
+
+fragment VaultInfos on Vault{
+    id
+    currency
+    name
+    orderTemplates {
+        ...OrderTemplateInfos
+    }
+}

@@ -2,8 +2,8 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Login } from "./pages/Login";
 import { UserContextProvider } from "./context/UserContext";
 import { LoginValidate } from "./pages/LoginValidate";
-import { AppHome } from "./pages/app/AppHome";
-import { OrderSettings } from "./pages/app/OrderSettings";
+import { AppHome } from "./pages/app/Home/AppHome";
+import { OrderSettings } from "./pages/app/OrderSettings/OrderSettings";
 import { useEffect } from "react";
 import { LinkBityPage } from "./pages/app/LinkBity/LinkBityPage";
 

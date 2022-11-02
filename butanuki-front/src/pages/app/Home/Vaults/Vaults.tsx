@@ -1,5 +1,5 @@
-import { useUserContext } from "../context/UserContext";
-import { VaultStatus } from "./VaultStatus";
+import { useUserContext } from "../../../../context/UserContext";
+import { VaultStatus } from "../../../../components/VaultStatus";
 import { useCallback, useState } from "react";
 import { VaultForm } from "./VaultForm";
 import {
@@ -8,7 +8,7 @@ import {
   useVaultsQuery,
   VaultInfosFragmentDoc,
   VaultInput,
-} from "../generated/graphql";
+} from "../../../../generated/graphql";
 import { useTranslation } from "react-i18next";
 
 export const Vaults = ({ disabled }: { disabled: boolean }) => {
@@ -52,9 +52,7 @@ export const Vaults = ({ disabled }: { disabled: boolean }) => {
     [addVault]
   );
   const onDeleteVault = useCallback(
-    (id: string) => {
-      deleteVault({ variables: { vaultId: id } });
-    },
+    (id: string) => deleteVault({ variables: { vaultId: id } }),
     [deleteVault]
   );
 
