@@ -95,6 +95,7 @@ export class RenewFilledOrderTask extends AbstractTask {
         bankDetails: JSON.stringify(newOrder.payment_details),
         redactedCryptoAddress: orderDbWithUserAndToken.redactedCryptoAddress,
         previousOrderId: orderDbWithUserAndToken.id,
+        orderTemplateId: orderDbWithUserAndToken.orderTemplateId,
       });
     });
   }
