@@ -1,5 +1,5 @@
 import { useUserContext } from "../../../../context/UserContext";
-import { VaultStatus } from "../../../../components/VaultStatus";
+import { VaultStatus } from "../../../../components/VaultStatus/VaultStatus";
 import { useCallback, useState } from "react";
 import { VaultForm } from "./VaultForm";
 import {

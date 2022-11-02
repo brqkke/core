@@ -1,10 +1,10 @@
 import {
   useDeleteVaultMutation,
   VaultInfosFragment,
-} from "../generated/graphql";
+} from "../../generated/graphql";
 import { useCallback } from "react";
-import { VaultOrders } from "../pages/app/Home/Vaults/VaultOrders";
-import { DeleteBtnWithConfirm } from "./buttons/DeleteBtnWithConfirm";
+import { VaultOrders } from "../../pages/app/Home/Vaults/VaultOrders";
+import { DeleteBtnWithConfirm } from "../buttons/DeleteBtnWithConfirm";
 
 export function VaultStatus({
   disabled,

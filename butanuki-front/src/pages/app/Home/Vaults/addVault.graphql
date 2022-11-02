@@ -1,15 +1,6 @@
-
-
 mutation addVault($data: VaultInput!){
     addVault(data: $data){
         ...VaultInfos
-    }
-}
-
-
-mutation deleteVault($vaultId: ID!){
-    deleteVault(vaultId: $vaultId){
-        id
     }
 }
 

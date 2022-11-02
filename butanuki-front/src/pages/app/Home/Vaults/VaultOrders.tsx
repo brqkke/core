@@ -1,27 +1,15 @@
-import {
-  useDeleteOrderMutation,
-  VaultInfosFragment,
-} from "../../../../generated/graphql";
+import { VaultInfosFragment } from "../../../../generated/graphql";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { OrderStatus } from "../../../../components/orders/OrderStatus";
+import React from "react";
 
 interface Props {
   vault: VaultInfosFragment;
   disabled: boolean;
 }
 
-export function VaultOrders({ vault, disabled }: Props) {
-  const [deleteOrder] = useDeleteOrderMutation({
-    update: (cache, { data }) => {
-      if (data?.deleteOrderTemplate.id) {
-        cache.evict({ id: cache.identify(data.deleteOrderTemplate) });
-      }
-    },
-  });
-  const onDelete = (id: string) =>
-    deleteOrder({ variables: { orderTemplateId: id } });
-
+export const VaultOrders = React.memo(({ vault, disabled }: Props) => {
   return (
     <div className="row">
       {vault.orderTemplates.map(
@@ -32,7 +20,6 @@ export function VaultOrders({ vault, disabled }: Props) {
                 order={orderTemplate.activeOrder}
                 disabled={disabled}
                 template={orderTemplate}
-                onDelete={() => onDelete(orderTemplate.id)}
               />
             </div>
           )
@@ -44,9 +31,9 @@ export function VaultOrders({ vault, disabled }: Props) {
       )}
     </div>
   );
-}
+});
 
-function NoOrders({ vaultId }: { vaultId: string }) {
+const NoOrders = React.memo(({ vaultId }: { vaultId: string }) => {
   const { t } = useTranslation();
   return (
     <p>
@@ -56,9 +43,9 @@ function NoOrders({ vaultId }: { vaultId: string }) {
       </Link>
     </p>
   );
-}
+});
 
-function AddOrder({ vaultId }: { vaultId: string }) {
+const AddOrder = React.memo(({ vaultId }: { vaultId: string }) => {
   const { t } = useTranslation();
   return (
     <p>
@@ -71,4 +58,4 @@ function AddOrder({ vaultId }: { vaultId: string }) {
       </Link>
     </p>
   );
-}
+});

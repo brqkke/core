@@ -13,12 +13,10 @@ export function OrderStatus({
   disabled,
   order,
   template,
-  onDelete,
 }: {
   disabled?: boolean;
   order: OrderInfosFragment;
   template: OrderTemplateInfosFragment;
-  onDelete?: () => Promise<unknown>;
 }) {
   const { t } = useTranslation();
 
@@ -41,7 +39,7 @@ export function OrderStatus({
     >
       <div className="col-4">{!!template.name && <h4>{template.name}</h4>}</div>
       <div className="col-8">
-        {!disabled && onDelete && (
+        {!disabled && (
           <div className="btn-toolbar justify-content-end">
             <DeleteBtnWithConfirm
               onDelete={onDeleteOrder}
