@@ -94,6 +94,7 @@ type Mutation {
   unlinkBity: User!
   linkBity(redirectedFrom: String!): User!
   addVault(data: VaultInput!): Vault!
+  updateVault(id: ID!, data: UpdateVaultInput!): Vault!
   deleteVault(vaultId: ID!): Vault!
 }
 
@@ -112,4 +113,8 @@ input CreateOrderInput {
 input VaultInput {
   name: String!
   currency: OrderCurrency!
+}
+
+input UpdateVaultInput {
+  name: String!
 }

@@ -9,7 +9,7 @@ import {
 } from '@nestjs/graphql';
 import { Vault } from '../entities/Vault';
 import { VaultService } from './vault.service';
-import { VaultInput } from './types';
+import { UpdateVaultInput, VaultInput } from './types';
 import { CurrentUser, Roles } from '../decorator/user.decorator';
 import { User } from '../entities/User';
 import { UserRole } from '../entities/enums/UserRole';
@@ -33,6 +33,25 @@ export class VaultResolver {
     @CurrentUser() user: User,
   ): Promise<Vault> {
     return this.vaultService.createVault(data, user);
+  }
+
+  @Roles(UserRole.USER)
+  @Mutation(() => Vault)
+  async updateVault(
+    @Args({
+      name: 'id',
+      type: () => ID,
+    })
+    id: string,
+    @Args({
+      name: 'data',
+      type: () => UpdateVaultInput,
+      nullable: false,
+    })
+    data: UpdateVaultInput,
+    @CurrentUser() user: User,
+  ): Promise<Vault> {
+    return this.vaultService.updateVault(id, data, user);
   }
 
   @Query(() => Vault)

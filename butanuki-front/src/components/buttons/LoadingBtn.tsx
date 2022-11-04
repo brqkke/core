@@ -6,6 +6,7 @@ export interface LoadingBtnProps<T> {
   text: string;
   disabled?: boolean;
   type?: "button" | "submit" | "reset";
+  className?: string;
 }
 
 export function LoadingBtn<T>({
@@ -16,11 +17,12 @@ export function LoadingBtn<T>({
   level,
   disabled,
   type,
+  className,
 }: LoadingBtnProps<T>) {
   return (
     <button
       onClick={onClick}
-      className={`btn btn-${size} btn-${level}`}
+      className={`btn btn-${size} btn-${level} ${className ? className : ""}`}
       disabled={loading || disabled}
       type={type}
     >

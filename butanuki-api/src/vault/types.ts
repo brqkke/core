@@ -9,3 +9,9 @@ export class VaultInput {
   @Field(() => OrderCurrency)
   currency: OrderCurrency;
 }
+
+@InputType('UpdateVaultInput')
+export class UpdateVaultInput {
+  @Field(() => String)
+  name: string;
+}

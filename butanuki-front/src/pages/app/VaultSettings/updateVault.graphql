@@ -1,0 +1,5 @@
+mutation updateVault($id: ID!, $data: UpdateVaultInput!){
+    updateVault(id: $id, data: $data){
+        ...VaultShortInfos
+    }
+}

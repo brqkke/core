@@ -8,58 +8,60 @@ const setLangCookie = (locale: string) => {
     "locale=" + locale + ";" + new Date(Date.now() + 1000 * 3600 * 24 * 365);
 };
 
-export function LocaleChanger({ logged = false }) {
-  const { i18n } = useTranslation();
-  const [updateLocale] = useUpdateLocaleMutation({
-    onCompleted: (data) => {
-      if (data.updateLocale.locale) {
-        console.log(
-          "onCompleted useUpdateLocaleMutation",
-          "i18n.changeLanguage",
-          data.updateLocale.locale
-        );
-        i18n.changeLanguage(data.updateLocale.locale);
-      }
-    },
-  });
-  const { availableLocales } = useConfigContext();
+export const LocaleChanger = React.memo(
+  ({ logged = false }: { logged: boolean }) => {
+    const { i18n } = useTranslation();
+    const [updateLocale] = useUpdateLocaleMutation({
+      onCompleted: (data) => {
+        if (data.updateLocale.locale) {
+          console.log(
+            "onCompleted useUpdateLocaleMutation",
+            "i18n.changeLanguage",
+            data.updateLocale.locale
+          );
+          i18n.changeLanguage(data.updateLocale.locale);
+        }
+      },
+    });
+    const { availableLocales } = useConfigContext();
 
-  const selector = availableLocales
-    .map((locale, i) => {
-      if (i18n.language === locale) {
-        return <span key={locale}>{locale.toUpperCase()}</span>;
-      } else {
-        return (
-          <a
-            key={locale}
-            onClick={(ev) => {
-              ev.preventDefault();
-              if (logged) {
-                updateLocale({ variables: { locale: locale } });
-              } else {
-                console.log(
-                  "onClick locale btn",
-                  "i18n.changeLanguage",
-                  locale
-                );
-                i18n.changeLanguage(locale);
-                setLangCookie(locale);
-              }
-              return false;
-            }}
-            href={"#"}
-          >
-            {locale.toUpperCase()}
-          </a>
-        );
-      }
-    })
-    .map((l, i) => (
-      <React.Fragment key={i}>
-        {i > 0 ? <>&nbsp;|&nbsp;</> : ""}
-        {l}
-      </React.Fragment>
-    ));
+    const selector = availableLocales
+      .map((locale, i) => {
+        if (i18n.language === locale) {
+          return <span key={locale}>{locale.toUpperCase()}</span>;
+        } else {
+          return (
+            <a
+              key={locale}
+              onClick={(ev) => {
+                ev.preventDefault();
+                if (logged) {
+                  updateLocale({ variables: { locale: locale } });
+                } else {
+                  console.log(
+                    "onClick locale btn",
+                    "i18n.changeLanguage",
+                    locale
+                  );
+                  i18n.changeLanguage(locale);
+                  setLangCookie(locale);
+                }
+                return false;
+              }}
+              href={"#"}
+            >
+              {locale.toUpperCase()}
+            </a>
+          );
+        }
+      })
+      .map((l, i) => (
+        <React.Fragment key={i}>
+          {i > 0 ? <>&nbsp;|&nbsp;</> : ""}
+          {l}
+        </React.Fragment>
+      ));
 
-  return <div>[{selector}]</div>;
-}
+    return <div className={"mt-3"}>[{selector}]</div>;
+  }
+);

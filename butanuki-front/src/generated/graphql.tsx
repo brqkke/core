@@ -58,6 +58,7 @@ export type Mutation = {
   unlinkBity: User;
   updateLocale: User;
   updateOrderTemplate: OrderTemplate;
+  updateVault: Vault;
 };
 
 
@@ -95,6 +96,12 @@ export type MutationUpdateLocaleArgs = {
 export type MutationUpdateOrderTemplateArgs = {
   data: OrderInput;
   orderTemplateId: Scalars['ID'];
+};
+
+
+export type MutationUpdateVaultArgs = {
+  data: UpdateVaultInput;
+  id: Scalars['ID'];
 };
 
 export type Order = {
@@ -155,6 +162,10 @@ export enum TokenStatus {
   NeedRefreshRetry = 'NEED_REFRESH_RETRY'
 }
 
+export type UpdateVaultInput = {
+  name: Scalars['String'];
+};
+
 export type User = {
   __typename?: 'User';
   bityTokenStatus: BityLinkStatus;
@@ -200,6 +211,13 @@ export type UpdateLocaleMutationVariables = Exact<{
 
 export type UpdateLocaleMutation = { __typename?: 'Mutation', updateLocale: { __typename?: 'User', locale: string, id: string } };
 
+export type DeleteVaultMutationVariables = Exact<{
+  vaultId: Scalars['ID'];
+}>;
+
+
+export type DeleteVaultMutation = { __typename?: 'Mutation', deleteVault: { __typename?: 'Vault', id: string } };
+
 export type UnlinkBityMutationVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -209,6 +227,13 @@ export type BityLinkUrlQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type BityLinkUrlQuery = { __typename?: 'Query', linkUrl: string };
+
+export type DeleteOrderMutationVariables = Exact<{
+  orderTemplateId: Scalars['ID'];
+}>;
+
+
+export type DeleteOrderMutation = { __typename?: 'Mutation', deleteOrderTemplate: { __typename?: 'OrderTemplate', id: string } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -222,24 +247,10 @@ export type AddVaultMutationVariables = Exact<{
 
 export type AddVaultMutation = { __typename?: 'Mutation', addVault: { __typename?: 'Vault', id: string, currency: string, name: string, orderTemplates: Array<{ __typename?: 'OrderTemplate', id: string, name: string, amount: number, vaultId: string, activeOrder?: { __typename?: 'Order', id: string, amount: number, currency: OrderCurrency, redactedCryptoAddress?: string | null, status: string, transferLabel: string, orderTemplateId?: string | null, bankDetails?: { __typename?: 'BityPaymentDetails', account_number?: string | null, bank_address?: string | null, bank_code?: string | null, iban?: string | null, recipient?: string | null, swift_bic?: string | null } | null } | null }> } };
 
-export type DeleteVaultMutationVariables = Exact<{
-  vaultId: Scalars['ID'];
-}>;
-
-
-export type DeleteVaultMutation = { __typename?: 'Mutation', deleteVault: { __typename?: 'Vault', id: string } };
-
 export type VaultsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type VaultsQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, vaults: Array<{ __typename?: 'Vault', id: string, currency: string, name: string, orderTemplates: Array<{ __typename?: 'OrderTemplate', id: string, name: string, amount: number, vaultId: string, activeOrder?: { __typename?: 'Order', id: string, amount: number, currency: OrderCurrency, redactedCryptoAddress?: string | null, status: string, transferLabel: string, orderTemplateId?: string | null, bankDetails?: { __typename?: 'BityPaymentDetails', account_number?: string | null, bank_address?: string | null, bank_code?: string | null, iban?: string | null, recipient?: string | null, swift_bic?: string | null } | null } | null }> }> } };
-
-export type DeleteOrderMutationVariables = Exact<{
-  orderTemplateId: Scalars['ID'];
-}>;
-
-
-export type DeleteOrderMutation = { __typename?: 'Mutation', deleteOrderTemplate: { __typename?: 'OrderTemplate', id: string } };
 
 export type LinkBityMutationVariables = Exact<{
   redirectedFrom: Scalars['String'];
@@ -282,6 +293,14 @@ export type OrderQueryVariables = Exact<{
 
 
 export type OrderQuery = { __typename?: 'Query', orderTemplate: { __typename?: 'OrderTemplate', id: string, name: string, amount: number, vaultId: string, activeOrder?: { __typename?: 'Order', id: string, amount: number, currency: OrderCurrency, redactedCryptoAddress?: string | null, status: string, transferLabel: string, orderTemplateId?: string | null, bankDetails?: { __typename?: 'BityPaymentDetails', account_number?: string | null, bank_address?: string | null, bank_code?: string | null, iban?: string | null, recipient?: string | null, swift_bic?: string | null } | null } | null } };
+
+export type UpdateVaultMutationVariables = Exact<{
+  id: Scalars['ID'];
+  data: UpdateVaultInput;
+}>;
+
+
+export type UpdateVaultMutation = { __typename?: 'Mutation', updateVault: { __typename?: 'Vault', id: string, currency: string, name: string } };
 
 export const BityStatusFragmentDoc = gql`
     fragment BityStatus on User {
@@ -386,6 +405,39 @@ export function useUpdateLocaleMutation(baseOptions?: Apollo.MutationHookOptions
 export type UpdateLocaleMutationHookResult = ReturnType<typeof useUpdateLocaleMutation>;
 export type UpdateLocaleMutationResult = Apollo.MutationResult<UpdateLocaleMutation>;
 export type UpdateLocaleMutationOptions = Apollo.BaseMutationOptions<UpdateLocaleMutation, UpdateLocaleMutationVariables>;
+export const DeleteVaultDocument = gql`
+    mutation deleteVault($vaultId: ID!) {
+  deleteVault(vaultId: $vaultId) {
+    id
+  }
+}
+    `;
+export type DeleteVaultMutationFn = Apollo.MutationFunction<DeleteVaultMutation, DeleteVaultMutationVariables>;
+
+/**
+ * __useDeleteVaultMutation__
+ *
+ * To run a mutation, you first call `useDeleteVaultMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteVaultMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteVaultMutation, { data, loading, error }] = useDeleteVaultMutation({
+ *   variables: {
+ *      vaultId: // value for 'vaultId'
+ *   },
+ * });
+ */
+export function useDeleteVaultMutation(baseOptions?: Apollo.MutationHookOptions<DeleteVaultMutation, DeleteVaultMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteVaultMutation, DeleteVaultMutationVariables>(DeleteVaultDocument, options);
+      }
+export type DeleteVaultMutationHookResult = ReturnType<typeof useDeleteVaultMutation>;
+export type DeleteVaultMutationResult = Apollo.MutationResult<DeleteVaultMutation>;
+export type DeleteVaultMutationOptions = Apollo.BaseMutationOptions<DeleteVaultMutation, DeleteVaultMutationVariables>;
 export const UnlinkBityDocument = gql`
     mutation unlinkBity {
   unlinkBity {
@@ -450,6 +502,39 @@ export function useBityLinkUrlLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type BityLinkUrlQueryHookResult = ReturnType<typeof useBityLinkUrlQuery>;
 export type BityLinkUrlLazyQueryHookResult = ReturnType<typeof useBityLinkUrlLazyQuery>;
 export type BityLinkUrlQueryResult = Apollo.QueryResult<BityLinkUrlQuery, BityLinkUrlQueryVariables>;
+export const DeleteOrderDocument = gql`
+    mutation deleteOrder($orderTemplateId: ID!) {
+  deleteOrderTemplate(orderTemplateId: $orderTemplateId) {
+    id
+  }
+}
+    `;
+export type DeleteOrderMutationFn = Apollo.MutationFunction<DeleteOrderMutation, DeleteOrderMutationVariables>;
+
+/**
+ * __useDeleteOrderMutation__
+ *
+ * To run a mutation, you first call `useDeleteOrderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteOrderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteOrderMutation, { data, loading, error }] = useDeleteOrderMutation({
+ *   variables: {
+ *      orderTemplateId: // value for 'orderTemplateId'
+ *   },
+ * });
+ */
+export function useDeleteOrderMutation(baseOptions?: Apollo.MutationHookOptions<DeleteOrderMutation, DeleteOrderMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteOrderMutation, DeleteOrderMutationVariables>(DeleteOrderDocument, options);
+      }
+export type DeleteOrderMutationHookResult = ReturnType<typeof useDeleteOrderMutation>;
+export type DeleteOrderMutationResult = Apollo.MutationResult<DeleteOrderMutation>;
+export type DeleteOrderMutationOptions = Apollo.BaseMutationOptions<DeleteOrderMutation, DeleteOrderMutationVariables>;
 export const MeDocument = gql`
     query me {
   me {
@@ -517,39 +602,6 @@ export function useAddVaultMutation(baseOptions?: Apollo.MutationHookOptions<Add
 export type AddVaultMutationHookResult = ReturnType<typeof useAddVaultMutation>;
 export type AddVaultMutationResult = Apollo.MutationResult<AddVaultMutation>;
 export type AddVaultMutationOptions = Apollo.BaseMutationOptions<AddVaultMutation, AddVaultMutationVariables>;
-export const DeleteVaultDocument = gql`
-    mutation deleteVault($vaultId: ID!) {
-  deleteVault(vaultId: $vaultId) {
-    id
-  }
-}
-    `;
-export type DeleteVaultMutationFn = Apollo.MutationFunction<DeleteVaultMutation, DeleteVaultMutationVariables>;
-
-/**
- * __useDeleteVaultMutation__
- *
- * To run a mutation, you first call `useDeleteVaultMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteVaultMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteVaultMutation, { data, loading, error }] = useDeleteVaultMutation({
- *   variables: {
- *      vaultId: // value for 'vaultId'
- *   },
- * });
- */
-export function useDeleteVaultMutation(baseOptions?: Apollo.MutationHookOptions<DeleteVaultMutation, DeleteVaultMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteVaultMutation, DeleteVaultMutationVariables>(DeleteVaultDocument, options);
-      }
-export type DeleteVaultMutationHookResult = ReturnType<typeof useDeleteVaultMutation>;
-export type DeleteVaultMutationResult = Apollo.MutationResult<DeleteVaultMutation>;
-export type DeleteVaultMutationOptions = Apollo.BaseMutationOptions<DeleteVaultMutation, DeleteVaultMutationVariables>;
 export const VaultsDocument = gql`
     query vaults {
   me {
@@ -587,39 +639,6 @@ export function useVaultsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Vau
 export type VaultsQueryHookResult = ReturnType<typeof useVaultsQuery>;
 export type VaultsLazyQueryHookResult = ReturnType<typeof useVaultsLazyQuery>;
 export type VaultsQueryResult = Apollo.QueryResult<VaultsQuery, VaultsQueryVariables>;
-export const DeleteOrderDocument = gql`
-    mutation deleteOrder($orderTemplateId: ID!) {
-  deleteOrderTemplate(orderTemplateId: $orderTemplateId) {
-    id
-  }
-}
-    `;
-export type DeleteOrderMutationFn = Apollo.MutationFunction<DeleteOrderMutation, DeleteOrderMutationVariables>;
-
-/**
- * __useDeleteOrderMutation__
- *
- * To run a mutation, you first call `useDeleteOrderMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteOrderMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteOrderMutation, { data, loading, error }] = useDeleteOrderMutation({
- *   variables: {
- *      orderTemplateId: // value for 'orderTemplateId'
- *   },
- * });
- */
-export function useDeleteOrderMutation(baseOptions?: Apollo.MutationHookOptions<DeleteOrderMutation, DeleteOrderMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteOrderMutation, DeleteOrderMutationVariables>(DeleteOrderDocument, options);
-      }
-export type DeleteOrderMutationHookResult = ReturnType<typeof useDeleteOrderMutation>;
-export type DeleteOrderMutationResult = Apollo.MutationResult<DeleteOrderMutation>;
-export type DeleteOrderMutationOptions = Apollo.BaseMutationOptions<DeleteOrderMutation, DeleteOrderMutationVariables>;
 export const LinkBityDocument = gql`
     mutation linkBity($redirectedFrom: String!) {
   linkBity(redirectedFrom: $redirectedFrom) {
@@ -832,3 +851,37 @@ export function useOrderLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Orde
 export type OrderQueryHookResult = ReturnType<typeof useOrderQuery>;
 export type OrderLazyQueryHookResult = ReturnType<typeof useOrderLazyQuery>;
 export type OrderQueryResult = Apollo.QueryResult<OrderQuery, OrderQueryVariables>;
+export const UpdateVaultDocument = gql`
+    mutation updateVault($id: ID!, $data: UpdateVaultInput!) {
+  updateVault(id: $id, data: $data) {
+    ...VaultShortInfos
+  }
+}
+    ${VaultShortInfosFragmentDoc}`;
+export type UpdateVaultMutationFn = Apollo.MutationFunction<UpdateVaultMutation, UpdateVaultMutationVariables>;
+
+/**
+ * __useUpdateVaultMutation__
+ *
+ * To run a mutation, you first call `useUpdateVaultMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateVaultMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateVaultMutation, { data, loading, error }] = useUpdateVaultMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateVaultMutation(baseOptions?: Apollo.MutationHookOptions<UpdateVaultMutation, UpdateVaultMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateVaultMutation, UpdateVaultMutationVariables>(UpdateVaultDocument, options);
+      }
+export type UpdateVaultMutationHookResult = ReturnType<typeof useUpdateVaultMutation>;
+export type UpdateVaultMutationResult = Apollo.MutationResult<UpdateVaultMutation>;
+export type UpdateVaultMutationOptions = Apollo.BaseMutationOptions<UpdateVaultMutation, UpdateVaultMutationVariables>;

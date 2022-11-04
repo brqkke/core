@@ -1,12 +1,12 @@
 import { usePublicPageLink } from "../../utils/i18n";
 import { useTranslation } from "react-i18next";
+import React from "react";
 
-export const Header = () => {
+export const Header = React.memo(() => {
   const { t } = useTranslation();
   const getUrl = usePublicPageLink();
   return (
     <div className="nav">
-      <input type="checkbox" id="nav-check" />
       <div className="nav-header">
         <div className="nav-title">
           <a href={getUrl("root")} target="_top">
@@ -27,4 +27,4 @@ export const Header = () => {
       </div>
     </div>
   );
-};
+});

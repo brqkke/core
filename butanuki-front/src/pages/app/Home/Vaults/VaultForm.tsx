@@ -1,14 +1,43 @@
-import { OrderCurrency, VaultInput } from "../../../../generated/graphql";
+import {
+  OrderCurrency,
+  useAddVaultMutation,
+  VaultInfosFragmentDoc,
+  VaultInput,
+} from "../../../../generated/graphql";
 import { ChangeEvent, FormEvent, useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useUserContext } from "../../../../context/UserContext";
+import { LoadingBtn } from "../../../../components/buttons/LoadingBtn";
+import { Alert } from "../../../../components/alerts/Alert";
 
 interface Props {
-  onSave: (input: VaultInput) => void;
+  onSave: () => void;
   cancel: () => void;
-  key: string;
 }
 
-export const VaultForm = (props: Props) => {
+export const VaultForm = ({ onSave, cancel }: Props) => {
+  const user = useUserContext();
+  const [addVault, addResult] = useAddVaultMutation({
+    update: (cache, { data }) => {
+      if (!data?.addVault) {
+        return;
+      }
+      cache.modify({
+        id: cache.identify(user),
+        fields: {
+          vaults: (existingVaults = []) => {
+            const newVaultRef = cache.writeFragment({
+              data: data?.addVault,
+              fragment: VaultInfosFragmentDoc,
+              fragmentName: "VaultInfos",
+            });
+            return [...existingVaults, newVaultRef];
+          },
+        },
+      });
+    },
+  });
+
   const [input, setInput] = useState<VaultInput>({
     name: "",
     currency: OrderCurrency.Chf,
@@ -39,11 +68,19 @@ export const VaultForm = (props: Props) => {
     [handleChange]
   );
   const onSubmit = useCallback(
-    (ev: FormEvent<HTMLFormElement>) => {
+    async (ev: FormEvent<HTMLFormElement>) => {
       ev.preventDefault();
-      props.onSave(input);
+      await addVault({
+        variables: {
+          data: {
+            name: input.name,
+            currency: input.currency,
+          },
+        },
+      });
+      onSave();
     },
-    [input, props]
+    [onSave, addVault, input]
   );
 
   return (
@@ -82,11 +119,11 @@ export const VaultForm = (props: Props) => {
           </select>
         </div>
       </div>
-      <div className="row mb-3">
+      <div className="row">
         <div className="col-12 btn-toolbar justify-content-end">
           <div className="btn-group me-2">
             <button
-              onClick={props.cancel}
+              onClick={cancel}
               name="cancel"
               type={"button"}
               className={"btn"}
@@ -95,12 +132,56 @@ export const VaultForm = (props: Props) => {
             </button>
           </div>
           <div className="btn-group">
-            <button name="submit" type="submit" className="btn btn-primary">
-              {t("app.action.submit")}
-            </button>
+            <LoadingBtn
+              level={"primary"}
+              text={t("app.action.submit")}
+              loading={addResult.loading}
+              type={"submit"}
+            />
           </div>
         </div>
       </div>
     </form>
+  );
+};
+
+export const VaultFormCard = ({
+  totalCurrentVaults,
+  maxVaults,
+  disabled,
+}: {
+  disabled: boolean;
+  totalCurrentVaults: number;
+  maxVaults: number;
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const { t } = useTranslation();
+
+  const closeForm = useCallback(() => setIsOpen(false), []);
+  const openForm = useCallback(() => setIsOpen(true), []);
+
+  return isOpen ? (
+    <div className="row">
+      <div className="col-md-6">
+        <div className="card">
+          <div className="card-body">
+            <VaultForm onSave={closeForm} cancel={closeForm} />
+          </div>
+        </div>
+      </div>
+    </div>
+  ) : totalCurrentVaults < maxVaults ? (
+    <button
+      className={"btn btn-primary"}
+      disabled={disabled}
+      onClick={openForm}
+    >
+      {t("app.vault.add")}
+    </button>
+  ) : (
+    <Alert
+      level={"warning"}
+      message={t("app.vault.maxReached", { max: maxVaults })}
+    />
   );
 };

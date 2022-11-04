@@ -6,6 +6,7 @@ import { AppHome } from "./pages/app/Home/AppHome";
 import { OrderSettings } from "./pages/app/OrderSettings/OrderSettings";
 import { useEffect } from "react";
 import { LinkBityPage } from "./pages/app/LinkBity/LinkBityPage";
+import { VaultSettings } from "./pages/app/VaultSettings/VaultSettings";
 
 export function Router() {
   return (
@@ -35,6 +36,11 @@ function AppRouter() {
             path={"/vault/:vaultId/new-order"}
             exact
             component={OrderSettings}
+          />
+          <Route
+            path={"/vault/:vaultId/edit"}
+            exact
+            component={VaultSettings}
           />
           <Route
             path={"/vault/:vaultId/edit-order/:orderId"}
