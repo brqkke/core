@@ -7,6 +7,7 @@ import { OrderSettings } from "./pages/app/OrderSettings/OrderSettings";
 import { useEffect } from "react";
 import { LinkBityPage } from "./pages/app/LinkBity/LinkBityPage";
 import { VaultSettings } from "./pages/app/VaultSettings/VaultSettings";
+import { Alert } from "./components/alerts/Alert";
 
 export function Router() {
   return (
@@ -31,7 +32,6 @@ function AppRouter() {
       <BrowserRouter>
         <Switch>
           <Route path={"/"} exact component={AppHome} />
-          <Route path={"/order-settings"} exact component={OrderSettings} />
           <Route
             path={"/vault/:vaultId/new-order"}
             exact
@@ -56,7 +56,7 @@ function AppRouter() {
 }
 
 function NotFound() {
-  return <h1>Not found</h1>;
+  return <Alert message={"Not found"} level={"danger"} />;
 }
 
 function Logout() {

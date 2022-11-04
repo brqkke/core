@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
-import { LoggedLayout } from "../../../layout/LoggedLayout";
 import { ApiErrorAlert } from "../../../components/alerts/ApiErrorAlert";
 import {
   ErrorType,
@@ -91,13 +90,11 @@ export function OrderSettings() {
 
   if (vault.loading || !vault.data || order.loading) {
     return (
-      <LoggedLayout>
-        <div className="row">
-          <div className="col-md-6">
-            <p>{t("app.loading")}</p>
-          </div>
+      <div className="row">
+        <div className="col-md-6">
+          <p>{t("app.loading")}</p>
         </div>
-      </LoggedLayout>
+      </div>
     );
   }
 
@@ -108,7 +105,7 @@ export function OrderSettings() {
   const addressIsValid = (!amountChanged && !addressChanged) || addressChanged;
 
   return (
-    <LoggedLayout>
+    <>
       <div className="row">
         <div className="col-12">
           <h3>{vault.data.vault.name}</h3>
@@ -238,6 +235,6 @@ export function OrderSettings() {
           </form>
         </div>
       </div>
-    </LoggedLayout>
+    </>
   );
 }

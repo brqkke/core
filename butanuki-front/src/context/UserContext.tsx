@@ -3,6 +3,9 @@ import { useTranslation } from "react-i18next";
 import { useMeQuery, UserProfileFragment } from "../generated/graphql";
 import { Redirect } from "react-router";
 import { Alert } from "../components/alerts/Alert";
+import { MainLayout } from "../layout/MainLayout";
+import { LoggedLayout } from "../layout/LoggedLayout";
+import { LoadingCard } from "../components/LoadingCard";
 
 const UserContext = createContext<UserProfileFragment>(
   {} as UserProfileFragment
@@ -48,11 +51,19 @@ export function UserContextProvider({
   // }, []);
 
   if (loading) {
-    return <p>Loading</p>;
+    return (
+      <MainLayout>
+        <LoadingCard />
+      </MainLayout>
+    );
   }
 
   if (error) {
-    return <Alert message={error.message} level={"danger"} />;
+    return (
+      <MainLayout>
+        <Alert message={error.message} level={"danger"} />
+      </MainLayout>
+    );
   }
 
   if (!data?.me) {
@@ -60,7 +71,9 @@ export function UserContextProvider({
   }
 
   return (
-    <UserContext.Provider value={data.me}>{children}</UserContext.Provider>
+    <UserContext.Provider value={data.me}>
+      <LoggedLayout>{children}</LoggedLayout>
+    </UserContext.Provider>
   );
 }
 
