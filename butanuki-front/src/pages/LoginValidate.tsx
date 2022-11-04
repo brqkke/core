@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { post } from "../api/call";
 import { useTranslation } from "react-i18next";
 import { LoadingCard } from "../components/LoadingCard";
+import { MainLayout } from "../layout/MainLayout";
 
 export function LoginValidate() {
   const params = useParams<{ token: string; email: string }>();
@@ -26,5 +27,9 @@ export function LoginValidate() {
       }
     })();
   }, [params, history]);
-  return <LoadingCard />;
+  return (
+    <MainLayout>
+      <LoadingCard />
+    </MainLayout>
+  );
 }
