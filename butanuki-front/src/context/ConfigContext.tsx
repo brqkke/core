@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { get } from "../api/call";
 import { useTranslation } from "react-i18next";
+import { MainLayout } from "../layout/MainLayout";
+import { LoadingCard } from "../components/LoadingCard";
 
 interface ConfigContextProps {
   recaptchaKey: string;
@@ -50,11 +52,19 @@ export function ConfigContextProvider({
   }, []);
 
   if (config === undefined) {
-    return <p>Loading</p>;
+    return (
+      <MainLayout>
+        <LoadingCard />
+      </MainLayout>
+    );
   }
 
   if (config === null) {
-    return <p>Error, try reloading</p>;
+    return (
+      <MainLayout>
+        <p>Error, try reloading</p>
+      </MainLayout>
+    );
   }
 
   return (

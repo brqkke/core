@@ -4,7 +4,6 @@ import {
   useUpdateVaultMutation,
   useVaultQuery,
 } from "../../../generated/graphql";
-import { LoggedLayout } from "../../../layout/LoggedLayout";
 import { useTranslation } from "react-i18next";
 import { LoadingBtn } from "../../../components/buttons/LoadingBtn";
 import { LoadingCard } from "../../../components/LoadingCard";
@@ -47,68 +46,62 @@ export const VaultSettings = React.memo(() => {
 
   if (vault.loading) {
     return (
-      <LoggedLayout>
-        <div className="row">
-          <div className="col-md-12">
-            <LoadingCard />
-          </div>
+      <div className="row">
+        <div className="col-md-12">
+          <LoadingCard />
         </div>
-      </LoggedLayout>
+      </div>
     );
   }
 
   return (
-    <LoggedLayout>
-      <div className="row">
-        <div className="col-md-12">
-          <div className="card mb-4">
-            <div className="card-header">
-              <h3>
-                {t("app.vault.editing", { name: vault.data?.vault.name })}
-              </h3>
-            </div>
-            <div className="card-body">
-              <form onSubmit={onSubmit}>
-                <div className="form-group">
-                  <div className="input-group">
-                    <div className="input-group-prepend">
-                      <span className="input-group-text">
-                        {t("app.vault.name")}
-                      </span>
-                    </div>
-                    <input
-                      className={"form-control"}
-                      onChange={(ev) => {
-                        setName(ev.target.value);
-                      }}
-                      value={name}
-                      placeholder={t("app.vault.name_placeholder")}
-                    />
+    <div className="row">
+      <div className="col-md-12">
+        <div className="card mb-4">
+          <div className="card-header">
+            <h3>{t("app.vault.editing", { name: vault.data?.vault.name })}</h3>
+          </div>
+          <div className="card-body">
+            <form onSubmit={onSubmit}>
+              <div className="form-group">
+                <div className="input-group">
+                  <div className="input-group-prepend">
+                    <span className="input-group-text">
+                      {t("app.vault.name")}
+                    </span>
                   </div>
+                  <input
+                    className={"form-control"}
+                    onChange={(ev) => {
+                      setName(ev.target.value);
+                    }}
+                    value={name}
+                    placeholder={t("app.vault.name_placeholder")}
+                  />
                 </div>
-                <br />
+              </div>
+              <br />
 
-                <button
-                  type={"button"}
-                  className={"btn btn-secondary"}
-                  onClick={() => {
-                    history.push("/");
-                  }}
-                >
-                  {t("app.order.go_back")}
-                </button>
-                <LoadingBtn
-                  level={"primary"}
-                  text={t("app.order.save")}
-                  loading={updateLoading}
-                  type={"submit"}
-                  className={"ms-2"}
-                />
-              </form>
-            </div>
+              <button
+                type={"button"}
+                className={"btn btn-secondary"}
+                onClick={() => {
+                  history.push("/");
+                }}
+              >
+                {t("app.order.go_back")}
+              </button>
+              <LoadingBtn
+                level={"primary"}
+                text={t("app.order.save")}
+                loading={updateLoading}
+                type={"submit"}
+                className={"ms-2"}
+              />
+            </form>
           </div>
         </div>
       </div>
-    </LoggedLayout>
+    </div>
   );
 });
