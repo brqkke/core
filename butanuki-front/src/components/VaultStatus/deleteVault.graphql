@@ -1,0 +1,5 @@
+mutation deleteVault($vaultId: ID!){
+    deleteVault(vaultId: $vaultId){
+        id
+    }
+}

@@ -1,6 +1,6 @@
 import { useUserContext } from "../context/UserContext";
 import { MainLayout } from "./MainLayout";
-import { LocaleChanger } from "../components/LocaleChanger";
+import { LocaleChanger } from "../components/LocaleChanger/LocaleChanger";
 
 export function LoggedLayout({ children }: { children: React.ReactNode }) {
   const user = useUserContext();

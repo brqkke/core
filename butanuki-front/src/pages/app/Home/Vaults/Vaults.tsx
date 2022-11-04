@@ -1,14 +1,13 @@
-import { useUserContext } from "../context/UserContext";
-import { VaultStatus } from "./VaultStatus";
+import { useUserContext } from "../../../../context/UserContext";
+import { VaultStatus } from "../../../../components/VaultStatus/VaultStatus";
 import { useCallback, useState } from "react";
 import { VaultForm } from "./VaultForm";
 import {
   useAddVaultMutation,
-  useDeleteVaultMutation,
   useVaultsQuery,
   VaultInfosFragmentDoc,
   VaultInput,
-} from "../generated/graphql";
+} from "../../../../generated/graphql";
 import { useTranslation } from "react-i18next";
 
 export const Vaults = ({ disabled }: { disabled: boolean }) => {
@@ -37,25 +36,13 @@ export const Vaults = ({ disabled }: { disabled: boolean }) => {
       });
     },
   });
-  const [deleteVault] = useDeleteVaultMutation({
-    update: (cache, { data }) => {
-      if (data?.deleteVault) {
-        cache.evict({ id: cache.identify(data.deleteVault) });
-      }
-    },
-  });
+
   const submitNew = useCallback(
     async (input: VaultInput) => {
       await addVault({ variables: { data: input } });
       setNewVaultForm(false);
     },
     [addVault]
-  );
-  const onDeleteVault = useCallback(
-    (id: string) => {
-      deleteVault({ variables: { vaultId: id } });
-    },
-    [deleteVault]
   );
 
   const closeForm = useCallback(() => setNewVaultForm(false), []);
@@ -65,11 +52,7 @@ export const Vaults = ({ disabled }: { disabled: boolean }) => {
       <hr />
       {vaults.data?.me.vaults.map((vault) => (
         <div className="col-12" key={vault.id}>
-          <VaultStatus
-            disabled={disabled}
-            vault={vault}
-            onDeleteVault={onDeleteVault}
-          />
+          <VaultStatus disabled={disabled} vault={vault} />
           <hr />
         </div>
       ))}

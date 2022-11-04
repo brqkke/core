@@ -4,21 +4,33 @@ import { useTranslation } from "react-i18next";
 import {
   OrderInfosFragment,
   OrderTemplateInfosFragment,
-} from "../generated/graphql";
-import { DeleteBtnWithConfirm } from "./Modal";
+  useDeleteOrderMutation,
+} from "../../generated/graphql";
+import { DeleteBtnWithConfirm } from "../buttons/DeleteBtnWithConfirm";
+import { useCallback } from "react";
 
 export function OrderStatus({
   disabled,
   order,
   template,
-  onDelete,
 }: {
   disabled?: boolean;
   order: OrderInfosFragment;
   template: OrderTemplateInfosFragment;
-  onDelete?: () => Promise<unknown>;
 }) {
   const { t } = useTranslation();
+
+  const [deleteOrder, deleteOrderResult] = useDeleteOrderMutation({
+    update: (cache, { data }) => {
+      if (data?.deleteOrderTemplate.id) {
+        cache.evict({ id: cache.identify(data.deleteOrderTemplate) });
+      }
+    },
+  });
+
+  const onDeleteOrder = useCallback(() => {
+    return deleteOrder({ variables: { orderTemplateId: template.id } });
+  }, [deleteOrder, template.id]);
 
   return (
     <div
@@ -27,9 +39,12 @@ export function OrderStatus({
     >
       <div className="col-4">{!!template.name && <h4>{template.name}</h4>}</div>
       <div className="col-8">
-        {!disabled && onDelete && (
+        {!disabled && (
           <div className="btn-toolbar justify-content-end">
-            <DeleteBtnWithConfirm onDelete={onDelete} />
+            <DeleteBtnWithConfirm
+              onDelete={onDeleteOrder}
+              mutationResult={deleteOrderResult}
+            />
           </div>
         )}
       </div>

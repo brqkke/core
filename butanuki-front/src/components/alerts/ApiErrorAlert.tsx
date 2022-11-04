@@ -1,15 +1,19 @@
-import { ApiError } from "../api/call";
+import { ApiError } from "../../api/call";
 import { Alert } from "./Alert";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import isArray from "lodash/isArray";
-import { ErrorType } from "../generated/graphql";
+import { ErrorType } from "../../generated/graphql";
 
 export function ApiErrorAlert({ error }: { error: ApiError | ErrorType }) {
   const { t } = useTranslation();
   const messages = useMemo<string[]>(() => {
     if (typeof error === "string") {
-      return [t(`app.error.${error}`)];
+      if (Object.values(ErrorType).includes(error as ErrorType)) {
+        return [t(`app.error.${error}`)];
+      } else {
+        return [error];
+      }
     }
     if (typeof error.error === "string") {
       return [error.error];

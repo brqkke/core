@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
-import { LoggedLayout } from "../../layout/LoggedLayout";
-import { ApiErrorAlert } from "../../components/ApiErrorAlert";
+import { LoggedLayout } from "../../../layout/LoggedLayout";
+import { ApiErrorAlert } from "../../../components/alerts/ApiErrorAlert";
 import {
   ErrorType,
   useAddOrderMutation,
@@ -10,10 +10,10 @@ import {
   useOrderQuery,
   useUpdateOrderMutation,
   useVaultQuery,
-} from "../../generated/graphql";
-import { OrderStatus } from "../../components/OrderStatus";
-import { BityStatus } from "../../components/BityStatus";
-import { LoadingBtn } from "../../components/LoadingBtn";
+} from "../../../generated/graphql";
+import { OrderStatus } from "../../../components/orders/OrderStatus";
+import { BityStatus } from "../../../components/BityStatus";
+import { LoadingBtn } from "../../../components/buttons/LoadingBtn";
 
 export function OrderSettings() {
   const { vaultId, orderId } = useParams<{

@@ -1,0 +1,9 @@
+mutation unlinkBity{
+    unlinkBity {
+        ...BityStatus
+    }
+}
+
+query bityLinkUrl{
+    linkUrl
+}

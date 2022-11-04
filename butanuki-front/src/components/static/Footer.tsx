@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { usePublicPageLink } from "../utils/i18n";
+import { usePublicPageLink } from "../../utils/i18n";
 
 export const Footer = () => {
   const { t } = useTranslation();
