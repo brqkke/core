@@ -210,6 +210,7 @@ export class BityService {
           newToken,
           TokenHistoryCause.MANUAL_CHANGE,
         );
+        user.token = newToken;
         return newToken;
       },
     );
