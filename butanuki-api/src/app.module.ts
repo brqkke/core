@@ -18,6 +18,9 @@ import { buildDataloaders } from './dataloader/dataloaders';
 import { AppConfigService } from './config/app.config.service';
 import { ErrorModule } from './error/error.module';
 import { CommandModule } from './command/command.module';
+import { ServerResponse } from 'http';
+
+const STATIC_PATH = join(__dirname, '..', 'front-build/');
 
 @Module({
   imports: [
@@ -27,8 +30,18 @@ import { CommandModule } from './command/command.module';
     AuthModule,
     UserModule,
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'front-build'),
+      rootPath: STATIC_PATH,
       exclude: ['/api/graphql'],
+      serveStaticOptions: {
+        setHeaders: (res, path, stat) => {
+          if (
+            path.replace(STATIC_PATH, '') === 'index.html' &&
+            res instanceof ServerResponse
+          ) {
+            res.setHeader('Link', '</api/config>; rel="preload"; as="fetch"');
+          }
+        },
+      },
     }),
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
