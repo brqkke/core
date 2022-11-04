@@ -11,9 +11,9 @@ import {
   useUpdateOrderMutation,
   useVaultQuery,
 } from "../../../generated/graphql";
-import { OrderStatus } from "../../../components/orders/OrderStatus";
 import { BityStatus } from "../../../components/BityStatus";
 import { LoadingBtn } from "../../../components/buttons/LoadingBtn";
+import { OrderCard } from "../../../components/VaultOrders/OrderCard";
 
 export function OrderSettings() {
   const { vaultId, orderId } = useParams<{
@@ -68,9 +68,8 @@ export function OrderSettings() {
           vaultId,
           data: { amount, cryptoAddress, name },
         },
-        onCompleted: (data) => {
-          const { vaultId, id: orderId } = data.createOrder;
-          history.replace(`/vault/${vaultId}/edit-order/${orderId}`);
+        onCompleted: () => {
+          history.replace(`/`);
         },
         onError: (error) => {
           setError(error.message as ErrorType);
@@ -127,8 +126,15 @@ export function OrderSettings() {
           <BityStatus bityStatus={bityStatus.me.bityTokenStatus} />
         </div>
       )}
+      {order.data?.orderTemplate && (
+        <div className="row my-2">
+          <div className="col-12">
+            <OrderCard order={order.data.orderTemplate} disabled noToolbar />
+          </div>
+        </div>
+      )}
       <div className="row">
-        <div className="col-md-12">
+        <div className="col-md-6">
           <br />
           {error && <ApiErrorAlert error={error} />}
           <form
@@ -227,17 +233,11 @@ export function OrderSettings() {
               loading={saveLoading}
               disabled={!addressIsValid || !amountIsValid}
               type={"submit"}
+              className={"ms-2"}
             />
           </form>
         </div>
       </div>
-      {order.data?.orderTemplate.activeOrder && (
-        <OrderStatus
-          order={order.data.orderTemplate.activeOrder}
-          template={order.data.orderTemplate}
-          disabled
-        />
-      )}
     </LoggedLayout>
   );
 }

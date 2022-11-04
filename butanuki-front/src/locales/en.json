@@ -67,6 +67,7 @@
     "order": {
       "amount": "Amount",
       "change_amount": "Change Amount",
+      "payment_informations": "Payment informations",
       "reference": "Bank Transfer Reference (VERY IMPORTANT!)",
       "crypto_address": "Crypto address",
       "crypto_address_desc": "Receiving Bitcoin address",
@@ -84,7 +85,9 @@
       "add": "Add a new piggy bank",
       "name": "Name",
       "name_placeholder": "Name of this piggy bank",
-      "currency": "Currency"
+      "currency": "Currency",
+      "maxReached": "You've reached the maximum number of piggy banks you can create. ({{max}})",
+      "editing": "Editing your piggy bank {{name}}"
     },
     "action": {
       "submit": "Submit",
@@ -92,7 +95,8 @@
       "go_back": "Go back",
       "cancel": "Cancel",
       "delete": "Delete",
-      "confirmDelete": "Confirm deletion?"
+      "confirmDelete": "Confirm deletion?",
+      "edit": "Edit"
     },
     "bity": {
       "error": {

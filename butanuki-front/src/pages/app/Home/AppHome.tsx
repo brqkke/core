@@ -12,12 +12,15 @@ export function AppHome() {
     <LoggedLayout>
       <div className="row">
         <div className="col-md-12">
-          <h3>Bity account</h3>
-          <BityStatus bityStatus={bityStatus} />
+          <div className="card mb-4">
+            <div className="card-header">
+              <h3>Bity account</h3>
+            </div>
+            <div className="card-body">
+              <BityStatus bityStatus={bityStatus} />
+            </div>
+          </div>
           {bityStatus && bityStatus.linked && (
-            // <OrderStatus
-            //   disabled={bityStatus.linkStatus === TokenStatus.Broken}
-            // />
             <Vaults disabled={bityStatus.linkStatus === TokenStatus.Broken} />
           )}
         </div>

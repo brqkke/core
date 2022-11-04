@@ -1,7 +1,7 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { DataSource, In } from 'typeorm';
 import { buildRepositories, Repositories } from '../utils';
-import { VaultInput } from './types';
+import { UpdateVaultInput, VaultInput } from './types';
 import { User } from '../entities/User';
 import { Vault } from '../entities/Vault';
 import { OrderService } from '../order/order.service';
@@ -25,6 +25,14 @@ export class VaultService {
       createdAt: new Date(),
       userId: user.id,
     });
+  }
+
+  //Only name can be updated
+  //Currency should not be updated because some orders may have been created with another currency
+  async updateVault(id: string, input: UpdateVaultInput, user: User) {
+    const vault = await this.findUserVault(user, id);
+    vault.name = input.name;
+    return this.db.vault.save(vault);
   }
 
   deleteVault(id: string, user: User) {

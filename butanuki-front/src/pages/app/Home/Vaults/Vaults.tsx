@@ -1,78 +1,33 @@
-import { useUserContext } from "../../../../context/UserContext";
-import { VaultStatus } from "../../../../components/VaultStatus/VaultStatus";
-import { useCallback, useState } from "react";
-import { VaultForm } from "./VaultForm";
-import {
-  useAddVaultMutation,
-  useVaultsQuery,
-  VaultInfosFragmentDoc,
-  VaultInput,
-} from "../../../../generated/graphql";
-import { useTranslation } from "react-i18next";
+import { VaultFormCard } from "./VaultForm";
+import { useVaultsQuery } from "../../../../generated/graphql";
+import React from "react";
+import { VaultCard } from "../../../../components/VaultOrders/VaultCard";
+import { LoadingCard } from "../../../../components/LoadingCard";
 
-export const Vaults = ({ disabled }: { disabled: boolean }) => {
-  const user = useUserContext();
+export const Vaults = React.memo(({ disabled }: { disabled: boolean }) => {
   const vaults = useVaultsQuery();
-  const [newVaultForm, setNewVaultForm] = useState(false);
-  const { t } = useTranslation();
-  const [addVault] = useAddVaultMutation({
-    // refetchQueries: [{ query: MeDocument }],
-    update: (cache, { data }) => {
-      if (!data?.addVault) {
-        return;
-      }
-      cache.modify({
-        id: cache.identify(user),
-        fields: {
-          vaults: (existingVaults = []) => {
-            const newVaultRef = cache.writeFragment({
-              data: data?.addVault,
-              fragment: VaultInfosFragmentDoc,
-              fragmentName: "VaultInfos",
-            });
-            return [...existingVaults, newVaultRef];
-          },
-        },
-      });
-    },
-  });
-
-  const submitNew = useCallback(
-    async (input: VaultInput) => {
-      await addVault({ variables: { data: input } });
-      setNewVaultForm(false);
-    },
-    [addVault]
-  );
-
-  const closeForm = useCallback(() => setNewVaultForm(false), []);
 
   return (
     <div className="row">
-      <hr />
-      {vaults.data?.me.vaults.map((vault) => (
-        <div className="col-12" key={vault.id}>
-          <VaultStatus disabled={disabled} vault={vault} />
-          <hr />
-        </div>
-      ))}
-      {vaults.data && (
-        <div className="col-6">
-          {newVaultForm ? (
-            <VaultForm onSave={submitNew} key={"new"} cancel={closeForm} />
-          ) : (
-            vaults.data.me.vaults.length < 3 && (
-              <button
-                className={"btn btn-primary"}
-                disabled={disabled}
-                onClick={() => setNewVaultForm(true)}
-              >
-                {t("app.vault.add")}
-              </button>
-            )
-          )}
+      {vaults.loading && (
+        <div className="col-lg-12">
+          <LoadingCard />
         </div>
       )}
+      {vaults.data?.me.vaults.map((vault) => (
+        <div key={vault.id} className="col-lg-12">
+          <VaultCard vault={vault} disabled={disabled} />
+        </div>
+      ))}
+      <div className="col-lg-12">
+        {vaults?.data && (
+          <VaultFormCard
+            disabled={disabled}
+            totalCurrentVaults={vaults.data.me.vaults.length}
+            maxVaults={3}
+          />
+        )}
+      </div>
     </div>
   );
-};
+});

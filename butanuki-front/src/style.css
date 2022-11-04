@@ -1,0 +1,101 @@
+body {
+    font: 16px -apple-system, BlinkMacSystemFont, Arial, Helvetica, sans-serif;
+}
+
+a {
+    background-color: transparent;
+    text-decoration: underline dotted;
+    color: #4a4;
+}
+
+a:hover:not(.btn) {
+    background-color: transparent;
+    text-decoration: underline dotted;
+    color: #4a4;
+}
+footer a {
+    text-decoration: none;
+}
+
+footer a:hover {
+    opacity: 0.8;
+    text-decoration: underline dotted;
+}
+
+
+.nav {
+    height: 50px;
+    width: 100%;
+    background-color: white;
+    border-bottom: 1px solid #ebeaeb;
+    top: 0;
+    position: fixed;
+}
+
+.nav {
+    height: 50px;
+    width: 100%;
+    background-color: white;
+    border-bottom: 1px solid #ebeaeb;
+    top: 0;
+    position: fixed;
+    z-index: 2;
+}
+
+.nav > .nav-header {
+    display: inline;
+}
+
+.nav > .nav-header > .nav-title {
+    display: inline-block;
+    font-size: 22px;
+    padding: 10px 10px 10px 10px;
+}
+
+.nav > .nav-btn {
+    display: none;
+}
+
+.nav > .nav-links {
+    display: inline;
+    float: right;
+    font-size: 18px;
+}
+
+.nav > .nav-links > a {
+    display: inline-block;
+    padding: 13px 10px 13px 10px;
+    text-decoration: none;
+    color: #000;
+}
+
+.nav > .nav-links > a:hover {
+    color: #4a4;
+    text-decoration: underline dotted;
+}
+
+.nav > #nav-check {
+    display: none;
+}
+
+.nav-title {
+    color: #f90;
+    font-weight: bold;
+}
+
+.nav-title a {
+    color: #f90;
+    text-decoration: none;
+}
+
+.nav-title a:hover {
+    color: #f90;
+    text-decoration: underline dotted;
+}
+
+.heading-bitcoin{
+    font-weight: 600;
+    font-size: 36px;
+    color: #ff9900;
+    margin: 20px 0;
+}

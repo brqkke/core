@@ -67,6 +67,7 @@
     "order": {
       "amount": "Montant",
       "change_amount": "Changer le montant",
+      "payment_informations": "Informations de paiement",
       "reference": "Label de paiement (TRÈS IMPORTANT!)",
       "crypto_address": "Adresse Bitcoin",
       "crypto_address_desc": "Adresse Bitcoin de réception",
@@ -84,7 +85,9 @@
       "add": "Ajouter une tirelire",
       "name": "Nom",
       "name_placeholder": "Nom de cette tirelire",
-      "currency": "Devise"
+      "currency": "Devise",
+      "maxReached": "Vous avez atteint le nombre maximum de tirelires ({{max}})",
+      "editing": "Edition de la tirelire {{name}}"
     },
     "action": {
       "submit": "Envoyer",
@@ -92,7 +95,8 @@
       "go_back": "Retour",
       "cancel": "Annuler",
       "delete": "Supprimer",
-      "confirmDelete": "Confirmer la suppression ?"
+      "confirmDelete": "Confirmer la suppression ?",
+      "edit": "Modifier"
     },
     "bity": {
       "error": {
