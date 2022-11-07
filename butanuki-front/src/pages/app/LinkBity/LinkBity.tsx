@@ -1,23 +1,30 @@
 import { Navigate, useLocation, useNavigate } from "react-router";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ErrorType, useLinkBityMutation } from "../../../generated/graphql";
 import { useTranslation } from "react-i18next";
 import { ApiErrorAlert } from "../../../components/alerts/ApiErrorAlert";
 import { Alert } from "../../../components/alerts/Alert";
 import { LinkBityBtn } from "../../../components/buttons/BityBtn/LinkBityBtn";
+import { useEffectOnce } from "../../../utils/hooks";
 
 export function LinkBity() {
+  console.info("LinkBity render");
   const location = useLocation();
-  const [urlSearchParams] = useState(new URLSearchParams(location.search));
+  const [urlSearchParams] = useState(
+    () => new URLSearchParams(location.search)
+  );
   const [linkBityWithCode, result] = useLinkBityMutation();
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  useEffect(() => {
+  useEffectOnce(() => {
+    console.log("CALLING LINK BITY", Math.random());
     const url = window.document.location.href;
     const path = url.replace(window.document.location.origin, "");
-    linkBityWithCode({ variables: { redirectedFrom: path } });
-  }, [linkBityWithCode, urlSearchParams]);
+    linkBityWithCode({ variables: { redirectedFrom: path } }).catch(() => {});
+    console.log("path", path);
+    console.log("url", url);
+  });
 
   if (result.loading || !result.called) {
     return (
@@ -43,7 +50,7 @@ export function LinkBity() {
   }
 
   return (
-    <p>
+    <>
       {standardError ? (
         <ApiErrorAlert error={standardError} />
       ) : (
@@ -66,6 +73,6 @@ export function LinkBity() {
         {t("app.order.go_back")}
       </button>{" "}
       <LinkBityBtn variant={"try-again"} />
-    </p>
+    </>
   );
 }

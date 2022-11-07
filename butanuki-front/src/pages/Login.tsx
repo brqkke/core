@@ -1,17 +1,13 @@
-import { useEffect, useRef } from "react";
 import { usePublicPageLink } from "../utils/i18n";
 import { MainLayout } from "../layout/MainLayout";
+import { useEffectOnce } from "../utils/hooks";
 
 export function Login() {
   const getUrl = usePublicPageLink();
   const link = getUrl("login");
-  const going = useRef(false);
-  useEffect(() => {
-    if (!going.current) {
-      going.current = true;
-      window.location.href = link;
-    }
-  }, [link]);
+  useEffectOnce(() => {
+    window.location.href = link;
+  });
   return (
     <MainLayout>
       <a href={link}>Login page</a>

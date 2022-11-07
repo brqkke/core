@@ -9,6 +9,7 @@ import { Alert } from "./components/alerts/Alert";
 import { Login } from "./pages/Login";
 import { VaultSettings } from "./pages/app/VaultSettings/VaultSettings";
 import { useEffectOnce } from "./utils/hooks";
+import { useNavigate } from "react-router";
 
 export function Router() {
   return (
@@ -49,9 +50,10 @@ function NotFound() {
 }
 
 function Logout() {
+  const navigate = useNavigate();
   useEffectOnce(() => {
     window.localStorage.removeItem("sessionKey");
-    window.location.href = "/";
+    navigate("/login");
   });
 
   return null;
