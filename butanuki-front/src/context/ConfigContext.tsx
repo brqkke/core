@@ -3,6 +3,7 @@ import { get } from "../api/call";
 import { useTranslation } from "react-i18next";
 import { MainLayout } from "../layout/MainLayout";
 import { LoadingCard } from "../components/LoadingCard";
+import { useEffectOnce } from "../utils/hooks";
 
 interface ConfigContextProps {
   recaptchaKey: string;
@@ -10,6 +11,18 @@ interface ConfigContextProps {
   baseUrl: string;
   publicWebsiteBaseUrl: string;
 }
+
+const response = get<
+  ConfigContextProps & {
+    locale: string;
+  }
+>("/config", true, {
+  credentials: "include",
+  mode: "no-cors",
+  headers: {
+    Accept: "*/*",
+  },
+});
 
 const ConfigContext = createContext<ConfigContextProps>({
   recaptchaKey: "dummy",
@@ -31,25 +44,19 @@ export function ConfigContextProvider({
   const { i18n } = useTranslation();
 
   useEffect(() => {
-    console.log("effect config context", "i18n.changeLanguage", locale);
     i18n.changeLanguage(locale);
   }, [locale, i18n]);
 
-  useEffect(() => {
-    (async () => {
-      const r = await get<
-        ConfigContextProps & {
-          locale: string;
-        }
-      >("/config", true, { credentials: "include", mode: "no-cors" });
-      if (r.response) {
-        setConfig(r.response);
-        setLocale(r.response.locale);
+  useEffectOnce(() => {
+    response.then((response) => {
+      if (response.response) {
+        setConfig(response.response);
+        setLocale(response.response.locale);
       } else {
         setConfig(null);
       }
-    })();
-  }, []);
+    });
+  });
 
   if (config === undefined) {
     return (

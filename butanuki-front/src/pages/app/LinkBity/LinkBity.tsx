@@ -1,4 +1,4 @@
-import { Redirect, useHistory, useLocation } from "react-router";
+import { Navigate, useLocation, useNavigate } from "react-router";
 import React, { useEffect, useState } from "react";
 import { ErrorType, useLinkBityMutation } from "../../../generated/graphql";
 import { useTranslation } from "react-i18next";
@@ -10,7 +10,7 @@ export function LinkBity() {
   const location = useLocation();
   const [urlSearchParams] = useState(new URLSearchParams(location.search));
   const [linkBityWithCode, result] = useLinkBityMutation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export function LinkBity() {
   }
 
   if (result.data?.linkBity.bityTokenStatus.linked) {
-    return <Redirect to={"/"} />;
+    return <Navigate to={"/"} />;
   }
 
   const urlError = urlSearchParams.get("error_description");
@@ -60,7 +60,7 @@ export function LinkBity() {
         type={"button"}
         className={"btn btn-secondary"}
         onClick={() => {
-          history.push("/");
+          navigate("/");
         }}
       >
         {t("app.order.go_back")}

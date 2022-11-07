@@ -1,21 +1,18 @@
 import { createContext, useContext, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useMeQuery, UserProfileFragment } from "../generated/graphql";
-import { Redirect } from "react-router";
+import { Navigate } from "react-router";
 import { Alert } from "../components/alerts/Alert";
 import { MainLayout } from "../layout/MainLayout";
 import { LoggedLayout } from "../layout/LoggedLayout";
 import { LoadingCard } from "../components/LoadingCard";
+import { Outlet } from "react-router-dom";
 
 const UserContext = createContext<UserProfileFragment>(
   {} as UserProfileFragment
 );
 
-export function UserContextProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export function UserContextProvider({}: {}) {
   const { data, loading, error } = useMeQuery();
   const { i18n } = useTranslation();
 
@@ -67,12 +64,14 @@ export function UserContextProvider({
   }
 
   if (!data?.me) {
-    return <Redirect to={"/login"} />;
+    return <Navigate to={"/login"} />;
   }
 
   return (
     <UserContext.Provider value={data.me}>
-      <LoggedLayout>{children}</LoggedLayout>
+      <LoggedLayout>
+        <Outlet />
+      </LoggedLayout>
     </UserContext.Provider>
   );
 }

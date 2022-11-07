@@ -1,57 +1,46 @@
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { Login } from "./pages/Login";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { UserContextProvider } from "./context/UserContext";
 import { LoginValidate } from "./pages/LoginValidate";
 import { AppHome } from "./pages/app/Home/AppHome";
 import { OrderSettings } from "./pages/app/OrderSettings/OrderSettings";
-import { useEffect } from "react";
+import React from "react";
 import { LinkBityPage } from "./pages/app/LinkBity/LinkBityPage";
-import { VaultSettings } from "./pages/app/VaultSettings/VaultSettings";
 import { Alert } from "./components/alerts/Alert";
+import { Login } from "./pages/Login";
+import { VaultSettings } from "./pages/app/VaultSettings/VaultSettings";
+import { useEffectOnce } from "./utils/hooks";
 
 export function Router() {
   return (
     <BrowserRouter>
-      <Switch>
-        <Route path={"/login"} exact component={Login} />
-        <Route path={"/logout"} exact component={Logout} />
+      <Routes>
+        <Route path={"/logout"} element={<Logout />} />
         <Route
           path={"/login/verify/:token/:email"}
-          exact
-          component={LoginValidate}
+          element={<LoginValidate />}
         />
-        <Route path={"*"} component={AppRouter} />
-      </Switch>
+        <Route path={"login"} element={<Login />} />
+        <Route path={"*"} element={<UserApp />} />
+      </Routes>
     </BrowserRouter>
   );
 }
 
-function AppRouter() {
+function UserApp() {
   return (
-    <UserContextProvider>
-      <BrowserRouter>
-        <Switch>
-          <Route path={"/"} exact component={AppHome} />
-          <Route
-            path={"/vault/:vaultId/new-order"}
-            exact
-            component={OrderSettings}
-          />
-          <Route
-            path={"/vault/:vaultId/edit"}
-            exact
-            component={VaultSettings}
-          />
-          <Route
-            path={"/vault/:vaultId/edit-order/:orderId"}
-            exact
-            component={OrderSettings}
-          />
-          <Route path={"/auth/bity/callback"} exact component={LinkBityPage} />
-          <Route path={"*"} exact component={NotFound} />
-        </Switch>
-      </BrowserRouter>
-    </UserContextProvider>
+    <Routes>
+      <Route element={<UserContextProvider />}>
+        <Route path={"/"} element={<AppHome />} />
+        <Route path={"/vault/:vaultId/new-order"} element={<OrderSettings />} />
+        <Route path={"/vault/:vaultId/edit"} element={<VaultSettings />} />
+        <Route
+          path={"/vault/:vaultId/edit-order/:orderId"}
+          element={<OrderSettings />}
+        />
+        <Route path={"/auth/bity/callback"} element={<LinkBityPage />} />
+        <Route path={"*"} element={<NotFound />} />
+      </Route>
+    </Routes>
   );
 }
 
@@ -60,10 +49,10 @@ function NotFound() {
 }
 
 function Logout() {
-  useEffect(() => {
+  useEffectOnce(() => {
     window.localStorage.removeItem("sessionKey");
     window.location.href = "/";
-  }, []);
+  });
 
   return null;
 }

@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { useHistory, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import { ApiErrorAlert } from "../../../components/alerts/ApiErrorAlert";
 import {
@@ -23,7 +23,7 @@ export function OrderSettings() {
   const { data: bityStatus, refetch: refetchBityStatus } = useBityStatusQuery();
 
   const vault = useVaultQuery({
-    variables: { id: vaultId },
+    variables: { id: vaultId || "" },
   });
   const order = useOrderQuery({
     variables: {
@@ -47,7 +47,7 @@ export function OrderSettings() {
 
   const [error, setError] = useState<ErrorType | undefined>();
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const submit = useCallback(async () => {
     setError(undefined);
@@ -64,11 +64,11 @@ export function OrderSettings() {
     } else {
       await placeOrder({
         variables: {
-          vaultId,
+          vaultId: vaultId || "",
           data: { amount, cryptoAddress, name },
         },
         onCompleted: () => {
-          history.replace(`/`);
+          navigate(`/`);
         },
         onError: (error) => {
           setError(error.message as ErrorType);
@@ -85,7 +85,7 @@ export function OrderSettings() {
     name,
     placeOrder,
     vaultId,
-    history,
+    navigate,
   ]);
 
   if (vault.loading || !vault.data || order.loading) {
@@ -219,7 +219,7 @@ export function OrderSettings() {
               type={"button"}
               className={"btn btn-secondary"}
               onClick={() => {
-                history.push("/");
+                navigate("/");
               }}
             >
               {t("app.order.go_back")}

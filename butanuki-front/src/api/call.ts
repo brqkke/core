@@ -1,4 +1,4 @@
-const baseUrl = process.env.REACT_APP_BASE_URL || "/api";
+const baseUrl = "/api";
 export const CLIENT_VERSION_HEADER = "X-Client-Version";
 
 export interface ApiError {
@@ -22,7 +22,7 @@ export const call = async <T, R>(
   const headers: HeadersInit = {
     "Content-Type": "application/json",
     Accept: "application/json",
-    [CLIENT_VERSION_HEADER]: process.env.REACT_APP_BUILD_TAG || "",
+    [CLIENT_VERSION_HEADER]: import.meta.env.REACT_APP_BUILD_TAG || "",
   };
   if (!noCredentials) {
     const sessionKey = window.localStorage.getItem("sessionKey");
