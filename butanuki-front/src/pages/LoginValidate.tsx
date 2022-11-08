@@ -1,8 +1,9 @@
 import { useNavigate, useParams } from "react-router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { post } from "../api/call";
 import { LoadingCard } from "../components/LoadingCard";
 import { MainLayout } from "../layout/MainLayout";
+import { useEffectOnce } from "../utils/hooks";
 
 const useVerifyEmail = ({
   token,
@@ -15,19 +16,13 @@ const useVerifyEmail = ({
   result?: { sessionToken: string; success: boolean };
 } => {
   //avoid fetching twice in dev mode with strict mode
-  const called = useRef(false);
   const [loading, setLoading] = useState(true);
   const [result, setResult] = useState<{
     sessionToken: string;
     success: boolean;
   }>();
 
-  useEffect(() => {
-    if (called.current || !token || !email) {
-      return;
-    }
-    called.current = true;
-    console.log("POSTING TO VERIFY EMAIL");
+  useEffectOnce(() => {
     post<
       { tempCode: string; email: string },
       { sessionToken: string; success: boolean }
@@ -39,7 +34,7 @@ const useVerifyEmail = ({
         setResult({ sessionToken: "", success: false });
       }
     });
-  }, [token, email]);
+  });
 
   return {
     loading,
