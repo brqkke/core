@@ -14,11 +14,6 @@ export const LocaleChanger = React.memo(
     const [updateLocale] = useUpdateLocaleMutation({
       onCompleted: (data) => {
         if (data.updateLocale.locale) {
-          console.log(
-            "onCompleted useUpdateLocaleMutation",
-            "i18n.changeLanguage",
-            data.updateLocale.locale
-          );
           i18n.changeLanguage(data.updateLocale.locale);
         }
       },
@@ -38,11 +33,6 @@ export const LocaleChanger = React.memo(
                 if (logged) {
                   updateLocale({ variables: { locale: locale } });
                 } else {
-                  console.log(
-                    "onClick locale btn",
-                    "i18n.changeLanguage",
-                    locale
-                  );
                   i18n.changeLanguage(locale);
                   setLangCookie(locale);
                 }

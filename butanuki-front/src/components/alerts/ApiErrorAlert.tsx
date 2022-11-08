@@ -4,7 +4,11 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { ErrorType } from "../../generated/graphql";
 
-export function ApiErrorAlert({ error }: { error: ApiError | ErrorType }) {
+export function ApiErrorAlert({
+  error,
+}: {
+  error: ApiError | ErrorType | string;
+}) {
   const { t } = useTranslation();
   const messages = useMemo<string[]>(() => {
     if (typeof error === "string") {

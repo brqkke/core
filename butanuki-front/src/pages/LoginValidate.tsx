@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { post } from "../api/call";
 import { LoadingCard } from "../components/LoadingCard";
 import { MainLayout } from "../layout/MainLayout";
@@ -16,7 +16,6 @@ const useVerifyEmail = ({
 } => {
   //avoid fetching twice in dev mode with strict mode
   const called = useRef(false);
-
   const [loading, setLoading] = useState(true);
   const [result, setResult] = useState<{
     sessionToken: string;
@@ -28,6 +27,7 @@ const useVerifyEmail = ({
       return;
     }
     called.current = true;
+    console.log("POSTING TO VERIFY EMAIL");
     const r = post<
       { tempCode: string; email: string },
       { sessionToken: string; success: boolean }

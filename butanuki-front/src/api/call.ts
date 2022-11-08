@@ -59,10 +59,6 @@ export const call = async <T, R>(
                 | { code: string; message: string }[];
             }
           ) => {
-            console.log({
-              status: res.status + "",
-              error: resJ.error,
-            });
             return {
               error: {
                 status: res.status + "",

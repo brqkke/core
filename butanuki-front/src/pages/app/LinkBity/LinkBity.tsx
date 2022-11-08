@@ -1,32 +1,62 @@
-import { Navigate, useLocation, useNavigate } from "react-router";
+import { Navigate, useNavigate } from "react-router";
 import React, { useState } from "react";
 import { ErrorType, useLinkBityMutation } from "../../../generated/graphql";
 import { useTranslation } from "react-i18next";
 import { ApiErrorAlert } from "../../../components/alerts/ApiErrorAlert";
-import { Alert } from "../../../components/alerts/Alert";
 import { LinkBityBtn } from "../../../components/buttons/BityBtn/LinkBityBtn";
 import { useEffectOnce } from "../../../utils/hooks";
 
-export function LinkBity() {
-  console.info("LinkBity render");
-  const location = useLocation();
-  const [urlSearchParams] = useState(
-    () => new URLSearchParams(location.search)
-  );
+const useUrlSearchParams = () => {
+  return useState(() => new URLSearchParams(location.search))[0];
+};
+
+const useBityOAuthCodeValidation = () => {
   const [linkBityWithCode, result] = useLinkBityMutation();
-  const navigate = useNavigate();
-  const { t } = useTranslation();
 
   useEffectOnce(() => {
-    console.log("CALLING LINK BITY", Math.random());
     const url = window.document.location.href;
     const path = url.replace(window.document.location.origin, "");
     linkBityWithCode({ variables: { redirectedFrom: path } }).catch(() => {});
-    console.log("path", path);
-    console.log("url", url);
   });
 
-  if (result.loading || !result.called) {
+  const error = useError(result.error?.message);
+  return {
+    loading: result.loading,
+    error,
+    data: result.data,
+    called: result.called,
+  };
+};
+
+const useError = (
+  mutationErrorMessage?: string
+): { mutationError?: ErrorType | string; urlError?: string } => {
+  const url = useUrlSearchParams();
+  const urlError = url.get("error_description") || undefined;
+
+  const mutationError: ErrorType | string | undefined =
+    mutationErrorMessage && mutationErrorMessage in ErrorType
+      ? (mutationErrorMessage as ErrorType)
+      : mutationErrorMessage;
+
+  return {
+    mutationError,
+    urlError,
+  };
+};
+
+export function LinkBity() {
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+
+  const {
+    loading,
+    data,
+    called,
+    error: { mutationError, urlError },
+  } = useBityOAuthCodeValidation();
+
+  if (loading || !called) {
     return (
       <div className="spinner-border text-warning" role="status">
         <span className="sr-only"></span>
@@ -34,34 +64,15 @@ export function LinkBity() {
     );
   }
 
-  if (result.data?.linkBity.bityTokenStatus.linked) {
+  if (data?.linkBity.bityTokenStatus.linked) {
     return <Navigate to={"/"} />;
-  }
-
-  const urlError = urlSearchParams.get("error_description");
-  let responseErrorText = result.error?.message;
-  let standardError =
-    responseErrorText && responseErrorText in ErrorType
-      ? (responseErrorText as ErrorType)
-      : undefined;
-  if (responseErrorText && responseErrorText in ErrorType) {
-    const errorType: ErrorType = responseErrorText as ErrorType;
-    responseErrorText = t(`app.error.${errorType}`);
   }
 
   return (
     <>
-      {standardError ? (
-        <ApiErrorAlert error={standardError} />
-      ) : (
-        responseErrorText && (
-          <ApiErrorAlert
-            error={{ status: "unknown", error: responseErrorText }}
-          />
-        )
-      )}
+      {mutationError && <ApiErrorAlert error={mutationError} />}
       <br />
-      {urlError && <Alert message={urlError} level={"danger"} />}
+      {urlError && <ApiErrorAlert error={urlError} />}
       <br />
       <button
         type={"button"}
