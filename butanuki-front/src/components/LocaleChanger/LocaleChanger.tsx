@@ -14,11 +14,6 @@ export const LocaleChanger = React.memo(
     const [updateLocale] = useUpdateLocaleMutation({
       onCompleted: (data) => {
         if (data.updateLocale.locale) {
-          console.log(
-            "onCompleted useUpdateLocaleMutation",
-            "i18n.changeLanguage",
-            data.updateLocale.locale
-          );
           i18n.changeLanguage(data.updateLocale.locale);
         }
       },
@@ -26,11 +21,12 @@ export const LocaleChanger = React.memo(
     const { availableLocales } = useConfigContext();
 
     const selector = availableLocales
-      .map((locale, i) => {
+      .map((locale) => {
         if (i18n.language === locale) {
           return <span key={locale}>{locale.toUpperCase()}</span>;
         } else {
           return (
+            // eslint-disable-next-line jsx-a11y/anchor-is-valid
             <a
               key={locale}
               onClick={(ev) => {
@@ -38,11 +34,6 @@ export const LocaleChanger = React.memo(
                 if (logged) {
                   updateLocale({ variables: { locale: locale } });
                 } else {
-                  console.log(
-                    "onClick locale btn",
-                    "i18n.changeLanguage",
-                    locale
-                  );
                   i18n.changeLanguage(locale);
                   setLangCookie(locale);
                 }

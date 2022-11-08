@@ -1,4 +1,4 @@
-import { Redirect, useHistory, useParams } from "react-router";
+import { Navigate, useNavigate, useParams } from "react-router";
 import React, { FormEventHandler, useCallback, useState } from "react";
 import {
   useUpdateVaultMutation,
@@ -12,7 +12,7 @@ export const VaultSettings = React.memo(() => {
   const { vaultId } = useParams<{
     vaultId?: string;
   }>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const [name, setName] = useState("");
 
@@ -41,7 +41,7 @@ export const VaultSettings = React.memo(() => {
   );
 
   if (!vaultId) {
-    return <Redirect to="/" />;
+    return <Navigate to="/" />;
   }
 
   if (vault.loading) {
@@ -86,7 +86,7 @@ export const VaultSettings = React.memo(() => {
                 type={"button"}
                 className={"btn btn-secondary"}
                 onClick={() => {
-                  history.push("/");
+                  navigate("/");
                 }}
               >
                 {t("app.order.go_back")}

@@ -37,7 +37,7 @@ WORKDIR /app
 COPY  --from=core-prod-dependencies /app/node_modules ./node_modules
 COPY  --from=core-build /app/dist ./dist
 COPY butanuki-api/*.json ./
-COPY  --from=front-build /app/build ./front-build
+COPY  --from=front-build /app/dist ./front-build
 
 ARG appVersion
 ENV APP_VERSION=$appVersion

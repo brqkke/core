@@ -1,32 +1,66 @@
-import { useHistory, useParams } from "react-router";
-import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router";
+import React, { useEffect, useState } from "react";
 import { post } from "../api/call";
-import { useTranslation } from "react-i18next";
 import { LoadingCard } from "../components/LoadingCard";
 import { MainLayout } from "../layout/MainLayout";
+import { useEffectOnce } from "../utils/hooks";
+
+const useVerifyEmail = ({
+  token,
+  email,
+}: {
+  token: string;
+  email: string;
+}): {
+  loading: boolean;
+  result?: { sessionToken: string; success: boolean };
+} => {
+  //avoid fetching twice in dev mode with strict mode
+  const [loading, setLoading] = useState(true);
+  const [result, setResult] = useState<{
+    sessionToken: string;
+    success: boolean;
+  }>();
+
+  useEffectOnce(() => {
+    post<
+      { tempCode: string; email: string },
+      { sessionToken: string; success: boolean }
+    >("/auth/login/email/verify", { tempCode: token, email }).then((r) => {
+      setLoading(false);
+      if (r.response && r.response.success) {
+        setResult({ sessionToken: r.response.sessionToken, success: true });
+      } else {
+        setResult({ sessionToken: "", success: false });
+      }
+    });
+  });
+
+  return {
+    loading,
+    result,
+  };
+};
 
 export function LoginValidate() {
-  const params = useParams<{ token: string; email: string }>();
-  const history = useHistory();
-  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { token, email } = useParams<{ token: string; email: string }>();
+  const { loading, result } = useVerifyEmail({
+    token: token || "",
+    email: email || "",
+  });
 
   useEffect(() => {
-    (async () => {
-      const r = await post<
-        { tempCode: string; email: string },
-        { sessionToken: string; success: boolean }
-      >("/auth/login/email/verify", {
-        tempCode: params.token,
-        email: params.email,
-      });
-      if (r.response && r.response.success) {
-        window.localStorage.setItem("sessionKey", r.response.sessionToken);
-        history.replace("/");
-      } else {
-        history.replace("/login");
-      }
-    })();
-  }, [params, history]);
+    if (loading) {
+      return;
+    }
+    if (result?.success) {
+      window.localStorage.setItem("sessionKey", result.sessionToken);
+      navigate("/");
+    } else {
+      navigate("/login");
+    }
+  }, [loading, result, navigate]);
   return (
     <MainLayout>
       <LoadingCard />
