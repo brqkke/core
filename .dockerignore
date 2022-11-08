@@ -8,4 +8,4 @@
 !butanuki-front/src
 !butanuki-front/public
 !butanuki-front/package*.json
-!butanuki-front/tsconfig.json
+!butanuki-front/tsconfig.*
