@@ -28,7 +28,7 @@ const useVerifyEmail = ({
     }
     called.current = true;
     console.log("POSTING TO VERIFY EMAIL");
-    const r = post<
+    post<
       { tempCode: string; email: string },
       { sessionToken: string; success: boolean }
     >("/auth/login/email/verify", { tempCode: token, email }).then((r) => {

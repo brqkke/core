@@ -21,11 +21,12 @@ export const LocaleChanger = React.memo(
     const { availableLocales } = useConfigContext();
 
     const selector = availableLocales
-      .map((locale, i) => {
+      .map((locale) => {
         if (i18n.language === locale) {
           return <span key={locale}>{locale.toUpperCase()}</span>;
         } else {
           return (
+            // eslint-disable-next-line jsx-a11y/anchor-is-valid
             <a
               key={locale}
               onClick={(ev) => {

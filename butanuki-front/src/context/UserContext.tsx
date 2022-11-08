@@ -12,7 +12,7 @@ const UserContext = createContext<UserProfileFragment>(
   {} as UserProfileFragment
 );
 
-export function UserContextProvider({}: {}) {
+export function UserContextProvider() {
   const { data, loading, error } = useMeQuery();
   const { i18n } = useTranslation();
 

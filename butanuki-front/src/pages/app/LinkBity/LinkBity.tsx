@@ -7,7 +7,7 @@ import { LinkBityBtn } from "../../../components/buttons/BityBtn/LinkBityBtn";
 import { useEffectOnce } from "../../../utils/hooks";
 
 const useUrlSearchParams = () => {
-  return useState(() => new URLSearchParams(location.search))[0];
+  return useState(() => new URLSearchParams(globalThis.location.search))[0];
 };
 
 const useBityOAuthCodeValidation = () => {

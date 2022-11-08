@@ -30,8 +30,10 @@
     "@types/react-dom": "^18.0.8",
     "@vitejs/plugin-basic-ssl": "^0.1.2",
     "@vitejs/plugin-react": "^2.2.0",
+    "eslint": "^8.27.0",
+    "eslint-config-react-app": "^7.0.1",
     "prettier": "^2.7.1",
-    "typescript": "^4.6.4",
+    "typescript": "^4.8.4",
     "vite": "^3.2.3"
   }
 }
