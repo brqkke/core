@@ -28,6 +28,7 @@ export const LinkBityBtn = ({
     case "try-again":
       return (
         <LoadingBtn
+          className={"btn-sm"}
           onClick={linkAccount}
           level={colorVariant || "warning"}
           text={t("app.home.try_again")}
@@ -38,6 +39,7 @@ export const LinkBityBtn = ({
     default:
       return (
         <LoadingBtn
+          className={"btn-sm"}
           onClick={linkAccount}
           level={colorVariant || "success"}
           text={t("app.home.click_here")}
@@ -54,6 +56,7 @@ export const UnlinkBityBtn = () => {
     <LoadingBtn
       onClick={unlinkAccount}
       level={"danger"}
+      className={"btn-sm"}
       loading={unlinkLoading}
       text={t("app.home.click_here")}
     />

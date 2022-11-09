@@ -13,6 +13,7 @@ import {
 import { BityStatus } from "../../../components/BityStatus";
 import { LoadingBtn } from "../../../components/buttons/LoadingBtn";
 import { OrderCard } from "../../../components/VaultOrders/OrderCard";
+import { LoggedLayout } from "../../../layout/LoggedLayout";
 
 export function OrderSettings() {
   const { vaultId, orderId } = useParams<{
@@ -57,6 +58,9 @@ export function OrderSettings() {
           orderTemplateId: orderId,
           data: { amount, cryptoAddress, name },
         },
+        onCompleted: () => {
+          navigate(`/`);
+        },
         onError: (error) => {
           setError(error.message as ErrorType);
         },
@@ -90,11 +94,13 @@ export function OrderSettings() {
 
   if (vault.loading || !vault.data || order.loading) {
     return (
-      <div className="row">
-        <div className="col-md-6">
-          <p>{t("app.loading")}</p>
+      <LoggedLayout>
+        <div className="row">
+          <div className="col-md-6">
+            <p>{t("app.loading")}</p>
+          </div>
         </div>
-      </div>
+      </LoggedLayout>
     );
   }
 
@@ -105,7 +111,7 @@ export function OrderSettings() {
   const addressIsValid = (!amountChanged && !addressChanged) || addressChanged;
 
   return (
-    <>
+    <LoggedLayout>
       <div className="row">
         <div className="col-12">
           <h3>{vault.data.vault.name}</h3>
@@ -235,6 +241,6 @@ export function OrderSettings() {
           </form>
         </div>
       </div>
-    </>
+    </LoggedLayout>
   );
 }

@@ -4,7 +4,6 @@ import { useMeQuery, UserProfileFragment } from "../generated/graphql";
 import { Navigate } from "react-router";
 import { Alert } from "../components/alerts/Alert";
 import { MainLayout } from "../layout/MainLayout";
-import { LoggedLayout } from "../layout/LoggedLayout";
 import { LoadingCard } from "../components/LoadingCard";
 import { Outlet } from "react-router-dom";
 
@@ -21,30 +20,6 @@ export function UserContextProvider() {
       i18n.changeLanguage(data.me.locale);
     }
   }, [i18n, data]);
-
-  // useEffect(() => {
-  //   const sessionKey = window.localStorage.getItem("sessionKey");
-  //   if (!sessionKey) {
-  //     setUser(null);
-  //     return;
-  //   }
-  //
-  //   (async () => {
-  //     const response = await get<{ email: string; locale: string }>("/auth/me");
-  //     if (response.error) {
-  //       setUser(null);
-  //       return;
-  //     }
-  //
-  //     if (response.response?.email) {
-  //       setUser(response.response);
-  //       setLocale(response.response.locale);
-  //       return;
-  //     }
-  //
-  //     setUser(null);
-  //   })();
-  // }, []);
 
   if (loading) {
     return (
@@ -68,9 +43,7 @@ export function UserContextProvider() {
 
   return (
     <UserContext.Provider value={data.me}>
-      <LoggedLayout>
-        <Outlet />
-      </LoggedLayout>
+      <Outlet />
     </UserContext.Provider>
   );
 }
