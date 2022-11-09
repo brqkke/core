@@ -1,4 +1,4 @@
-FROM node:16.17.1-alpine3.16  As front-build
+FROM node:16.18.1-alpine3.16  As front-build
 
 WORKDIR /app
 COPY butanuki-front/package*.json ./
@@ -6,7 +6,7 @@ RUN npm ci
 COPY butanuki-front/. .
 RUN npm run build
 
-FROM node:16.17.1-alpine3.16  As core-build
+FROM node:16.18.1-alpine3.16  As core-build
 
 # Create app directory
 WORKDIR /app
@@ -21,7 +21,7 @@ COPY butanuki-api/. .
 # Run the build command which creates the production bundle
 RUN npm run build
 
-FROM node:16.17.1-alpine3.16 as core-prod-dependencies
+FROM node:16.18.1-alpine3.16 as core-prod-dependencies
 WORKDIR /app
 # Set NODE_ENV environment variable
 ENV NODE_ENV production
@@ -29,7 +29,7 @@ COPY butanuki-api/package*.json ./
 # Running `npm ci` removes the existing node_modules directory and passing in --only=production ensures that only the production dependencies are installed. This ensures that the node_modules directory is as optimized as possible
 RUN npm ci --omit dev --omit peer --omit optional && npm cache clean --force
 
-FROM node:16.17.1-alpine3.16 As production
+FROM node:16.18.1-alpine3.16 As production
 
 WORKDIR /app
 
