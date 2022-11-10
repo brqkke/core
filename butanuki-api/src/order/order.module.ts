@@ -6,9 +6,15 @@ import { OrderTemplateService } from './order.template.service';
 import { OrderResolver } from './order.resolver';
 import { MailerModule } from '../emails/mailer.module';
 import { VaultModule } from '../vault/vault.module';
+import { AppConfigModule } from '../config/config.module';
 
 @Module({
-  imports: [forwardRef(() => BityModule), MailerModule, VaultModule],
+  imports: [
+    forwardRef(() => BityModule),
+    MailerModule,
+    VaultModule,
+    AppConfigModule,
+  ],
   controllers: [OrderController],
   providers: [OrderService, OrderTemplateService, OrderResolver],
   exports: [OrderService],

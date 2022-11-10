@@ -20,6 +20,8 @@ export class ConfigController {
       availableLocales: ['en', 'fr'], //TODO use locales module to infer list of available locales
       baseUrl: config.baseUrl,
       publicWebsiteBaseUrl: config.publicWebsiteBaseUrl,
+      maxOrdersTemplatesPerVault: config.vault.maxOrdersTemplatesPerVault,
+      maxVaultsPerUser: config.vault.maxVaultsPerUser,
     };
   }
 }

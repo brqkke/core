@@ -8,12 +8,14 @@ import { Link } from "react-router-dom";
 export const VaultCard = ({
   vault,
   disabled,
+  maxOrdersTemplatesPerVault,
 }: {
   vault: VaultInfosFragment;
   disabled: boolean;
+  maxOrdersTemplatesPerVault: number;
 }) => {
   return (
-    <div className="card mb-4">
+    <div className="card mb-2">
       <div className="card-body">
         <VaultHeaderCardBody vault={vault} />
       </div>
@@ -25,13 +27,15 @@ export const VaultCard = ({
               <OrderCard order={orderTemplate} disabled={disabled} />
             </div>
           ))}
-          <div className="col-lg-12">
-            {vault.orderTemplates.length === 0 ? (
-              <NoOrders vaultId={vault.id} disabled={disabled} />
-            ) : (
-              <AddOrder vaultId={vault.id} disabled={disabled} />
-            )}
-          </div>
+          {vault.orderTemplates.length < maxOrdersTemplatesPerVault && (
+            <div className="col-lg-12">
+              {vault.orderTemplates.length === 0 ? (
+                <NoOrders vaultId={vault.id} disabled={disabled} />
+              ) : (
+                <AddOrder vaultId={vault.id} disabled={disabled} />
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

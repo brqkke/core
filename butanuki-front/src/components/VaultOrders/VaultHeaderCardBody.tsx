@@ -20,14 +20,13 @@ export const VaultHeaderCardBody = React.memo(
     const { t } = useTranslation();
     return (
       <div className="row">
-        <div className="col-md-4">
-          <h4 className="mt-1">{vault.name}</h4>
+        <div className="col-6">
+          <h4>{vault.name}</h4>
           <p className="text-muted mb-0">
             {t("app.vault.currency")} : {vault.currency}
           </p>
         </div>
-        <div className="col-md-4"></div>
-        <div className="col-md-4">
+        <div className="col-6">
           <div className="d-flex justify-content-end mt-2">
             <Link
               className="btn btn-outline-primary"

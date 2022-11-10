@@ -59,7 +59,7 @@ function pluginIndexHtmlHeaders(): PluginOption {
     },
   };
 }
-// https://vitejs.dev/config/
+/** @type {import('vite').UserConfig} */
 export default defineConfig({
   plugins: [
     react(),
@@ -67,6 +67,9 @@ export default defineConfig({
     spaFallbackWithDot(),
     pluginIndexHtmlHeaders(),
   ],
+  build: {
+    assetsInlineLimit: 1024 * 1024,
+  },
   server: {
     https: true,
     port: 3000,

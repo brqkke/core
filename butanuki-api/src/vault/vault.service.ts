@@ -7,19 +7,27 @@ import { Vault } from '../entities/Vault';
 import { OrderService } from '../order/order.service';
 import { OrderStatus } from '../entities/enums/OrderStatus';
 import { OrderTemplate } from '../entities/OrderTemplate';
+import { AppConfigService } from '../config/app.config.service';
+import { ErrorType, makeError } from '../error/ErrorTypes';
 
 @Injectable()
 export class VaultService {
   private db: Repositories;
   constructor(
     db: DataSource,
+    private appConfig: AppConfigService,
     @Inject(forwardRef(() => OrderService)) private orderService: OrderService,
   ) {
     this.db = buildRepositories(db.manager);
   }
 
-  createVault(input: VaultInput, user: User) {
-    console.log(input);
+  async createVault(input: VaultInput, user: User) {
+    const totalUserVaults = await this.db.vault.count({
+      where: { userId: user.id },
+    });
+    if (totalUserVaults >= this.appConfig.config.vault.maxVaultsPerUser) {
+      throw makeError(ErrorType.TooManyVaults);
+    }
     return this.db.vault.save({
       ...input,
       createdAt: new Date(),

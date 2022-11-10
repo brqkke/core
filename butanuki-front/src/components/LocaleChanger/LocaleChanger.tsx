@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useConfigContext } from "../../context/ConfigContext";
-import React, { useRef } from "react";
+import React from "react";
 import { useUpdateLocaleMutation } from "../../generated/graphql";
 
 const setLangCookie = (locale: string) => {
@@ -11,8 +11,7 @@ const setLangCookie = (locale: string) => {
 export const LocaleChanger = React.memo(
   ({ logged = false }: { logged: boolean }) => {
     const { i18n } = useTranslation();
-    const latest = useRef(i18n.language);
-    const [updateLocale] = useUpdateLocaleMutation();
+    const [updateLocale, result] = useUpdateLocaleMutation();
     const { availableLocales } = useConfigContext();
 
     const selector = availableLocales
@@ -24,14 +23,13 @@ export const LocaleChanger = React.memo(
             // eslint-disable-next-line jsx-a11y/anchor-is-valid
             <a
               key={locale}
-              onClick={(ev) => {
+              onClick={async (ev) => {
                 ev.preventDefault();
-                latest.current = locale;
+                if (logged) {
+                  await updateLocale({ variables: { locale: locale } });
+                }
                 i18n.changeLanguage(locale);
                 setLangCookie(locale);
-                if (logged) {
-                  updateLocale({ variables: { locale: locale } });
-                }
                 return false;
               }}
               href={"#"}

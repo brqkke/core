@@ -17,6 +17,7 @@ export function UserContextProvider() {
 
   useEffect(() => {
     if (data?.me) {
+      console.log(data.me.locale);
       i18n.changeLanguage(data.me.locale);
     }
   }, [i18n, data]);

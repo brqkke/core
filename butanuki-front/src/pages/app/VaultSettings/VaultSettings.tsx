@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { LoadingBtn } from "../../../components/buttons/LoadingBtn";
 import { LoadingCard } from "../../../components/LoadingCard";
 import { LoggedLayout } from "../../../layout/LoggedLayout";
+import { useDebounce } from "../../../utils/hooks";
 
 export const VaultSettings = React.memo(() => {
   const { vaultId } = useParams<{
@@ -44,11 +45,13 @@ export const VaultSettings = React.memo(() => {
     [updateVault]
   );
 
+  const vaultLoading = useDebounce(vault.loading, 100, true);
+
   if (!vaultId) {
     return <Navigate to="/" />;
   }
 
-  if (vault.loading) {
+  if (vaultLoading) {
     return (
       <LoggedLayout>
         <div className="row">

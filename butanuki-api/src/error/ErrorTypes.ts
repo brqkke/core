@@ -11,6 +11,8 @@ export enum ErrorType {
   ButanukiAccountPreviouslyLinkedToOtherBityAccount = 'ButanukiAccountPreviouslyLinkedToOtherBityAccount',
   UnknownBityError = 'UnknownBityError',
   Unknown = 'Unknown',
+  TooManyOrdersInVault = 'TooManyOrdersInVault',
+  TooManyVaults = 'TooManyVaults',
 }
 
 registerEnumType(ErrorType, {
@@ -22,6 +24,8 @@ export const makeError = (code: ErrorType): HttpException => {
   switch (code) {
     case ErrorType.NeedVerifiedBityAccount:
     case ErrorType.ButanukiAccountPreviouslyLinkedToOtherBityAccount:
+    case ErrorType.TooManyOrdersInVault:
+    case ErrorType.TooManyVaults:
       return new ConflictException(code);
     case ErrorType.CantRefreshBityToken:
       return new InternalServerErrorException(code);
@@ -29,6 +33,10 @@ export const makeError = (code: ErrorType): HttpException => {
     case ErrorType.Unknown:
       return new InternalServerErrorException(code);
     default:
-      return new InternalServerErrorException(ErrorType.Unknown);
+      return shouldNotHappen(code);
   }
+};
+
+const shouldNotHappen = (code: never): never => {
+  throw new Error(`Should not happen: ${code}`);
 };

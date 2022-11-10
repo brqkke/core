@@ -103,6 +103,10 @@ export class AppConfigService {
           ),
         },
       },
+      vault: {
+        maxVaultsPerUser: 3,
+        maxOrdersTemplatesPerVault: 3,
+      },
     };
   }
 }

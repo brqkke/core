@@ -5,8 +5,8 @@ import {
   useDeleteOrderMutation,
 } from "../../generated/graphql";
 import { useTranslation } from "react-i18next";
-import { DeleteBtnWithConfirm } from "../buttons/DeleteBtnWithConfirm";
 import { Link } from "react-router-dom";
+import { DeleteBtnWithConfirm } from "../buttons/DeleteBtnWithConfirm";
 
 const RenderIbanWithSpaces = React.memo((props: { iban: string }) => {
   const { iban } = props;
@@ -139,13 +139,14 @@ export const OrderCard = ({
     },
   });
 
-  // const onDeleteOrder = useCallback(() => {
-  //   return deleteOrder({ variables: { orderTemplateId: template.id } });
-  // }, [deleteOrder, template.id]);
   return (
     <div className="card">
       <div className="card-header">
-        <h4>{order.name}</h4>
+        <div className="row">
+          <div className="col-12">
+            <h4 className={"mb-0"}>{order.name}</h4>
+          </div>
+        </div>
       </div>
       <div className="card-body">
         <div className="row">
@@ -187,23 +188,19 @@ export const OrderCard = ({
         </div>
       </div>
       {!noToolbar && (
-        <div className="card-footer">
-          <div className="d-flex justify-content-end">
-            <Link
-              to={`/vault/${order.vaultId}/edit-order/${order.id}`}
-              className={`btn btn-outline-primary ${
-                disabled ? "disabled" : ""
-              }`}
-            >
-              {t("app.order.change_amount")}
-            </Link>
-            <DeleteBtnWithConfirm
-              onDelete={deleteOrder}
-              mutationResult={deleteOrderResult}
-              label={t("app.action.delete")}
-              className={"ms-2"}
-            />
-          </div>
+        <div className={"card-footer justify-content-end d-flex"}>
+          <Link
+            to={`/vault/${order.vaultId}/edit-order/${order.id}`}
+            className={`btn btn-outline-primary ${disabled ? "disabled" : ""}`}
+          >
+            {t("app.order.change_amount")}
+          </Link>
+          <DeleteBtnWithConfirm
+            onDelete={deleteOrder}
+            mutationResult={deleteOrderResult}
+            label={t("app.action.delete")}
+            className={"ms-2"}
+          />
         </div>
       )}
     </div>

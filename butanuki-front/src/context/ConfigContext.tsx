@@ -10,6 +10,8 @@ interface ConfigContextProps {
   availableLocales: string[];
   baseUrl: string;
   publicWebsiteBaseUrl: string;
+  maxOrdersTemplatesPerVault: number;
+  maxVaultsPerUser: number;
 }
 
 const response = get<
@@ -29,6 +31,8 @@ const ConfigContext = createContext<ConfigContextProps>({
   availableLocales: ["fr", "en"],
   baseUrl: "dummy",
   publicWebsiteBaseUrl: "dummy",
+  maxOrdersTemplatesPerVault: 0,
+  maxVaultsPerUser: 0,
 });
 
 export function ConfigContextProvider({
