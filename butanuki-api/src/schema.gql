@@ -9,6 +9,7 @@ type Vault {
   createdAt: DateTime!
   userId: String!
   orderTemplates: [OrderTemplate!]!
+  statistics: VaultStatistics!
 }
 
 """
@@ -40,6 +41,7 @@ type Order {
   status: String!
   orderTemplateId: String
   amount: Float!
+  filledAmount: Float
   currency: OrderCurrency!
   redactedCryptoAddress: String
   bankDetails: BityPaymentDetails
@@ -67,6 +69,11 @@ enum TokenStatus {
   ACTIVE
   NEED_REFRESH_RETRY
   BROKEN
+}
+
+type VaultStatistics {
+  totalSpent: Float!
+  totalReceived: Float!
 }
 
 type Query {

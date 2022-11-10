@@ -70,6 +70,7 @@ export class CheckPendingOrdersTask extends AbstractTask {
           status: OrderStatus.FILLED_NEED_RENEW,
           updatedAt: new Date(),
           lastCheckedAt: new Date(),
+          filledAmount: parseFloat(orderBity.output?.amount || '0'),
         },
       );
     } else if (orderBity.timestamp_cancelled) {

@@ -9,7 +9,7 @@ import {
 } from '@nestjs/graphql';
 import { Vault } from '../entities/Vault';
 import { VaultService } from './vault.service';
-import { UpdateVaultInput, VaultInput } from './types';
+import { UpdateVaultInput, VaultInput, VaultStatistics } from './types';
 import { CurrentUser, Roles } from '../decorator/user.decorator';
 import { User } from '../entities/User';
 import { UserRole } from '../entities/enums/UserRole';
@@ -81,5 +81,13 @@ export class VaultResolver {
     @Dataloaders() dataloader: DLoaders,
   ): Promise<OrderTemplate[]> {
     return dataloader.orderTemplatesByVaultId.load(vault.id);
+  }
+
+  @ResolveField(() => VaultStatistics)
+  async statistics(
+    @Root() vault: Vault,
+    @Dataloaders() dataloader: DLoaders,
+  ): Promise<VaultStatistics> {
+    return dataloader.vaultStatisticsByVaultId.load(vault.id);
   }
 }
