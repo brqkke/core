@@ -66,7 +66,7 @@
     },
     "order": {
       "amount": "Montant",
-      "change_amount": "Changer le montant",
+      "change_amount": "Modifier",
       "payment_informations": "Informations de paiement",
       "reference": "Label de paiement (TRÈS IMPORTANT!)",
       "crypto_address": "Adresse Bitcoin",

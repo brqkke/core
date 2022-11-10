@@ -11,13 +11,7 @@ const setLangCookie = (locale: string) => {
 export const LocaleChanger = React.memo(
   ({ logged = false }: { logged: boolean }) => {
     const { i18n } = useTranslation();
-    const [updateLocale] = useUpdateLocaleMutation({
-      onCompleted: (data) => {
-        if (data.updateLocale.locale) {
-          i18n.changeLanguage(data.updateLocale.locale);
-        }
-      },
-    });
+    const [updateLocale, result] = useUpdateLocaleMutation();
     const { availableLocales } = useConfigContext();
 
     const selector = availableLocales
@@ -29,14 +23,13 @@ export const LocaleChanger = React.memo(
             // eslint-disable-next-line jsx-a11y/anchor-is-valid
             <a
               key={locale}
-              onClick={(ev) => {
+              onClick={async (ev) => {
                 ev.preventDefault();
                 if (logged) {
-                  updateLocale({ variables: { locale: locale } });
-                } else {
-                  i18n.changeLanguage(locale);
-                  setLangCookie(locale);
+                  await updateLocale({ variables: { locale: locale } });
                 }
+                i18n.changeLanguage(locale);
+                setLangCookie(locale);
                 return false;
               }}
               href={"#"}

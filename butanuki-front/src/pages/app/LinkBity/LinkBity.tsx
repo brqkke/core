@@ -58,7 +58,7 @@ export function LinkBity() {
 
   if (loading || !called) {
     return (
-      <div className="spinner-border text-warning" role="status">
+      <div className="spinner-border text-warning text-center" role="status">
         <span className="sr-only"></span>
       </div>
     );

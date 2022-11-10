@@ -84,6 +84,8 @@ enum ErrorType {
   ButanukiAccountPreviouslyLinkedToOtherBityAccount
   UnknownBityError
   Unknown
+  TooManyOrdersInVault
+  TooManyVaults
 }
 
 type Mutation {

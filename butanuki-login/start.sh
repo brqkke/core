@@ -1,0 +1,1 @@
+BUTANUKI_APP_DOMAIN=localhost:3000 RECAPTCHA_SITE_KEY=6LdF8HIaAAAAAKHwjcGb6f6JtGMtcy6ka6chjGp6 php -S localhost:8002 login.php

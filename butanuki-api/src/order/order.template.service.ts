@@ -13,6 +13,8 @@ import { Order } from '../entities/Order';
 import { CreateOrderInput, OrderInput } from '../dto/OrderInput';
 import { VaultService } from '../vault/vault.service';
 import { OrderStatus } from '../entities/enums/OrderStatus';
+import { ErrorType, makeError } from '../error/ErrorTypes';
+import { AppConfigService } from '../config/app.config.service';
 
 @Injectable()
 export class OrderTemplateService {
@@ -22,6 +24,7 @@ export class OrderTemplateService {
     private bityService: BityService,
     private orderService: OrderService,
     private vaultService: VaultService,
+    private appConfig: AppConfigService,
   ) {
     this.db = buildRepositories(conn.manager);
   }
@@ -32,6 +35,17 @@ export class OrderTemplateService {
     data: CreateOrderInput,
   ): Promise<{ template: OrderTemplate; newOrder: Order }> {
     const vault = await this.vaultService.findUserVault(user, vaultId);
+    const vaultOrderTemplatesCount = await this.db.orderTemplate.count({
+      where: {
+        vaultId,
+      },
+    });
+    if (
+      vaultOrderTemplatesCount >=
+      this.appConfig.config.vault.maxOrdersTemplatesPerVault
+    ) {
+      throw makeError(ErrorType.TooManyOrdersInVault);
+    }
     const template = await this.db.orderTemplate.save({
       name: data.name,
       vaultId,
