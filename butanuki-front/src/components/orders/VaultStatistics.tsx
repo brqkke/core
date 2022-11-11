@@ -5,6 +5,7 @@ import { formatAmount } from "../../utils/i18n";
 export const VaultStatistics = (props: {
   vaultStatistics: Vault["statistics"];
   currency: OrderCurrency;
+  bitcoinPrice?: number | null;
 }) => {
   const { t, i18n } = useTranslation();
   return (
@@ -25,6 +26,16 @@ export const VaultStatistics = (props: {
           i18n.language as "en" | "fr"
         )}
       </p>
+      {!!props.bitcoinPrice && (
+        <p>
+          {t("app.vault.statistics.valuation")} :{" "}
+          {formatAmount(
+            props.vaultStatistics.totalReceived * props.bitcoinPrice,
+            props.currency,
+            i18n.language as "en" | "fr"
+          )}
+        </p>
+      )}
     </>
   );
 };

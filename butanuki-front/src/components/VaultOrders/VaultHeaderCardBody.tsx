@@ -31,6 +31,7 @@ export const VaultHeaderCardBody = React.memo(
           <VaultStatistics
             vaultStatistics={vault.statistics}
             currency={vault.currency}
+            bitcoinPrice={vault.bitcoinPrice}
           />
         </div>
         <div className="col-12 col-md-4">

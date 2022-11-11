@@ -32,7 +32,7 @@ export const formatAmount = (
         currency: "EUR",
       }).format(amount);
     case OrderCurrency.Chf:
-      return new Intl.NumberFormat(`${locale}-CH`, {
+      return new Intl.NumberFormat(`${locale === "fr" ? "ch" : locale}-CH`, {
         style: "currency",
         currency: "CHF",
       }).format(amount);

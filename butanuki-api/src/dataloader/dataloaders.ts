@@ -20,5 +20,6 @@ export const buildDataloaders = (data: DataSource) => {
     ),
     latestActiveOrderByTemplateId: createActiveOrderByTemplateIdDataloader(db),
     vaultStatisticsByVaultId: createVaultStatisticsDataloader(db),
+    rateByCurrency: createEntityDataloader(db.rate, 'currency'),
   };
 };

@@ -91,7 +91,8 @@
       "statistics": {
         "total_spent": "Total saved",
         "total_spent_desc": "Total amount of {{currency}} saved in this piggy bank.",
-        "total_received": "Total received bitcoins"
+        "total_received": "Total received bitcoins",
+        "valuation": "Valuation"
       }
     },
     "action": {

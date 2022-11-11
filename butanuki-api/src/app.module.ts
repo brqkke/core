@@ -19,6 +19,7 @@ import { AppConfigService } from './config/app.config.service';
 import { ErrorModule } from './error/error.module';
 import { CommandModule } from './command/command.module';
 import { ServerResponse } from 'http';
+import { RateModule } from './rate/rate.module';
 
 const STATIC_PATH = join(__dirname, '..', 'front-build/');
 
@@ -67,6 +68,7 @@ const STATIC_PATH = join(__dirname, '..', 'front-build/');
     VaultModule,
     ErrorModule,
     CommandModule,
+    RateModule,
   ],
   controllers: [AppController],
 })

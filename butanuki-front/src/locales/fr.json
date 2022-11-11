@@ -91,7 +91,8 @@
       "statistics": {
         "total_spent": "Total épargné",
         "total_spent_desc": "Montant total de {{currency}} épargné dans cette tirelire",
-        "total_received": "Montant de bitcoins reçus."
+        "total_received": "Montant de bitcoins reçus.",
+        "valuation": "Valeur actuelle"
       }
     },
     "action": {

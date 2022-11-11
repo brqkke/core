@@ -7,22 +7,23 @@ type Entity = { id: string } & ObjectLiteral;
 
 export function createEntityDataloader<E extends Entity>(
   repository: Repository<E>,
+  key: keyof E = 'id',
 ) {
-  return new DataLoader<string, E>(async (ids: string[]) => {
+  return new DataLoader<string, E>(async (keys: string[]) => {
     const q = repository.createQueryBuilder('e');
-    q.andWhere(`e."id" IN (:...ids)`, { ids });
+    q.andWhere(`e."${String(key)}" IN (:...keys)`, { keys });
     const data = await q.getMany();
     const map = data.reduce((map, current) => {
-      map.set(current.id, current);
+      map.set(current[key], current);
       return map;
     }, new Map<string, E>());
 
-    return ids.map(
-      (id) =>
-        map.get(id) ||
+    return keys.map(
+      (key) =>
+        map.get(key) ||
         new NotFoundException({
           error: 'Entity not found',
-          id,
+          key,
           entity: repository.metadata.name,
         }),
     );

@@ -102,6 +102,7 @@ export class AppConfigService {
             'taccolaaless@gmail.com',
           ),
         },
+        bitcoinPriceRefreshInterval: 15 * 60, //15 minutes
       },
       vault: {
         maxVaultsPerUser: 3,

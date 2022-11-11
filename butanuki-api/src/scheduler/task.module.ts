@@ -10,6 +10,7 @@ import { TaskRunner } from './TaskRunner';
 import { OrderModule } from '../order/order.module';
 import { MailerModule } from '../emails/mailer.module';
 import { TASK_OPTIONS_KEY } from './Task';
+import { RateModule } from '../rate/rate.module';
 
 @Module({})
 export class TaskModule {
@@ -54,6 +55,7 @@ export class TaskModule {
         BityModule,
         OrderModule,
         MailerModule,
+        RateModule,
       ],
       providers: [
         ...classes,

@@ -180,8 +180,9 @@ export type User = {
 
 export type Vault = {
   __typename?: 'Vault';
+  bitcoinPrice?: Maybe<Scalars['Float']>;
   createdAt: Scalars['DateTime'];
-  currency: Scalars['String'];
+  currency: OrderCurrency;
   id: Scalars['String'];
   name: Scalars['String'];
   orderTemplates: Array<OrderTemplate>;
@@ -204,9 +205,9 @@ export type UserProfileFragment = { __typename?: 'User', id: string, locale: str
 
 export type BityStatusFragment = { __typename?: 'User', id: string, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } };
 
-export type VaultShortInfosFragment = { __typename?: 'Vault', id: string, currency: string, name: string };
+export type VaultShortInfosFragment = { __typename?: 'Vault', id: string, currency: OrderCurrency, name: string };
 
-export type VaultInfosFragment = { __typename?: 'Vault', id: string, currency: string, name: string, statistics: { __typename?: 'VaultStatistics', totalSpent: number, totalReceived: number }, orderTemplates: Array<{ __typename?: 'OrderTemplate', id: string, name: string, amount: number, vaultId: string, activeOrder?: { __typename?: 'Order', id: string, amount: number, currency: OrderCurrency, redactedCryptoAddress?: string | null, status: string, transferLabel: string, orderTemplateId?: string | null, bankDetails?: { __typename?: 'BityPaymentDetails', account_number?: string | null, bank_address?: string | null, bank_code?: string | null, iban?: string | null, recipient?: string | null, swift_bic?: string | null } | null } | null }> };
+export type VaultInfosFragment = { __typename?: 'Vault', id: string, currency: OrderCurrency, name: string, bitcoinPrice?: number | null, statistics: { __typename?: 'VaultStatistics', totalSpent: number, totalReceived: number }, orderTemplates: Array<{ __typename?: 'OrderTemplate', id: string, name: string, amount: number, vaultId: string, activeOrder?: { __typename?: 'Order', id: string, amount: number, currency: OrderCurrency, redactedCryptoAddress?: string | null, status: string, transferLabel: string, orderTemplateId?: string | null, bankDetails?: { __typename?: 'BityPaymentDetails', account_number?: string | null, bank_address?: string | null, bank_code?: string | null, iban?: string | null, recipient?: string | null, swift_bic?: string | null } | null } | null }> };
 
 export type BankDetailsFragment = { __typename?: 'BityPaymentDetails', account_number?: string | null, bank_address?: string | null, bank_code?: string | null, iban?: string | null, recipient?: string | null, swift_bic?: string | null };
 
@@ -255,12 +256,12 @@ export type AddVaultMutationVariables = Exact<{
 }>;
 
 
-export type AddVaultMutation = { __typename?: 'Mutation', addVault: { __typename?: 'Vault', id: string, currency: string, name: string, statistics: { __typename?: 'VaultStatistics', totalSpent: number, totalReceived: number }, orderTemplates: Array<{ __typename?: 'OrderTemplate', id: string, name: string, amount: number, vaultId: string, activeOrder?: { __typename?: 'Order', id: string, amount: number, currency: OrderCurrency, redactedCryptoAddress?: string | null, status: string, transferLabel: string, orderTemplateId?: string | null, bankDetails?: { __typename?: 'BityPaymentDetails', account_number?: string | null, bank_address?: string | null, bank_code?: string | null, iban?: string | null, recipient?: string | null, swift_bic?: string | null } | null } | null }> } };
+export type AddVaultMutation = { __typename?: 'Mutation', addVault: { __typename?: 'Vault', id: string, currency: OrderCurrency, name: string, bitcoinPrice?: number | null, statistics: { __typename?: 'VaultStatistics', totalSpent: number, totalReceived: number }, orderTemplates: Array<{ __typename?: 'OrderTemplate', id: string, name: string, amount: number, vaultId: string, activeOrder?: { __typename?: 'Order', id: string, amount: number, currency: OrderCurrency, redactedCryptoAddress?: string | null, status: string, transferLabel: string, orderTemplateId?: string | null, bankDetails?: { __typename?: 'BityPaymentDetails', account_number?: string | null, bank_address?: string | null, bank_code?: string | null, iban?: string | null, recipient?: string | null, swift_bic?: string | null } | null } | null }> } };
 
 export type VaultsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type VaultsQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, vaults: Array<{ __typename?: 'Vault', id: string, currency: string, name: string, statistics: { __typename?: 'VaultStatistics', totalSpent: number, totalReceived: number }, orderTemplates: Array<{ __typename?: 'OrderTemplate', id: string, name: string, amount: number, vaultId: string, activeOrder?: { __typename?: 'Order', id: string, amount: number, currency: OrderCurrency, redactedCryptoAddress?: string | null, status: string, transferLabel: string, orderTemplateId?: string | null, bankDetails?: { __typename?: 'BityPaymentDetails', account_number?: string | null, bank_address?: string | null, bank_code?: string | null, iban?: string | null, recipient?: string | null, swift_bic?: string | null } | null } | null }> }> } };
+export type VaultsQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, vaults: Array<{ __typename?: 'Vault', id: string, currency: OrderCurrency, name: string, bitcoinPrice?: number | null, statistics: { __typename?: 'VaultStatistics', totalSpent: number, totalReceived: number }, orderTemplates: Array<{ __typename?: 'OrderTemplate', id: string, name: string, amount: number, vaultId: string, activeOrder?: { __typename?: 'Order', id: string, amount: number, currency: OrderCurrency, redactedCryptoAddress?: string | null, status: string, transferLabel: string, orderTemplateId?: string | null, bankDetails?: { __typename?: 'BityPaymentDetails', account_number?: string | null, bank_address?: string | null, bank_code?: string | null, iban?: string | null, recipient?: string | null, swift_bic?: string | null } | null } | null }> }> } };
 
 export type LinkBityMutationVariables = Exact<{
   redirectedFrom: Scalars['String'];
@@ -279,7 +280,7 @@ export type VaultQueryVariables = Exact<{
 }>;
 
 
-export type VaultQuery = { __typename?: 'Query', vault: { __typename?: 'Vault', id: string, currency: string, name: string } };
+export type VaultQuery = { __typename?: 'Query', vault: { __typename?: 'Vault', id: string, currency: OrderCurrency, name: string } };
 
 export type AddOrderMutationVariables = Exact<{
   data: CreateOrderInput;
@@ -287,7 +288,7 @@ export type AddOrderMutationVariables = Exact<{
 }>;
 
 
-export type AddOrderMutation = { __typename?: 'Mutation', createOrder: { __typename?: 'OrderTemplate', id: string, name: string, amount: number, vaultId: string, vault: { __typename?: 'Vault', id: string, currency: string, name: string, orderTemplates: Array<{ __typename?: 'OrderTemplate', id: string }> }, activeOrder?: { __typename?: 'Order', id: string, amount: number, currency: OrderCurrency, redactedCryptoAddress?: string | null, status: string, transferLabel: string, orderTemplateId?: string | null, bankDetails?: { __typename?: 'BityPaymentDetails', account_number?: string | null, bank_address?: string | null, bank_code?: string | null, iban?: string | null, recipient?: string | null, swift_bic?: string | null } | null } | null } };
+export type AddOrderMutation = { __typename?: 'Mutation', createOrder: { __typename?: 'OrderTemplate', id: string, name: string, amount: number, vaultId: string, vault: { __typename?: 'Vault', id: string, currency: OrderCurrency, name: string, orderTemplates: Array<{ __typename?: 'OrderTemplate', id: string }> }, activeOrder?: { __typename?: 'Order', id: string, amount: number, currency: OrderCurrency, redactedCryptoAddress?: string | null, status: string, transferLabel: string, orderTemplateId?: string | null, bankDetails?: { __typename?: 'BityPaymentDetails', account_number?: string | null, bank_address?: string | null, bank_code?: string | null, iban?: string | null, recipient?: string | null, swift_bic?: string | null } | null } | null } };
 
 export type UpdateOrderMutationVariables = Exact<{
   data: OrderInput;
@@ -310,7 +311,7 @@ export type UpdateVaultMutationVariables = Exact<{
 }>;
 
 
-export type UpdateVaultMutation = { __typename?: 'Mutation', updateVault: { __typename?: 'Vault', id: string, currency: string, name: string } };
+export type UpdateVaultMutation = { __typename?: 'Mutation', updateVault: { __typename?: 'Vault', id: string, currency: OrderCurrency, name: string } };
 
 export const BityStatusFragmentDoc = gql`
     fragment BityStatus on User {
@@ -383,6 +384,7 @@ export const VaultInfosFragmentDoc = gql`
   orderTemplates {
     ...OrderTemplateInfos
   }
+  bitcoinPrice
 }
     ${OrderTemplateInfosFragmentDoc}`;
 export const UpdateLocaleDocument = gql`

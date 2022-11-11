@@ -15,4 +15,5 @@ fragment VaultInfos on Vault{
     orderTemplates {
         ...OrderTemplateInfos
     }
+    bitcoinPrice
 }
