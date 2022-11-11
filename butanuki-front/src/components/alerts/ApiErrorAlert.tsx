@@ -13,7 +13,8 @@ export function ApiErrorAlert({
   const messages = useMemo<string[]>(() => {
     if (typeof error === "string") {
       if (Object.values(ErrorType).includes(error as ErrorType)) {
-        return [t(`app.error.${error}`)];
+        const key = `app.error.${error as ErrorType}` as const;
+        return [t(key)];
       } else {
         return [error];
       }

@@ -43,7 +43,9 @@
       "CantRefreshBityToken": "Veuillez réessayer. Si l'erreur subsiste, veuillez déconnecter votre compte Butanuki de Bity, puis le reconnecter.",
       "NeedVerifiedBityAccount": "Vous devez vérifier votre compte et votre IBAN (auprès de Bity) avant de pouvoir mettre en place une épargne automatique chez Butanuki.",
       "UnknownBityError": "Veuillez réessayer. Si l'erreur subsiste, veuillez déconnecter votre compte Butanuki de Bity, puis le reconnecter.",
-      "Unknown": "Une erreur est survenue. Merci de rééssayer plus tard"
+      "Unknown": "Une erreur est survenue. Merci de rééssayer plus tard",
+      "TooManyOrdersInVault": "Vous avez atteint la limite du nombre d'ordre dans une tirelire.",
+      "TooManyVaults": "Vous avez atteint la limite du nombre de tirelires."
     },
     "login": {
       "enter_email": "Entrez votre adresse email pour recevoir un lien de connexion unique",

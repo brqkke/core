@@ -43,7 +43,9 @@
       "CantRefreshBityToken": "Please try again. If the error persists, please disconnect your Butanuki account from Bity, then reconnect it.",
       "NeedVerifiedBityAccount": "You must verify your account and your IBAN (with Bity) before being able to setup a DCA with Butanuki.",
       "Unknown": "An unknown error occured. Please try again later.",
-      "UnknownBityError": "Please try again. If the error persists, please disconnect your Butanuki account from Bity, then reconnect it."
+      "UnknownBityError": "Please try again. If the error persists, please disconnect your Butanuki account from Bity, then reconnect it.",
+      "TooManyOrdersInVault": "You have too many orders in your vault.",
+      "TooManyVaults": "You have too many vaults."
     },
     "login": {
       "enter_email": "Enter your email to receive a unique login link",
