@@ -7,6 +7,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { DeleteBtnWithConfirm } from "../buttons/DeleteBtnWithConfirm";
+import { formatAmount } from "../../utils/i18n";
 
 const RenderIbanWithSpaces = React.memo((props: { iban: string }) => {
   const { iban } = props;
@@ -127,7 +128,7 @@ export const OrderCard = ({
   disabled: boolean;
   noToolbar?: boolean;
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [deleteOrder, deleteOrderResult] = useDeleteOrderMutation({
     update: (cache, { data }) => {
       if (data?.deleteOrderTemplate.id) {
@@ -157,7 +158,12 @@ export const OrderCard = ({
               </div>
               <div className="col-sm-6">
                 <p className="text-muted mb-md-0">
-                  {order.amount} {order.activeOrder?.currency}
+                  {order.activeOrder &&
+                    formatAmount(
+                      order.amount,
+                      order.activeOrder.currency,
+                      i18n.language as "en" | "fr"
+                    )}
                 </p>
               </div>
             </div>

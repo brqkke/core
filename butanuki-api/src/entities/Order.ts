@@ -12,7 +12,7 @@ import { OrderStatus } from './enums/OrderStatus';
 import { User } from './User';
 import { OrderCurrency } from './enums/OrderCurrency';
 import { Vault } from './Vault';
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Float, ObjectType } from '@nestjs/graphql';
 import { OrderTemplate } from './OrderTemplate';
 
 @ObjectType()
@@ -94,6 +94,11 @@ export class Order {
   @Column()
   @Field()
   amount: number;
+
+  //filledAmount in bitcoin
+  @Field(() => Float, { nullable: true })
+  @Column({ type: 'decimal', nullable: true, precision: 20, scale: 8 })
+  filledAmount?: number | null;
 
   @Column({ type: 'enum', enum: OrderCurrency })
   @Field(() => OrderCurrency)

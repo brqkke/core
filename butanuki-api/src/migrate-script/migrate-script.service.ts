@@ -21,7 +21,7 @@ export class MigrateScriptService {
       for (const order of activeOrders) {
         //init vault for user
         //init order-template from order and set order-vault as vault
-        //update order with order-template
+        //update order with order-template and all other user order
         const vault = await db.vault.save({
           createdAt: new Date(),
           currency: order.currency,
@@ -35,9 +35,10 @@ export class MigrateScriptService {
           currency: order.currency,
           amount: order.amount,
         });
-        await db.order.update(order.id, {
-          orderTemplateId: orderTemplate.id,
-        });
+        await db.order.update(
+          { userId: order.userId },
+          { orderTemplateId: orderTemplate.id },
+        ); // initialize all this user orders with this template
       }
       if (dryRun) {
         throw new Error('Rollback');

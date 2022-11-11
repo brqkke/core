@@ -43,7 +43,9 @@
       "CantRefreshBityToken": "Please try again. If the error persists, please disconnect your Butanuki account from Bity, then reconnect it.",
       "NeedVerifiedBityAccount": "You must verify your account and your IBAN (with Bity) before being able to setup a DCA with Butanuki.",
       "Unknown": "An unknown error occured. Please try again later.",
-      "UnknownBityError": "Please try again. If the error persists, please disconnect your Butanuki account from Bity, then reconnect it."
+      "UnknownBityError": "Please try again. If the error persists, please disconnect your Butanuki account from Bity, then reconnect it.",
+      "TooManyOrdersInVault": "You have too many orders in your vault.",
+      "TooManyVaults": "You have too many vaults."
     },
     "login": {
       "enter_email": "Enter your email to receive a unique login link",
@@ -87,7 +89,13 @@
       "name_placeholder": "Name of this piggy bank",
       "currency": "Currency",
       "maxReached": "You've reached the maximum number of piggy banks you can create. ({{max}})",
-      "editing": "Editing your piggy bank {{name}}"
+      "editing": "Editing your piggy bank {{name}}",
+      "statistics": {
+        "total_spent": "Total saved",
+        "total_spent_desc": "Total amount of {{currency}} saved in this piggy bank.",
+        "total_received": "Total received bitcoins",
+        "valuation": "Valuation"
+      }
     },
     "action": {
       "submit": "Submit",

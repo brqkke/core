@@ -1,4 +1,4 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { OrderCurrency } from '../entities/enums/OrderCurrency';
 
 @InputType('VaultInput')
@@ -14,4 +14,13 @@ export class VaultInput {
 export class UpdateVaultInput {
   @Field(() => String)
   name: string;
+}
+
+@ObjectType()
+export class VaultStatistics {
+  @Field(() => Number)
+  totalSpent: number;
+
+  @Field(() => Number)
+  totalReceived: number;
 }

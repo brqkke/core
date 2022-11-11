@@ -24,7 +24,7 @@ export class Vault {
   @Column()
   name: string;
 
-  @Field()
+  @Field(() => OrderCurrency)
   @Column({ type: 'enum', enum: OrderCurrency })
   currency: OrderCurrency;
 

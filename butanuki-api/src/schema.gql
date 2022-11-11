@@ -5,10 +5,17 @@
 type Vault {
   id: String!
   name: String!
-  currency: String!
+  currency: OrderCurrency!
   createdAt: DateTime!
   userId: String!
   orderTemplates: [OrderTemplate!]!
+  statistics: VaultStatistics!
+  bitcoinPrice: Float
+}
+
+enum OrderCurrency {
+  CHF
+  EUR
 }
 
 """
@@ -40,14 +47,10 @@ type Order {
   status: String!
   orderTemplateId: String
   amount: Float!
+  filledAmount: Float
   currency: OrderCurrency!
   redactedCryptoAddress: String
   bankDetails: BityPaymentDetails
-}
-
-enum OrderCurrency {
-  CHF
-  EUR
 }
 
 type User {
@@ -67,6 +70,11 @@ enum TokenStatus {
   ACTIVE
   NEED_REFRESH_RETRY
   BROKEN
+}
+
+type VaultStatistics {
+  totalSpent: Float!
+  totalReceived: Float!
 }
 
 type Query {

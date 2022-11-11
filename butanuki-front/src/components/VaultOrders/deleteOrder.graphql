@@ -1,0 +1,12 @@
+mutation deleteOrder($orderTemplateId: ID!){
+    deleteOrderTemplate(orderTemplateId: $orderTemplateId){
+        id
+        vault {
+            id
+            statistics {
+                totalSpent
+                totalReceived
+            }
+        }
+    }
+}

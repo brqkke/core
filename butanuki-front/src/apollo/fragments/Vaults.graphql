@@ -8,7 +8,12 @@ fragment VaultInfos on Vault{
     id
     currency
     name
+    statistics {
+        totalSpent
+        totalReceived
+    }
     orderTemplates {
         ...OrderTemplateInfos
     }
+    bitcoinPrice
 }
