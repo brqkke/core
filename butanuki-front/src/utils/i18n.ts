@@ -1,9 +1,9 @@
-import { CustomTypeOptions, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { useCallback } from "react";
 import { useConfigContext } from "../context/ConfigContext";
 import { OrderCurrency } from "../generated/graphql";
 
-type Pages = keyof CustomTypeOptions["resources"]["ns"]["nav"]["links"];
+type Pages = "about" | "help" | "tou" | "privacy" | "login" | "root";
 
 export const usePublicPageLink = (): ((key: Pages) => string) => {
   const { t } = useTranslation();
@@ -11,9 +11,8 @@ export const usePublicPageLink = (): ((key: Pages) => string) => {
 
   return useCallback(
     (key: Pages) => {
-      //key: "about" | "help" | "tou" | "privacy" | "login" | "root"
-      const fullkey = `nav.links.${key}` as const;
-      const path = t(fullkey);
+      const fullKey = `nav.links.${key}` as const;
+      const path = t(fullKey);
       return `${publicWebsiteBaseUrl}${path}`;
     },
     [t, publicWebsiteBaseUrl]
