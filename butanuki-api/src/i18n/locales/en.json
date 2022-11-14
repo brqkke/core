@@ -1,0 +1,15 @@
+{
+  "email": {
+    "new_order": {
+      "subject": "New Butanuki order",
+      "subtitle": "New order",
+      "body": "Here are the details of your new order of <1>{{currency}} {{amount}}</1> to {{address}}:"
+    },
+    "bity_token_broken": {
+      "subject": "It looks like your bity account is no more linked !",
+      "subtitle": "Your Bity account was unlinked",
+      "body": "You need to link it again in your Butanuki account if you want to keep your DCA working.",
+      "login": "Login to Butanuki"
+    }
+  }
+}

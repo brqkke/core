@@ -1,0 +1,15 @@
+{
+  "email": {
+    "new_order": {
+      "subject": "Nouvel ordre Butanuki",
+      "subtitle": "Nouvel ordre",
+      "body": "Voici les détails de votre nouvel ordre de <1>{{currency}} {{amount}}</1> vers {{address}} :"
+    },
+    "bity_token_broken": {
+      "subject": "Votre compte bity ne semble plus lié !",
+      "subtitle": "Votre compte bity s'est délié",
+      "body": "Vous devez le lier à nouveau dans votre compte Butanuki si vous souhaitez que votre épargne récurrente continue de fonctionner.",
+      "login": "Se connecter à Butanuki"
+    }
+  }
+}

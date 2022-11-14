@@ -19,5 +19,6 @@
     "noFallthroughCasesInSwitch": true,
     "jsx": "react",
     "esModuleInterop": true,
+    "resolveJsonModule": true
   }
 }

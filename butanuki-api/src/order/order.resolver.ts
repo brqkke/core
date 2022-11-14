@@ -73,7 +73,11 @@ export class OrderResolver {
     const { newOrder, template: updatedTemplate } =
       await this.orderTemplateService.updateTemplate(user, template, data);
     if (newOrder) {
-      await this.mailerService.sendNewOrderEmail(newOrder, user.email);
+      await this.mailerService.sendNewOrderEmail(
+        newOrder,
+        user.email,
+        user.locale,
+      );
     }
 
     return updatedTemplate;
@@ -91,7 +95,11 @@ export class OrderResolver {
       data,
     );
     if (newOrder) {
-      await this.mailerService.sendNewOrderEmail(newOrder, user.email);
+      await this.mailerService.sendNewOrderEmail(
+        newOrder,
+        user.email,
+        user.locale,
+      );
     }
     return template;
   }

@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "postinstall": "cd butanuki-front && npm install && cd ../butanuki-api && npm install",
-    "test": "cd butanuki-api && npm run test"
+    "test": "cd butanuki-api && npm run test",
+    "mock:login": "cd butanuki-login && bash start.sh"
   },
   "repository": {
     "type": "git",

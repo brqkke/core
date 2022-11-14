@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
 import { Layout } from './Layout';
+import { Trans, useTranslation } from 'react-i18next';
 
 export const NewOrderEmailContent = (props: {
   iban: string;
@@ -13,14 +14,27 @@ export const NewOrderEmailContent = (props: {
   amount: number;
   currency: string;
 }): ReactElement<{}> => {
+  const { t } = useTranslation();
   return (
-    <Layout subtitle={'New order'}>
+    <Layout subtitle={t('email.new_order.subtitle')}>
       <p>
-        Here are the details of you new order of{' '}
-        <b>
-          {props.currency} {props.amount}
-        </b>{' '}
-        to {props.redactedCryptoAddress} :
+        <Trans
+          t={t}
+          i18nKey={'email.new_order.body'}
+          values={{
+            amount: props.amount,
+            currency: props.currency,
+            address: props.redactedCryptoAddress,
+          }}
+        >
+          Here are the details of you new order of
+          <b>
+            <>
+              {{ currency: props.currency }} {{ amount: props.amount }}
+            </>
+          </b>{' '}
+          to {{ address: props.redactedCryptoAddress }} :
+        </Trans>
       </p>
       <p>
         IBAN : <b>{props.iban}</b>
