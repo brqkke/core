@@ -20,6 +20,7 @@ import { ErrorModule } from './error/error.module';
 import { CommandModule } from './command/command.module';
 import { ServerResponse } from 'http';
 import { RateModule } from './rate/rate.module';
+import { I18nModule } from './i18n/i18n.module';
 
 const STATIC_PATH = join(__dirname, '..', 'front-build/');
 
@@ -69,6 +70,7 @@ const STATIC_PATH = join(__dirname, '..', 'front-build/');
     ErrorModule,
     CommandModule,
     RateModule,
+    I18nModule.forRootAsync(),
   ],
   controllers: [AppController],
 })

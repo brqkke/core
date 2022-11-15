@@ -9,6 +9,7 @@ import { NewOrderEmailContent } from './templates/NewOrderEmailContent';
 import { Order } from '../entities/Order';
 import { Token } from '../entities/Token';
 import { TokenStatusReporting } from './templates/TokenStatusReporting';
+import { I18nService } from '../i18n/i18n.service';
 
 @Injectable()
 export class MailerService {
@@ -16,6 +17,7 @@ export class MailerService {
     private renderer: SSRService,
     private transport: MailerTransportService,
     private appConfig: AppConfigService,
+    private i18n: I18nService,
   ) {}
 
   private renderAndSend<P extends {}>({
@@ -24,14 +26,16 @@ export class MailerService {
     element,
     params,
     prefix,
+    locale,
   }: {
     to: string;
     subject: string;
     prefix?: string;
     element: React.FC<P>;
     params: P;
+    locale?: string;
   }) {
-    const content = this.renderer.render(element, params);
+    const content = this.renderer.render(element, params, locale || 'fr');
     return this.transport.sendRawEmail({ to, content, subject, prefix });
   }
 
@@ -46,16 +50,17 @@ export class MailerService {
     });
   }
 
-  sendBityRelink(to: string) {
+  sendBityRelink(to: string, locale: string) {
     return this.renderAndSend({
       to,
-      subject: 'It looks like your bity account is no more linked !',
+      subject: this.i18n.getLng(locale).t('email.bity_token_broken.subject'),
       element: BityAccountWasUnlinked,
       params: { appUrl: this.appConfig.config.baseUrl },
+      locale,
     });
   }
 
-  async sendNewOrderEmail(order: Order, email: string) {
+  async sendNewOrderEmail(order: Order, email: string, locale: string) {
     const bankDetails = JSON.parse(order.bankDetails || '{}') as {
       iban: string;
       swift_bic: string;
@@ -64,6 +69,7 @@ export class MailerService {
       bank_code: string;
       bank_address: string;
     };
+    const { t } = this.i18n.getLng(locale || 'fr');
     return this.renderAndSend({
       to: email,
       element: NewOrderEmailContent,
@@ -74,7 +80,8 @@ export class MailerService {
         reference: order.transferLabel,
         ...bankDetails,
       },
-      subject: 'New Butanuki order',
+      subject: t('email.new_order.subject'),
+      locale,
     });
   }
 

@@ -4,32 +4,27 @@ import { OrderStatus } from '../entities/enums/OrderStatus';
 import { MailerService } from './MailerService';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MailerTransportService } from './MailerTransportService';
-import { ModuleMocker, MockFunctionMetadata } from 'jest-mock';
-import { SSRService } from './SSRService';
+import { MockFunctionMetadata, ModuleMocker } from 'jest-mock';
+import { MailerModule } from './mailer.module';
 
 const moduleMocker = new ModuleMocker(global);
 
-describe('Send new order email', () => {
+describe('Email rendering', () => {
   let mailerService: MailerService;
   let module: TestingModule;
   beforeEach(async () => {
     module = await Test.createTestingModule({
-      providers: [MailerService],
+      imports: [MailerModule],
     })
-      .useMocker((token) => {
-        if (token === MailerTransportService) {
-          return { sendRawEmail: jest.fn() };
-        }
-        if (token === SSRService) {
-          return new SSRService();
-        }
-        if (typeof token === 'function') {
+      .overrideProvider(MailerTransportService)
+      .useFactory({
+        factory: () => {
           const mockMetadata = moduleMocker.getMetadata(
-            token,
+            MailerTransportService,
           ) as MockFunctionMetadata<any, any>;
           const Mock = moduleMocker.generateFromMetadata(mockMetadata);
           return new Mock();
-        }
+        },
       })
       .compile();
     mailerService = module.get(MailerService);
@@ -59,9 +54,25 @@ describe('Send new order email', () => {
       userId: '123456',
     };
     const transport = module.get(MailerTransportService);
-    await mailerService.sendNewOrderEmail(order, 'aa@aaa.com');
+    await mailerService.sendNewOrderEmail(order, 'aa@aaa.com', 'en');
     expect(
       jest.mocked(transport.sendRawEmail).mock.calls[0][0],
+    ).toMatchSnapshot();
+    await mailerService.sendNewOrderEmail(order, 'aa@aaa.com', 'fr');
+    expect(
+      jest.mocked(transport.sendRawEmail).mock.calls[1][0],
+    ).toMatchSnapshot();
+  });
+
+  it('send an email for bity relink', async () => {
+    const transport = module.get(MailerTransportService);
+    await mailerService.sendBityRelink('aa@aaa.com', 'en');
+    expect(
+      jest.mocked(transport.sendRawEmail).mock.calls[0][0],
+    ).toMatchSnapshot();
+    await mailerService.sendBityRelink('aa@aaa.com', 'fr');
+    expect(
+      jest.mocked(transport.sendRawEmail).mock.calls[1][0],
     ).toMatchSnapshot();
   });
 });

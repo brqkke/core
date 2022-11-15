@@ -123,7 +123,10 @@ export class BityService {
 
       if (dbToken.refreshTriesCount > this.config.config.bity.refreshMaxRetry) {
         dbToken.status = TokenStatus.BROKEN;
-        await this.mailer.sendBityRelink(dbToken.user.email);
+        await this.mailer.sendBityRelink(
+          dbToken.user.email,
+          dbToken.user.locale,
+        );
         await db.eventLog.insert({
           data: dbToken.user.id,
           createdAt: new Date(),
