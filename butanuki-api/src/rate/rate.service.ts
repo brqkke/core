@@ -33,6 +33,21 @@ export class RateService {
     return parseFloat(rate.rate);
   }
 
+  async getCachedRate(currency: OrderCurrency): Promise<number> {
+    const rate = await this.db.rate.findOne({
+      where: { currency },
+    });
+    if (rate) {
+      if (rate.updatedAt.getTime() < Date.now() - 1000 * 60 * 60) {
+        // 1 hour
+        await this.updateRates();
+        return this.getCachedRate(currency);
+      }
+      return rate.rate;
+    }
+    return this.getRate(currency);
+  }
+
   async getRates(): Promise<{ currency: OrderCurrency; rate: number }[]> {
     return Promise.all(
       Object.values(OrderCurrency).map(async (currency) => ({

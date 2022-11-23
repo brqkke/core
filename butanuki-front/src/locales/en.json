@@ -71,7 +71,7 @@
       "change_amount": "Edit",
       "payment_informations": "Payment informations",
       "reference": "Bank Transfer Reference (VERY IMPORTANT!)",
-      "crypto_address": "Crypto address",
+      "crypto_address": "Bitcoin address",
       "crypto_address_desc": "Receiving Bitcoin address",
       "save": "Save",
       "go_back": "Go back",

@@ -2,16 +2,16 @@ import { AbstractTask, Task } from '../Task';
 import { buildRepositories, Repositories } from '../../utils';
 import { DataSource } from 'typeorm';
 import { AppConfigService } from '../../config/app.config.service';
-import { RateService } from '../../rate/rate.service';
+import { HistoricalRateService } from '../../rate/historical-rate.service';
 
-@Task({ name: 'BTC_PRICE' })
-export class Reporting extends AbstractTask {
+@Task({ name: 'FETCH_HISTORICAL_RATES' })
+export class FetchHistoricalRates extends AbstractTask {
   private db: Repositories;
 
   constructor(
     db: DataSource,
     private appConfig: AppConfigService,
-    private rateService: RateService,
+    private historicalRateService: HistoricalRateService,
   ) {
     super();
     this.db = buildRepositories(db.manager);
@@ -30,18 +30,11 @@ export class Reporting extends AbstractTask {
       return true;
     }
 
-    return (
-      task.lastRunAt <
-      new Date(
-        Date.now() -
-          this.appConfig.config.backgroundAgent.bitcoinPriceRefreshInterval *
-            1000,
-      )
-    );
+    return task.lastRunAt < new Date(Date.now() - 4 * 60 * 60 * 1000);
   }
 
   async run() {
-    await this.rateService.updateRates();
+    await this.historicalRateService.updateRates();
     await this.db.task.update(
       {
         name: this.name,

@@ -10,19 +10,23 @@ import { Login } from "./pages/Login";
 import { VaultSettings } from "./pages/app/VaultSettings/VaultSettings";
 import { useEffectOnce } from "./utils/hooks";
 import { useNavigate } from "react-router";
+import { EstimatorPage } from "./pages/app/Estimator/EstimatorPage";
+import { ApolloClientProvider } from "./apollo/ApolloClientProvider";
 
 export function Router() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path={"/logout"} element={<Logout />} />
-        <Route
-          path={"/login/verify/:token/:email"}
-          element={<LoginValidate />}
-        />
-        <Route path={"login"} element={<Login />} />
-        <Route path={"*"} element={<UserApp />} />
-      </Routes>
+      <ApolloClientProvider>
+        <Routes>
+          <Route path={"/logout"} element={<Logout />} />
+          <Route
+            path={"/login/verify/:token/:email"}
+            element={<LoginValidate />}
+          />
+          <Route path={"login"} element={<Login />} />
+          <Route path={"*"} element={<UserApp />} />
+        </Routes>
+      </ApolloClientProvider>
     </BrowserRouter>
   );
 }
@@ -32,6 +36,7 @@ function UserApp() {
     <Routes>
       <Route element={<UserContextProvider />}>
         <Route path={"/"} element={<AppHome />} />
+        <Route path="/estimator" element={<EstimatorPage />} />
         <Route path={"/vault/:vaultId/new-order"} element={<OrderSettings />} />
         <Route path={"/vault/:vaultId/edit"} element={<VaultSettings />} />
         <Route

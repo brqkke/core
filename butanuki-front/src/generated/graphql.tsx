@@ -39,6 +39,12 @@ export type CreateOrderInput = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+export enum DcaInterval {
+  Daily = 'DAILY',
+  Monthly = 'MONTHLY',
+  Weekly = 'WEEKLY'
+}
+
 /** Error type */
 export enum ErrorType {
   ButanukiAccountPreviouslyLinkedToOtherBityAccount = 'ButanukiAccountPreviouslyLinkedToOtherBityAccount',
@@ -49,6 +55,12 @@ export enum ErrorType {
   Unknown = 'Unknown',
   UnknownBityError = 'UnknownBityError'
 }
+
+export type EstimatorResult = {
+  __typename?: 'EstimatorResult';
+  averageBtcPrice?: Maybe<Scalars['Float']>;
+  transactionCount: Scalars['Int'];
+};
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -142,11 +154,26 @@ export type OrderTemplate = {
 
 export type Query = {
   __typename?: 'Query';
+  averageCostEstimator: EstimatorResult;
+  currentPrice: Scalars['Float'];
   errors: Array<ErrorType>;
   linkUrl: Scalars['String'];
   me: User;
   orderTemplate: OrderTemplate;
   vault: Vault;
+};
+
+
+export type QueryAverageCostEstimatorArgs = {
+  currency: OrderCurrency;
+  endTimestamp: Scalars['Int'];
+  interval: DcaInterval;
+  startTimestamp: Scalars['Int'];
+};
+
+
+export type QueryCurrentPriceArgs = {
+  currency: OrderCurrency;
 };
 
 
@@ -214,6 +241,16 @@ export type BankDetailsFragment = { __typename?: 'BityPaymentDetails', account_n
 export type OrderInfosFragment = { __typename?: 'Order', id: string, amount: number, currency: OrderCurrency, redactedCryptoAddress?: string | null, status: string, transferLabel: string, orderTemplateId?: string | null, bankDetails?: { __typename?: 'BityPaymentDetails', account_number?: string | null, bank_address?: string | null, bank_code?: string | null, iban?: string | null, recipient?: string | null, swift_bic?: string | null } | null };
 
 export type OrderTemplateInfosFragment = { __typename?: 'OrderTemplate', id: string, name: string, amount: number, vaultId: string, activeOrder?: { __typename?: 'Order', id: string, amount: number, currency: OrderCurrency, redactedCryptoAddress?: string | null, status: string, transferLabel: string, orderTemplateId?: string | null, bankDetails?: { __typename?: 'BityPaymentDetails', account_number?: string | null, bank_address?: string | null, bank_code?: string | null, iban?: string | null, recipient?: string | null, swift_bic?: string | null } | null } | null };
+
+export type EstimationQueryVariables = Exact<{
+  currency: OrderCurrency;
+  startTimestamp: Scalars['Int'];
+  endTimestamp: Scalars['Int'];
+  interval: DcaInterval;
+}>;
+
+
+export type EstimationQuery = { __typename?: 'Query', currentPrice: number, averageCostEstimator: { __typename?: 'EstimatorResult', averageBtcPrice?: number | null, transactionCount: number } };
 
 export type UpdateLocaleMutationVariables = Exact<{
   locale: Scalars['String'];
@@ -387,6 +424,51 @@ export const VaultInfosFragmentDoc = gql`
   bitcoinPrice
 }
     ${OrderTemplateInfosFragmentDoc}`;
+export const EstimationDocument = gql`
+    query estimation($currency: OrderCurrency!, $startTimestamp: Int!, $endTimestamp: Int!, $interval: DCAInterval!) {
+  averageCostEstimator(
+    currency: $currency
+    startTimestamp: $startTimestamp
+    endTimestamp: $endTimestamp
+    interval: $interval
+  ) {
+    averageBtcPrice
+    transactionCount
+  }
+  currentPrice(currency: $currency)
+}
+    `;
+
+/**
+ * __useEstimationQuery__
+ *
+ * To run a query within a React component, call `useEstimationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEstimationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useEstimationQuery({
+ *   variables: {
+ *      currency: // value for 'currency'
+ *      startTimestamp: // value for 'startTimestamp'
+ *      endTimestamp: // value for 'endTimestamp'
+ *      interval: // value for 'interval'
+ *   },
+ * });
+ */
+export function useEstimationQuery(baseOptions: Apollo.QueryHookOptions<EstimationQuery, EstimationQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EstimationQuery, EstimationQueryVariables>(EstimationDocument, options);
+      }
+export function useEstimationLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EstimationQuery, EstimationQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EstimationQuery, EstimationQueryVariables>(EstimationDocument, options);
+        }
+export type EstimationQueryHookResult = ReturnType<typeof useEstimationQuery>;
+export type EstimationLazyQueryHookResult = ReturnType<typeof useEstimationLazyQuery>;
+export type EstimationQueryResult = Apollo.QueryResult<EstimationQuery, EstimationQueryVariables>;
 export const UpdateLocaleDocument = gql`
     mutation updateLocale($locale: String!) {
   updateLocale(locale: $locale) {

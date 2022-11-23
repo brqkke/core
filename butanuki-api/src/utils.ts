@@ -11,6 +11,7 @@ import { TokenHistory } from './entities/TokenHistory';
 import { Vault } from './entities/Vault';
 import { OrderTemplate } from './entities/OrderTemplate';
 import { Rate } from './entities/Rate';
+import { HistoricalRate } from './entities/HistoricalRate';
 
 export function genRandomString(length: number) {
   const list = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -35,6 +36,7 @@ export function buildRepositories(manager: EntityManager) {
     vault: manager.getRepository(Vault),
     orderTemplate: manager.getRepository(OrderTemplate),
     rate: manager.getRepository(Rate),
+    historicalRate: manager.getRepository(HistoricalRate),
   };
 }
 
