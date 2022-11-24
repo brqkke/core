@@ -179,7 +179,7 @@ export const DCAEstimator = () => {
                   type="date"
                   className="form-control"
                   onChange={(e) => setStart(e.target.value)}
-                  min={"2019-12-07"}
+                  min={"2013-01-01"}
                   max={formatDateYYYYMMDD(new Date())}
                 />
               </div>
@@ -192,7 +192,7 @@ export const DCAEstimator = () => {
                   type="date"
                   className="form-control"
                   onChange={(e) => setEnd(e.target.value)}
-                  min={"2019-12-07"}
+                  min={"2013-01-01"}
                   max={formatDateYYYYMMDD(new Date())}
                 />
               </div>
