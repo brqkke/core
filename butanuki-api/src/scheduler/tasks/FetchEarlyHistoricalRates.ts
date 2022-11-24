@@ -5,8 +5,8 @@ import { AppConfigService } from '../../config/app.config.service';
 import { HistoricalRateService } from '../../rate/historical-rate.service';
 import { FiatHistoricalRateService } from '../../rate/fiat.historical.rate.service';
 
-@Task({ name: 'FETCH_HISTORICAL_RATES' })
-export class FetchHistoricalRates extends AbstractTask {
+@Task({ name: 'FETCH_EARLY_HISTORICAL_RATES' })
+export class FetchEarlyHistoricalRates extends AbstractTask {
   private db: Repositories;
 
   constructor(
@@ -32,12 +32,12 @@ export class FetchHistoricalRates extends AbstractTask {
       return true;
     }
 
-    return task.lastRunAt < new Date(Date.now() - 4 * 60 * 60 * 1000);
+    return false;
   }
 
   async run() {
-    await this.historicalRateService.updateRates();
-    //await this.fiatHistoricalRateService.updateMissingRates();
+    // await this.historicalRateService.updateRates();
+    await this.fiatHistoricalRateService.initializePastRates();
     await this.db.task.update(
       {
         name: this.name,

@@ -97,6 +97,13 @@ export const DCAEstimator = () => {
   );
   const [end, setEnd] = useState<string>(() => formatDateYYYYMMDD(new Date()));
 
+  const skip = useMemo(() => {
+    const maxDate = new Date();
+    const minDate = new Date("2013-01-01");
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    return startDate < minDate || endDate > maxDate || startDate > endDate;
+  }, [start, end]);
   const [amount, setAmount] = useState(50);
   const { i18n, t } = useTranslation();
 
@@ -117,6 +124,7 @@ export const DCAEstimator = () => {
       end: useDebounce(end, 500),
       interval,
     },
+    skip,
   });
   const amounts = useMemo(() => {
     if (!result.data) {
@@ -175,7 +183,7 @@ export const DCAEstimator = () => {
                   {t("estimator.input.start_date")}
                 </label>
                 <input
-                  defaultValue={start}
+                  value={start}
                   type="date"
                   className="form-control"
                   onChange={(e) => setStart(e.target.value)}
@@ -188,7 +196,7 @@ export const DCAEstimator = () => {
                   {t("estimator.input.end_date")}
                 </label>
                 <input
-                  defaultValue={end}
+                  value={end}
                   type="date"
                   className="form-control"
                   onChange={(e) => setEnd(e.target.value)}
@@ -211,7 +219,12 @@ export const DCAEstimator = () => {
           </div>
         </div>
       </div>
-      {result.loading || !result.data || !amounts ? (
+      {skip ? (
+        <div className="alert alert-warning">
+          {t("estimator.error.invalid_date")}
+        </div>
+      ) : null}
+      {skip || result.loading || !result.data || !amounts ? (
         <LoadingCard />
       ) : (
         <div className="card">

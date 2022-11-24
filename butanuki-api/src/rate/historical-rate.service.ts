@@ -78,6 +78,9 @@ export class HistoricalRateService {
           },
           order: { timestamp: 'DESC' },
         });
+        if (!latest) {
+          return; //this currency hasn't been initialized yet by FetchEarlyHistoricalRates
+        }
         const rates = await this.cryptoWatchRateService.fetchRates(
           currency,
           '86400',
