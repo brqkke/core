@@ -26,14 +26,9 @@ const response = get<
   },
 });
 
-const ConfigContext = createContext<ConfigContextProps>({
-  recaptchaKey: "dummy",
-  availableLocales: ["fr", "en"],
-  baseUrl: "dummy",
-  publicWebsiteBaseUrl: "dummy",
-  maxOrdersTemplatesPerVault: 0,
-  maxVaultsPerUser: 0,
-});
+const ConfigContext = createContext<ConfigContextProps>(
+  {} as ConfigContextProps
+);
 
 export function ConfigContextProvider({
   children,
@@ -64,15 +59,15 @@ export function ConfigContextProvider({
 
   if (config === undefined) {
     return (
-      <MainLayout>
+      <MainLayout withoutLocaleChanger>
         <LoadingCard />
       </MainLayout>
     );
   }
-
+  console.log(config);
   if (config === null) {
     return (
-      <MainLayout>
+      <MainLayout withoutLocaleChanger>
         <p>Error, try reloading</p>
       </MainLayout>
     );
@@ -84,5 +79,11 @@ export function ConfigContextProvider({
 }
 
 export function useConfigContext() {
-  return useContext(ConfigContext);
+  const ctx = useContext(ConfigContext);
+  if (!ctx) {
+    throw new Error(
+      "useConfigContext must be used inside ConfigContextProvider"
+    );
+  }
+  return ctx;
 }

@@ -1,10 +1,10 @@
 import { DCAEstimator } from "../../../components/DCAEstimator/DCAEstimator";
-import { LoggedLayout } from "../../../layout/LoggedLayout";
+import { MainLayout } from "../../../layout/MainLayout";
 
 export const EstimatorPage = () => {
   return (
-    <LoggedLayout>
+    <MainLayout>
       <DCAEstimator />
-    </LoggedLayout>
+    </MainLayout>
   );
 };

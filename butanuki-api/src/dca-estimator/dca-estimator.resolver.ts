@@ -1,4 +1,4 @@
-import { Args, Int, Query, registerEnumType, Resolver } from '@nestjs/graphql';
+import { Args, Query, registerEnumType, Resolver } from '@nestjs/graphql';
 import { DcaEstimatorService } from './dca-estimator.service';
 import { OrderCurrency } from '../entities/enums/OrderCurrency';
 import { DCAInterval, EstimatorResult } from './types';
@@ -18,13 +18,13 @@ export class DcaEstimatorResolver {
   @Query(() => EstimatorResult)
   async averageCostEstimator(
     @Args('currency', { type: () => OrderCurrency }) currency: OrderCurrency,
-    @Args('startTimestamp', { type: () => Int }) startTimestamp: number,
-    @Args('endTimestamp', { type: () => Int }) endTimestamp: number,
+    @Args('start', { type: () => String }) start: string,
+    @Args('end', { type: () => String }) end: string,
     @Args('interval', { type: () => DCAInterval }) interval: DCAInterval,
   ): Promise<EstimatorResult> {
     return this.dcaEstimatorService.averageDCACost(
       currency,
-      [startTimestamp, endTimestamp],
+      [start, end],
       interval,
     );
   }

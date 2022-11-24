@@ -1,6 +1,5 @@
 import { useUserContext } from "../context/UserContext";
 import { MainLayout } from "./MainLayout";
-import { LocaleChanger } from "../components/LocaleChanger/LocaleChanger";
 import { BityStatus } from "../components/BityStatus";
 import { Link } from "react-router-dom";
 
@@ -46,12 +45,7 @@ export function LoggedLayout({
   showBityStatus?: boolean;
 }) {
   return (
-    <MainLayout>
-      <div className="row">
-        <div className="col-lg-12 mb-4">
-          <LocaleChanger logged />
-        </div>
-      </div>
+    <MainLayout logged>
       <UserAndBityStatus withBityStatus={showBityStatus} />
       {children}
     </MainLayout>

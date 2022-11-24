@@ -1,8 +1,8 @@
-query estimation($currency: OrderCurrency!, $startTimestamp: Int!, $endTimestamp: Int!, $interval: DCAInterval!) {
+query estimation($currency: OrderCurrency!, $start: String!, $end: String!, $interval: DCAInterval!) {
     averageCostEstimator(
         currency: $currency
-        startTimestamp: $startTimestamp,
-        endTimestamp: $endTimestamp,
+        start: $start,
+        end: $end,
         interval: $interval
     ){
         averageBtcPrice

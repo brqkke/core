@@ -62,7 +62,7 @@ export class DcaEstimatorService {
 
   async averageDCACost(
     currency: OrderCurrency,
-    [start, end]: [number, number],
+    [start, end]: [string, string],
     interval: DCAInterval,
   ): Promise<EstimatorResult> {
     const { average, dayCounts } =

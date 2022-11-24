@@ -89,7 +89,7 @@ type Query {
   vault(id: ID!): Vault!
   errors: [ErrorType!]!
   currentPrice(currency: OrderCurrency!): Float!
-  averageCostEstimator(currency: OrderCurrency!, startTimestamp: Int!, endTimestamp: Int!, interval: DCAInterval!): EstimatorResult!
+  averageCostEstimator(currency: OrderCurrency!, start: String!, end: String!, interval: DCAInterval!): EstimatorResult!
 }
 
 """Error type"""

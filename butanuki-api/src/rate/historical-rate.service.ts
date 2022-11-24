@@ -28,7 +28,7 @@ export class HistoricalRateService {
 
   public async getAveragePrice(
     currency: OrderCurrency,
-    [start, end]: [number, number],
+    [start, end]: [string, string],
     interval: DCAInterval,
   ): Promise<{ average: number; dayCounts: number }> {
     const takeEvery = this.intervalToDays(interval);
@@ -45,8 +45,8 @@ export class HistoricalRateService {
             'row_number',
           )
           .where('hr.currency = :currency', { currency })
-          .andWhere('hr.timestamp >= to_timestamp(:start)', { start })
-          .andWhere('hr.timestamp <= to_timestamp(:end)', { end })
+          .andWhere('hr.timestamp >= :start', { start })
+          .andWhere('hr.timestamp <= :end', { end })
           .orderBy('hr.timestamp', 'ASC');
       }, 'rates')
       .select('SUM(rates."reverseRate")', 'reverseRatesSum')

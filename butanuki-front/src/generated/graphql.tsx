@@ -166,9 +166,9 @@ export type Query = {
 
 export type QueryAverageCostEstimatorArgs = {
   currency: OrderCurrency;
-  endTimestamp: Scalars['Int'];
+  end: Scalars['String'];
   interval: DcaInterval;
-  startTimestamp: Scalars['Int'];
+  start: Scalars['String'];
 };
 
 
@@ -244,8 +244,8 @@ export type OrderTemplateInfosFragment = { __typename?: 'OrderTemplate', id: str
 
 export type EstimationQueryVariables = Exact<{
   currency: OrderCurrency;
-  startTimestamp: Scalars['Int'];
-  endTimestamp: Scalars['Int'];
+  start: Scalars['String'];
+  end: Scalars['String'];
   interval: DcaInterval;
 }>;
 
@@ -425,11 +425,11 @@ export const VaultInfosFragmentDoc = gql`
 }
     ${OrderTemplateInfosFragmentDoc}`;
 export const EstimationDocument = gql`
-    query estimation($currency: OrderCurrency!, $startTimestamp: Int!, $endTimestamp: Int!, $interval: DCAInterval!) {
+    query estimation($currency: OrderCurrency!, $start: String!, $end: String!, $interval: DCAInterval!) {
   averageCostEstimator(
     currency: $currency
-    startTimestamp: $startTimestamp
-    endTimestamp: $endTimestamp
+    start: $start
+    end: $end
     interval: $interval
   ) {
     averageBtcPrice
@@ -452,8 +452,8 @@ export const EstimationDocument = gql`
  * const { data, loading, error } = useEstimationQuery({
  *   variables: {
  *      currency: // value for 'currency'
- *      startTimestamp: // value for 'startTimestamp'
- *      endTimestamp: // value for 'endTimestamp'
+ *      start: // value for 'start'
+ *      end: // value for 'end'
  *      interval: // value for 'interval'
  *   },
  * });

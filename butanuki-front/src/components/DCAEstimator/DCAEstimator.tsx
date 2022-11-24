@@ -7,6 +7,7 @@ import { useMemo, useState } from "react";
 import { LoadingCard } from "../LoadingCard";
 import { formatAmount } from "../../utils/i18n";
 import { useTranslation } from "react-i18next";
+import { useDebounce } from "../../utils/hooks";
 
 const currencies = [...Object.values(OrderCurrency)];
 const CurrencySelector = ({
@@ -38,15 +39,16 @@ const IntervalSelector = ({
   onChange: (interval: string) => void;
   defaultValue: DcaInterval;
 }) => {
+  const { t } = useTranslation();
   return (
     <select
       className="form-select"
       onChange={(e) => onChange(e.target.value)}
       defaultValue={defaultValue}
     >
-      {Object.values(DcaInterval).map((interval) => (
+      {Object.values(DcaInterval).map((interval: DcaInterval) => (
         <option key={interval} value={interval}>
-          {interval}
+          {t(`estimator.interval.${interval}` as const)}
         </option>
       ))}
     </select>
@@ -64,28 +66,55 @@ const intervalToDays = (interval: DcaInterval) => {
   }
 };
 
+const formatDateYYYYMMDD = (date: Date) => {
+  return date.toISOString().split("T")[0];
+};
+
+const oneYearAgo = () => {
+  const date = new Date();
+  date.setFullYear(date.getFullYear() - 1);
+  return date;
+};
+
+const FormatToPercent = ({ part, total }: { part: number; total: number }) => {
+  const ratio = part / total;
+  const sign = ratio > 0 ? "+" : "";
+  const className = ratio > 0 ? "text-success" : "text-danger";
+  return (
+    <span className={className}>
+      {sign}
+      {(ratio * 100).toFixed(2)}%
+    </span>
+  );
+};
+
 export const DCAEstimator = () => {
   const [currency, setCurrency] = useState<OrderCurrency>(OrderCurrency.Eur);
   const [duration, setDuration] = useState(1);
   const [interval, setInterval] = useState<DcaInterval>(DcaInterval.Weekly);
-  const [amount, setAmount] = useState(50);
-  const { i18n } = useTranslation();
+  const [start, setStart] = useState<string>(() =>
+    formatDateYYYYMMDD(oneYearAgo())
+  );
+  const [end, setEnd] = useState<string>(() => formatDateYYYYMMDD(new Date()));
 
-  const [start, end] = useMemo(() => {
-    const days = duration * 365;
-    const end = new Date();
-    const start = new Date();
-    start.setDate(start.getDate() - days);
-    return [
-      Math.round(start.getTime() / 1000),
-      Math.round(end.getTime() / 1000),
-    ];
-  }, [duration]);
+  const [amount, setAmount] = useState(50);
+  const { i18n, t } = useTranslation();
+
+  // const [start, end] = useMemo(() => {
+  //   const days = duration * 365;
+  //   const end = new Date();
+  //   const start = new Date();
+  //   start.setDate(start.getDate() - days);
+  //   return [
+  //     Math.round(start.getTime() / 1000),
+  //     Math.round(end.getTime() / 1000),
+  //   ];
+  // }, [duration]);
   const result = useEstimationQuery({
     variables: {
       currency,
-      startTimestamp: start,
-      endTimestamp: end,
+      start: useDebounce(start, 500),
+      end: useDebounce(end, 500),
       interval,
     },
   });
@@ -114,11 +143,13 @@ export const DCAEstimator = () => {
     <div>
       <div className="card mb-4">
         <div className="card-body">
-          <h5 className="card-title">DCA Estimator</h5>
+          <h5 className="card-title">{t("estimator.title")}</h5>
           <div className="row">
-            <div className="col-3">
+            <div className="col-sm-3 mb-2">
               <div className="form-group">
-                <label className="form-label">Amount</label>
+                <label className="form-label">
+                  {t("estimator.input.recurring_amount")}
+                </label>
                 <input
                   defaultValue={amount}
                   type="number"
@@ -127,10 +158,10 @@ export const DCAEstimator = () => {
                 />
               </div>
             </div>
-            <div className="col-3">
+            <div className="col-sm-3 mb-2">
               <div className="form-group">
                 <label className="form-label" htmlFor="currency">
-                  Currency
+                  {t("estimator.input.currency")}
                 </label>
                 <CurrencySelector
                   onChange={setCurrency}
@@ -138,24 +169,38 @@ export const DCAEstimator = () => {
                 />
               </div>
             </div>
-            <div className="col-3">
+            <div className="col-sm-3 mb-2">
               <div className="form-group">
-                <label className="form-label" htmlFor="duration">
-                  Nombre d'années
+                <label className="form-label" htmlFor="start">
+                  {t("estimator.input.start_date")}
                 </label>
                 <input
-                  type="number"
+                  defaultValue={start}
+                  type="date"
                   className="form-control"
-                  id="duration"
-                  value={duration}
-                  onChange={(e) => setDuration(parseInt(e.target.value))}
+                  onChange={(e) => setStart(e.target.value)}
+                  min={"2019-12-07"}
+                  max={formatDateYYYYMMDD(new Date())}
+                />
+              </div>
+              <div className="form-group mt-2">
+                <label className="form-label" htmlFor="end">
+                  {t("estimator.input.end_date")}
+                </label>
+                <input
+                  defaultValue={end}
+                  type="date"
+                  className="form-control"
+                  onChange={(e) => setEnd(e.target.value)}
+                  min={"2019-12-07"}
+                  max={formatDateYYYYMMDD(new Date())}
                 />
               </div>
             </div>
-            <div className="col-3">
+            <div className="col-sm-3 mb-2">
               <div className="form-group">
                 <label className="form-label" htmlFor="interval">
-                  Interval d'achat
+                  {t("estimator.input.interval")}
                 </label>
                 <IntervalSelector
                   onChange={(interval) => setInterval(interval as DcaInterval)}
@@ -171,54 +216,61 @@ export const DCAEstimator = () => {
       ) : (
         <div className="card">
           <div className="card-body">
-            <h5 className="card-title">Results</h5>
+            <h5 className="card-title">{t("estimator.results.title")}</h5>
             <div className="row">
               <div className="col-4">
-                <p>
-                  Nombre d'achats:{" "}
+                <p className={"lh-base"}>
+                  {t("estimator.results.total_buys")}{" "}
                   {result.data.averageCostEstimator.transactionCount}
                   <br />
-                  Total épargné:{" "}
+                  {t("estimator.results.total_spent")}{" "}
                   {formatAmount(
                     amounts.totalInvestment,
                     currency,
                     i18n.language as "fr" | "en"
                   )}
                   <br />
-                  Bitcoin achetés :{" "}
+                  {t("estimator.results.total_bought")}{" "}
                   {formatAmount(
                     amounts.totalBtcBought,
                     "btc",
                     i18n.language as "fr" | "en"
                   )}
                   <br />
-                  Prix d'achat moyen :{" "}
+                  {t("estimator.results.average_cost")}{" "}
                   {formatAmount(
                     amounts.averagePrice,
                     currency,
                     i18n.language as "fr" | "en"
                   )}
                   <br />
-                  Prix actuel :{" "}
+                  {t("estimator.results.current_price")}{" "}
                   {formatAmount(
                     result.data.currentPrice,
                     currency,
                     i18n.language as "fr" | "en"
                   )}
                   <br />
-                  Valeur actuelle :{" "}
+                  {t("estimator.results.valuation")}{" "}
                   {formatAmount(
                     amounts.totalBtcValue,
                     currency,
                     i18n.language as "fr" | "en"
                   )}
                   <br />
-                  Bénéfice/Perte :{" "}
+                  {t("estimator.results.profit_loss")}{" "}
                   {formatAmount(
                     amounts.totalProfit,
                     currency,
-                    i18n.language as "fr" | "en"
-                  )}
+                    i18n.language as "fr" | "en",
+                    true
+                  )}{" "}
+                  <small>
+                    <FormatToPercent
+                      part={amounts.totalProfit}
+                      total={amounts.totalInvestment}
+                    />
+                  </small>
                 </p>
               </div>
             </div>

@@ -5,12 +5,20 @@ import {
   createHttpLink,
   InMemoryCache,
 } from "@apollo/client";
-import React, { useMemo } from "react";
+import React from "react";
 import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
-import { useNavigate } from "react-router";
 
 const httpLink = createHttpLink({ uri: "/api/graphql" });
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors) {
+    if (
+      graphQLErrors.some((error) => error.extensions.code === "UNAUTHENTICATED")
+    ) {
+      document.location.assign("/login");
+    }
+  }
+});
 
 const authLink = setContext((req, { headers }) => {
   const token = localStorage.getItem("sessionKey");
@@ -22,32 +30,11 @@ const authLink = setContext((req, { headers }) => {
   };
 });
 
+const client = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: ApolloLink.from([errorLink, authLink, httpLink]),
+});
+
 export function ApolloClientProvider(props: React.PropsWithChildren<{}>) {
-  const navigate = useNavigate();
-  const errorLink = useMemo(
-    () =>
-      onError(({ graphQLErrors, networkError }) => {
-        if (graphQLErrors) {
-          if (
-            graphQLErrors.some(
-              (error) => error.extensions.code === "UNAUTHENTICATED"
-            )
-          ) {
-            navigate("/login");
-          }
-        }
-      }),
-    [navigate]
-  );
-
-  const client = useMemo(
-    () =>
-      new ApolloClient({
-        cache: new InMemoryCache(),
-        link: ApolloLink.from([errorLink, authLink, httpLink]),
-      }),
-    [errorLink]
-  );
-
   return <ApolloProvider client={client}>{props.children}</ApolloProvider>;
 }

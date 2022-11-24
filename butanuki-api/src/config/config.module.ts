@@ -3,6 +3,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppConfigService } from './app.config.service';
 import { ConfigController } from './config.controller';
 
+process.env.TZ = 'UTC';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
