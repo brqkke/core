@@ -77,12 +77,19 @@ type VaultStatistics {
   totalReceived: Float!
 }
 
+type EstimatorResult {
+  averageBtcPrice: Float
+  transactionCount: Int!
+}
+
 type Query {
   me: User!
   orderTemplate(id: ID!): OrderTemplate!
   linkUrl: String!
   vault(id: ID!): Vault!
   errors: [ErrorType!]!
+  currentPrice(currency: OrderCurrency!): Float!
+  averageCostEstimator(currency: OrderCurrency!, start: String!, end: String!, interval: DCAInterval!): EstimatorResult!
 }
 
 """Error type"""
@@ -94,6 +101,12 @@ enum ErrorType {
   Unknown
   TooManyOrdersInVault
   TooManyVaults
+}
+
+enum DCAInterval {
+  DAILY
+  WEEKLY
+  MONTHLY
 }
 
 type Mutation {

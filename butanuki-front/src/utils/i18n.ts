@@ -22,18 +22,21 @@ export const usePublicPageLink = (): ((key: Pages) => string) => {
 export const formatAmount = (
   amount: number,
   currency: OrderCurrency | "btc",
-  locale: "en" | "fr"
+  locale: "en" | "fr",
+  withSign = false
 ) => {
   switch (currency) {
     case OrderCurrency.Eur:
       return new Intl.NumberFormat(`${locale}-FR`, {
         style: "currency",
         currency: "EUR",
+        signDisplay: withSign ? "always" : "auto",
       }).format(amount);
     case OrderCurrency.Chf:
       return new Intl.NumberFormat(`${locale === "fr" ? "ch" : locale}-CH`, {
         style: "currency",
         currency: "CHF",
+        signDisplay: withSign ? "always" : "auto",
       }).format(amount);
     case "btc":
       return new Intl.NumberFormat(`${locale}-US`, {
@@ -41,6 +44,7 @@ export const formatAmount = (
         currency: "BTC",
         minimumFractionDigits: 8,
         maximumFractionDigits: 8,
+        signDisplay: withSign ? "always" : "auto",
       }).format(amount);
   }
 };

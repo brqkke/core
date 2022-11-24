@@ -21,6 +21,7 @@ import { CommandModule } from './command/command.module';
 import { ServerResponse } from 'http';
 import { RateModule } from './rate/rate.module';
 import { I18nModule } from './i18n/i18n.module';
+import { DcaEstimatorModule } from './dca-estimator/dca-estimator.module';
 
 const STATIC_PATH = join(__dirname, '..', 'front-build/');
 
@@ -71,6 +72,7 @@ const STATIC_PATH = join(__dirname, '..', 'front-build/');
     CommandModule,
     RateModule,
     I18nModule.forRootAsync(),
+    DcaEstimatorModule,
   ],
   controllers: [AppController],
 })

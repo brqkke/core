@@ -9,9 +9,9 @@ const setLangCookie = (locale: string) => {
 };
 
 export const LocaleChanger = React.memo(
-  ({ logged = false }: { logged: boolean }) => {
+  ({ logged = false }: { logged?: boolean }) => {
     const { i18n } = useTranslation();
-    const [updateLocale, result] = useUpdateLocaleMutation();
+    const [updateLocale] = useUpdateLocaleMutation();
     const { availableLocales } = useConfigContext();
 
     const selector = availableLocales

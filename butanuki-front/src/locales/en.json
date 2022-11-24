@@ -71,7 +71,7 @@
       "change_amount": "Edit",
       "payment_informations": "Payment informations",
       "reference": "Bank Transfer Reference (VERY IMPORTANT!)",
-      "crypto_address": "Crypto address",
+      "crypto_address": "Bitcoin address",
       "crypto_address_desc": "Receiving Bitcoin address",
       "save": "Save",
       "go_back": "Go back",
@@ -111,6 +111,31 @@
         "input_payment_information_required": "You must verify your account and your IBAN (with Bity) before being able to setup a DCA with Butanuki.",
         "cant_refresh_token": "Please try again. If the error persists, please disconnect your Butanuki account from Bity, then reconnect it."
       }
+    }
+  },
+  "estimator": {
+    "interval": {
+      "DAILY": "Daily",
+      "WEEKLY": "Weekly",
+      "MONTHLY": "Monthly"
+    },
+    "input": {
+      "recurring_amount": "Amount to save",
+      "currency": "Currency",
+      "interval": "Interval",
+      "start_date": "Start date",
+      "end_date": "End date"
+    },
+    "title": "DCA Estimator",
+    "results": {
+      "title": "Results",
+      "total_buys": "Total buys",
+      "total_spent": "Total saved",
+      "total_bought": "Bitcoin bought",
+      "average_cost": "Average cost per bitcoin",
+      "current_price": "Current price",
+      "valuation": "Valuation",
+      "profit_loss": "Profit/Loss"
     }
   }
 }

@@ -112,5 +112,30 @@
         "cant_refresh_token": "Veuillez réessayer. Si l'erreur subsiste, veuillez déconnecter votre compte Butanuki de Bity, puis le reconnecter."
       }
     }
+  },
+  "estimator": {
+    "interval": {
+      "DAILY": "Journalier",
+      "WEEKLY": "Hebdomadaire",
+      "MONTHLY": "Mensuel"
+    },
+    "input": {
+      "recurring_amount": "Montant récurrent",
+      "currency": "Devise",
+      "interval": "Intervalle",
+      "start_date": "Date de début",
+      "end_date": "Date de fin"
+    },
+    "title": "Estimateur d'épargne automatique",
+    "results": {
+      "title": "Résultats",
+      "total_buys": "Nombre d'achats",
+      "total_spent": "Total épargné",
+      "total_bought": "Bitcoin achetés",
+      "average_cost": "Coût moyen par Bitcoin",
+      "current_price": "Prix actuel",
+      "valuation": "Valeur actuelle",
+      "profit_loss": "Bénéfice / Perte"
+    }
   }
 }

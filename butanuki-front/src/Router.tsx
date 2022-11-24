@@ -10,11 +10,13 @@ import { Login } from "./pages/Login";
 import { VaultSettings } from "./pages/app/VaultSettings/VaultSettings";
 import { useEffectOnce } from "./utils/hooks";
 import { useNavigate } from "react-router";
+import { EstimatorPage } from "./pages/app/Estimator/EstimatorPage";
 
 export function Router() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/estimator" element={<EstimatorPage />} />
         <Route path={"/logout"} element={<Logout />} />
         <Route
           path={"/login/verify/:token/:email"}

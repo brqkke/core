@@ -1,9 +1,7 @@
 import { LinkBity } from "./LinkBity";
-import { useRef } from "react";
 import { LoggedLayout } from "../../../layout/LoggedLayout";
 
 export function LinkBityPage() {
-  console.log("LinkBityPage", useRef(Math.random()));
   return (
     <LoggedLayout>
       <div className="row">
