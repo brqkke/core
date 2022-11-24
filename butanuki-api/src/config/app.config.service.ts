@@ -108,6 +108,9 @@ export class AppConfigService {
         maxVaultsPerUser: 3,
         maxOrdersTemplatesPerVault: 3,
       },
+      exchangeRateData: {
+        apiKey: config.get<string>('HISTORICAL_RATE_API_KEY', 'xxx'),
+      },
     };
   }
 }

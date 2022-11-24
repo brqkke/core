@@ -119,6 +119,9 @@
       "WEEKLY": "Hebdomadaire",
       "MONTHLY": "Mensuel"
     },
+    "error": {
+      "invalid_date": "Date(s) invalide(s) (min: 2013-01-01, max: today)"
+    },
     "input": {
       "recurring_amount": "Montant récurrent",
       "currency": "Devise",
