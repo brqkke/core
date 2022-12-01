@@ -122,7 +122,7 @@ const useEstimatorParams = () => {
   ]);
 };
 
-export const SavingEstimator = () => {
+export default function SavingEstimator() {
   const [, setUrlParam] = useParams();
   const config = useEstimatorParams();
 
@@ -215,4 +215,4 @@ export const SavingEstimator = () => {
       </div>
     </div>
   );
-};
+}
