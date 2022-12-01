@@ -99,3 +99,39 @@ footer a:hover {
     color: #ff9900;
     margin: 5px 0;
 }
+.estimatorResult {
+    line-height: 1.75;
+}
+
+.estimatorResult input, .estimatorResult select {
+    text-align: center;
+    display: inline-block;
+    width: 150px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    border: 1px solid black;
+    vertical-align: middle;
+}
+
+.estimatorResult input:active, .estimatorResult select:active, .estimatorResult input:focus, .estimatorResult select:focus{
+    outline: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+    border: 1px solid black;
+}
+
+.estimatorResult select{
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='%23ff9900' stroke='%23ff9900' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+    background-position: right 0.2rem center;
+}
+
+.estimatorResult .currencySelector{
+    width: 64px;
+}
+
+.estimatorResult .priceInput{
+    /* width 4 digits */
+    width: 72px;
+}
+
+.estimatorResult .itemSelector{
+    width: 200px;
+}

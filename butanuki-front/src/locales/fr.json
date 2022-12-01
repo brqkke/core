@@ -114,6 +114,11 @@
     }
   },
   "estimator": {
+    "action": {
+      "copyUrl": "Copier l'URL",
+      "copyFeedback": "Copiée !",
+      "shareOnTwitter": "Partager sur Twitter"
+    },
     "interval": {
       "DAILY": "Journalier",
       "WEEKLY": "Hebdomadaire",
@@ -127,18 +132,34 @@
       "currency": "Devise",
       "interval": "Intervalle",
       "start_date": "Date de début",
-      "end_date": "Date de fin"
+      "end_date": "Date de fin",
+      "per": {
+        "DAILY": "par jour",
+        "WEEKLY": "par semaine",
+        "MONTHLY": "par mois"
+      }
     },
-    "title": "Estimateur d'épargne automatique",
+    "title": "Combien de Bitcoin pourrais-je avoir ?",
+    "profit": "plus-value",
+    "loss": "moins-value",
+    "item": {
+      "CIGARETTES": "un paquet de cigarettes",
+      "FASTFOOD": "un menu maxi big frites",
+      "BEER": "une pinte de pression",
+      "COFFEE": "un caramel cappuccino",
+      "OTHER": "un bidule jetable inutile"
+    },
     "results": {
+      "phrase": "Si j'avais acheté pour <currencyInput /> <itemPrice/> de Bitcoin <p>plutôt qu'<object/> <frequency/> depuis le <startInput/>,</p> <loader>j'aurais économisé <t>{{saved}},<t/> et j'aurais environ <t>{{bitcoinAmount}}</t> valant aujourd'hui <t>{{bitcoinValue}}</t>, c'est à dire une <t>{{profitOrLoss}}</t> de <t>{{profitLoss}}</t> <small>(<percentPL/>)</small>.</loader>",
+      "share": "Si j'avais acheté pour {{currency}} {{price}} de #Bitcoin plutôt qu'{{object}} {{frequency}} depuis le {{start}}, j'aurais économisé {{saved}}, et j'aurais environ {{bitcoinAmount}}, valant aujourd'hui {{bitcoinValue}} c'est à dire une {{profitOrLoss}} de {{profitLoss}} ({{percentPL}}).",
       "title": "Résultats",
-      "total_buys": "Nombre d'achats",
-      "total_spent": "Total épargné",
-      "total_bought": "Bitcoin achetés",
-      "average_cost": "Coût moyen par Bitcoin",
-      "current_price": "Prix actuel",
-      "valuation": "Valeur actuelle",
-      "profit_loss": "Bénéfice / Perte"
+      "total_buys": "Nombre d'achats :",
+      "total_spent": "Total épargné :",
+      "total_bought": "Bitcoin achetés :",
+      "average_cost": "Coût moyen par Bitcoin :",
+      "current_price": "Prix actuel :",
+      "valuation": "Valeur actuelle :",
+      "profit_loss": "Bénéfice / Perte :"
     }
   }
 }

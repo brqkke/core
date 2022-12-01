@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useCallback } from "react";
 import { useConfigContext } from "../context/ConfigContext";
-import { OrderCurrency } from "../generated/graphql";
+import { DcaInterval, OrderCurrency } from "../generated/graphql";
 
 type Pages = "about" | "help" | "tou" | "privacy" | "login" | "root";
 
@@ -23,28 +23,48 @@ export const formatAmount = (
   amount: number,
   currency: OrderCurrency | "btc",
   locale: "en" | "fr",
-  withSign = false
+  withSign = false,
+  withCents = true
 ) => {
-  switch (currency) {
-    case OrderCurrency.Eur:
-      return new Intl.NumberFormat(`${locale}-FR`, {
-        style: "currency",
-        currency: "EUR",
-        signDisplay: withSign ? "always" : "auto",
-      }).format(amount);
-    case OrderCurrency.Chf:
-      return new Intl.NumberFormat(`${locale === "fr" ? "ch" : locale}-CH`, {
-        style: "currency",
-        currency: "CHF",
-        signDisplay: withSign ? "always" : "auto",
-      }).format(amount);
-    case "btc":
-      return new Intl.NumberFormat(`${locale}-US`, {
-        style: "currency",
-        currency: "BTC",
-        minimumFractionDigits: 8,
-        maximumFractionDigits: 8,
-        signDisplay: withSign ? "always" : "auto",
-      }).format(amount);
+  const fullLocale = `${locale}-${locale.toUpperCase()}`;
+  if (currency === "btc") {
+    return new Intl.NumberFormat(fullLocale, {
+      style: "currency",
+      currency: "BTC",
+      currencyDisplay: "code",
+      minimumFractionDigits: withCents ? 8 : 0,
+      maximumFractionDigits: withCents ? 8 : 0,
+      signDisplay: withSign ? "always" : "auto",
+    })
+      .format(amount)
+      .replace(/BTC/, "₿");
   }
+  return new Intl.NumberFormat(fullLocale, {
+    style: "currency",
+    currency: currency.toUpperCase(),
+    signDisplay: withSign ? "always" : "auto",
+    maximumFractionDigits: withCents ? undefined : 0,
+    minimumFractionDigits: withCents ? undefined : 0,
+  })
+    .formatToParts(amount)
+    .map((part, i) => {
+      if (part.type === "group") {
+        return "'";
+      }
+      if (part.type === "decimal") {
+        return ".";
+      }
+
+      if (part.type === "currency" && i < 2) {
+        return part.value + " ";
+      }
+
+      return part.value;
+    })
+    .join("");
+};
+
+export const useTranslateFrequency = () => {
+  const { t } = useTranslation();
+  return (frequency: DcaInterval) => t(`estimator.input.per.${frequency}`);
 };

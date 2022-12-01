@@ -1,0 +1,12 @@
+fragment dcaEstimatorConfig on DCAConfig {
+    slug
+    type
+    price
+    interval
+    emojis
+}
+query savingEstimator{
+    dcaEstimatorConfigs {
+        ...dcaEstimatorConfig
+    }
+}

@@ -1,18 +1,10 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { get } from "../api/call";
 import { useTranslation } from "react-i18next";
 import { MainLayout } from "../layout/MainLayout";
 import { LoadingCard } from "../components/LoadingCard";
 import { useEffectOnce } from "../utils/hooks";
-
-interface ConfigContextProps {
-  recaptchaKey: string;
-  availableLocales: string[];
-  baseUrl: string;
-  publicWebsiteBaseUrl: string;
-  maxOrdersTemplatesPerVault: number;
-  maxVaultsPerUser: number;
-}
+import { ConfigContext, ConfigContextProps } from "./contexts";
 
 const response = get<
   ConfigContextProps & {
@@ -25,10 +17,6 @@ const response = get<
     Accept: "*/*",
   },
 });
-
-const ConfigContext = createContext<ConfigContextProps>(
-  {} as ConfigContextProps
-);
 
 export function ConfigContextProvider({
   children,
@@ -64,7 +52,6 @@ export function ConfigContextProvider({
       </MainLayout>
     );
   }
-  console.log(config);
   if (config === null) {
     return (
       <MainLayout withoutLocaleChanger>

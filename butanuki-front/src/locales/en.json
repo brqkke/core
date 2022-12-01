@@ -114,6 +114,11 @@
     }
   },
   "estimator": {
+    "action": {
+      "copyUrl": "Copy URL",
+      "copyFeedback": "Copied!",
+      "shareOnTwitter": "Share on Twitter"
+    },
     "interval": {
       "DAILY": "Daily",
       "WEEKLY": "Weekly",
@@ -127,18 +132,34 @@
       "currency": "Currency",
       "interval": "Interval",
       "start_date": "Start date",
-      "end_date": "End date"
+      "end_date": "End date",
+      "per": {
+        "DAILY": "every day",
+        "WEEKLY": "every week",
+        "MONTHLY": "every month"
+      }
     },
-    "title": "DCA Estimator",
+    "title": "How much Bitcoin could I own today?",
+    "profit": "rise in value",
+    "loss": "depreciation of",
+    "item": {
+      "CIGARETTES": "a pack of cigarettes",
+      "FASTFOOD": "a maxi large fries menu",
+      "BEER": "a pint of draft beer",
+      "COFFEE": "a caramel cappuccino",
+      "OTHER": "a useless cheap thingy"
+    },
     "results": {
+      "phrase": "If I had bought <currencyInput /> <itemPrice/> worth of Bitcoin <p>instead of <object/> <frequency/> since <startInput/>,</p> <loader>I would have saved <t>{{saved}},<t/> and I would own about <t>{{bitcoinAmount}}</t> worth <t>{{bitcoinValue}}</t> today, that is to say a <t>{{profitOrLoss}}</t> of <t>{{profitLoss}}</t> <small>(<percentPL/>)</small>.</loader>",
+      "share": "If I had bought {{currency}}{{price}} worth of #Bitcoin instead of {{object}} {{frequency}} since {{start}}, I would have saved {{saved}}, and I'd own {{bitcoinAmount}}, worth {{bitcoinValue}} today, that is to say a {{profitOrLoss}} of {{profitLoss}} ({{percentPL}}).",
       "title": "Results",
-      "total_buys": "Total buys",
-      "total_spent": "Total saved",
-      "total_bought": "Bitcoin bought",
-      "average_cost": "Average cost per bitcoin",
-      "current_price": "Current price",
-      "valuation": "Valuation",
-      "profit_loss": "Profit/Loss"
+      "total_buys": "Total buys:",
+      "total_spent": "Total saved:",
+      "total_bought": "Bitcoin bought:",
+      "average_cost": "Average cost per bitcoin:",
+      "current_price": "Current price:",
+      "valuation": "Valuation:",
+      "profit_loss": "Profit/Loss:"
     }
   }
 }
