@@ -214,10 +214,7 @@ const useTwitterShareLink = (
   });
 
   const url = new URL("https://twitter.com/intent/tweet");
-  url.searchParams.set(
-    "url",
-    window.location.href.replaceAll("localhost:3000", "app.butanuki.com")
-  );
+  url.searchParams.set("url", window.location.href);
   url.searchParams.set("text", text);
 
   return {

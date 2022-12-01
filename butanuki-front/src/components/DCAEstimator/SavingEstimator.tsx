@@ -27,9 +27,9 @@ export interface ResultData {
   averagePrice: number;
 }
 
-const oneYearAgo = () => {
+const yearsAgo = (count: number) => {
   const date = new Date();
-  date.setFullYear(date.getFullYear() - 1);
+  date.setFullYear(date.getFullYear() - count);
   return date;
 };
 
@@ -107,7 +107,7 @@ const useEstimatorParams = () => {
       frequency: isDcaInterval(urlParams.frequency)
         ? urlParams.frequency
         : config.interval,
-      since: urlParams.since ?? formatDateYYYYMMDD(oneYearAgo()),
+      since: urlParams.since ?? formatDateYYYYMMDD(yearsAgo(4)),
       emojis: config.emojis,
       price: urlParams.price ?? config.price.toString(),
     };
