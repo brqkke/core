@@ -5,11 +5,8 @@ import { usePageTitle } from "../../../utils/hooks";
 import { LoadingCard } from "../../../components/LoadingCard";
 import React, { Suspense } from "react";
 
-const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-const SavingEstimator = React.lazy(() =>
-  wait(5000).then(
-    () => import("../../../components/DCAEstimator/SavingEstimator")
-  )
+const SavingEstimator = React.lazy(
+  () => import("../../../components/DCAEstimator/SavingEstimator")
 );
 
 export const EstimatorPage = () => {
