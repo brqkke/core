@@ -39,6 +39,15 @@ export type CreateOrderInput = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+export type DcaConfig = {
+  __typename?: 'DCAConfig';
+  emojis: Scalars['String'];
+  interval: DcaInterval;
+  price: Scalars['Float'];
+  slug: Scalars['String'];
+  type: ItemType;
+};
+
 export enum DcaInterval {
   Daily = 'DAILY',
   Monthly = 'MONTHLY',
@@ -61,6 +70,14 @@ export type EstimatorResult = {
   averageBtcPrice?: Maybe<Scalars['Float']>;
   transactionCount: Scalars['Int'];
 };
+
+export enum ItemType {
+  Beer = 'BEER',
+  Cigarettes = 'CIGARETTES',
+  Coffee = 'COFFEE',
+  Fastfood = 'FASTFOOD',
+  Other = 'OTHER'
+}
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -156,6 +173,7 @@ export type Query = {
   __typename?: 'Query';
   averageCostEstimator: EstimatorResult;
   currentPrice: Scalars['Float'];
+  dcaEstimatorConfigs: Array<DcaConfig>;
   errors: Array<ErrorType>;
   linkUrl: Scalars['String'];
   me: User;
@@ -251,6 +269,13 @@ export type EstimationQueryVariables = Exact<{
 
 
 export type EstimationQuery = { __typename?: 'Query', currentPrice: number, averageCostEstimator: { __typename?: 'EstimatorResult', averageBtcPrice?: number | null, transactionCount: number } };
+
+export type DcaEstimatorConfigFragment = { __typename?: 'DCAConfig', slug: string, type: ItemType, price: number, interval: DcaInterval, emojis: string };
+
+export type SavingEstimatorQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SavingEstimatorQuery = { __typename?: 'Query', dcaEstimatorConfigs: Array<{ __typename?: 'DCAConfig', slug: string, type: ItemType, price: number, interval: DcaInterval, emojis: string }> };
 
 export type UpdateLocaleMutationVariables = Exact<{
   locale: Scalars['String'];
@@ -424,6 +449,15 @@ export const VaultInfosFragmentDoc = gql`
   bitcoinPrice
 }
     ${OrderTemplateInfosFragmentDoc}`;
+export const DcaEstimatorConfigFragmentDoc = gql`
+    fragment dcaEstimatorConfig on DCAConfig {
+  slug
+  type
+  price
+  interval
+  emojis
+}
+    `;
 export const EstimationDocument = gql`
     query estimation($currency: OrderCurrency!, $start: String!, $end: String!, $interval: DCAInterval!) {
   averageCostEstimator(
@@ -469,6 +503,40 @@ export function useEstimationLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type EstimationQueryHookResult = ReturnType<typeof useEstimationQuery>;
 export type EstimationLazyQueryHookResult = ReturnType<typeof useEstimationLazyQuery>;
 export type EstimationQueryResult = Apollo.QueryResult<EstimationQuery, EstimationQueryVariables>;
+export const SavingEstimatorDocument = gql`
+    query savingEstimator {
+  dcaEstimatorConfigs {
+    ...dcaEstimatorConfig
+  }
+}
+    ${DcaEstimatorConfigFragmentDoc}`;
+
+/**
+ * __useSavingEstimatorQuery__
+ *
+ * To run a query within a React component, call `useSavingEstimatorQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSavingEstimatorQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSavingEstimatorQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSavingEstimatorQuery(baseOptions?: Apollo.QueryHookOptions<SavingEstimatorQuery, SavingEstimatorQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SavingEstimatorQuery, SavingEstimatorQueryVariables>(SavingEstimatorDocument, options);
+      }
+export function useSavingEstimatorLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SavingEstimatorQuery, SavingEstimatorQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SavingEstimatorQuery, SavingEstimatorQueryVariables>(SavingEstimatorDocument, options);
+        }
+export type SavingEstimatorQueryHookResult = ReturnType<typeof useSavingEstimatorQuery>;
+export type SavingEstimatorLazyQueryHookResult = ReturnType<typeof useSavingEstimatorLazyQuery>;
+export type SavingEstimatorQueryResult = Apollo.QueryResult<SavingEstimatorQuery, SavingEstimatorQueryVariables>;
 export const UpdateLocaleDocument = gql`
     mutation updateLocale($locale: String!) {
   updateLocale(locale: $locale) {

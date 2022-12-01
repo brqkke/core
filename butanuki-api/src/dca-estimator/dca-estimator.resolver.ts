@@ -1,7 +1,7 @@
 import { Args, Query, registerEnumType, Resolver } from '@nestjs/graphql';
 import { DcaEstimatorService } from './dca-estimator.service';
 import { OrderCurrency } from '../entities/enums/OrderCurrency';
-import { DCAInterval, EstimatorResult } from './types';
+import { DCAConfig, DCAInterval, EstimatorResult, ItemType } from './types';
 import { RateService } from '../rate/rate.service';
 
 registerEnumType(DCAInterval, {
@@ -27,6 +27,40 @@ export class DcaEstimatorResolver {
       [start, end],
       interval,
     );
+  }
+
+  @Query(() => [DCAConfig])
+  async dcaEstimatorConfigs(): Promise<DCAConfig[]> {
+    return [
+      {
+        slug: 'cigarettes',
+        type: ItemType.CIGARETTES,
+        interval: DCAInterval.DAILY,
+        price: 10,
+        emojis: '🚬🚬🚬🚬🚬🚬🚬',
+      },
+      {
+        slug: 'coffee',
+        type: ItemType.COFFEE,
+        interval: DCAInterval.DAILY,
+        price: 6,
+        emojis: '☕☕☕☕☕☕☕',
+      },
+      {
+        slug: 'beer',
+        type: ItemType.BEER,
+        interval: DCAInterval.DAILY,
+        price: 7,
+        emojis: '🍺🍺🍺🍺🍺🍺🍺',
+      },
+      {
+        slug: 'fast-food',
+        type: ItemType.FASTFOOD,
+        interval: DCAInterval.DAILY,
+        price: 8,
+        emojis: '🍔🍟🥤🍗🍔🍟🥤',
+      },
+    ];
   }
 
   // @ResolveField(() => Float)

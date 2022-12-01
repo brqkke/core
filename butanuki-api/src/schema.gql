@@ -82,6 +82,28 @@ type EstimatorResult {
   transactionCount: Int!
 }
 
+type DCAConfig {
+  slug: String!
+  type: ItemType!
+  emojis: String!
+  interval: DCAInterval!
+  price: Float!
+}
+
+enum ItemType {
+  CIGARETTES
+  COFFEE
+  BEER
+  FASTFOOD
+  OTHER
+}
+
+enum DCAInterval {
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
 type Query {
   me: User!
   orderTemplate(id: ID!): OrderTemplate!
@@ -90,6 +112,7 @@ type Query {
   errors: [ErrorType!]!
   currentPrice(currency: OrderCurrency!): Float!
   averageCostEstimator(currency: OrderCurrency!, start: String!, end: String!, interval: DCAInterval!): EstimatorResult!
+  dcaEstimatorConfigs: [DCAConfig!]!
 }
 
 """Error type"""
@@ -101,12 +124,6 @@ enum ErrorType {
   Unknown
   TooManyOrdersInVault
   TooManyVaults
-}
-
-enum DCAInterval {
-  DAILY
-  WEEKLY
-  MONTHLY
 }
 
 type Mutation {

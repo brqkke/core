@@ -29,3 +29,13 @@ export const useDebounce = <T>(value: T, delay: number, skipIfValueIs?: T) => {
   }, [value, delay, skipIfValueIs]);
   return debouncedValue;
 };
+
+export const usePageTitle = (title: string) => {
+  useEffect(() => {
+    const originalTitle = document.title;
+    document.title = title;
+    return () => {
+      document.title = originalTitle;
+    };
+  }, [title]);
+};
