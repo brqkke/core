@@ -25,7 +25,7 @@ export const FormatToPercent = ({
   total: number;
   withFraction: boolean;
 }) => {
-  const className = part >= total ? "text-success" : "text-danger";
+  const className = part >= 0 ? "text-success" : "text-danger";
   return (
     <span className={className}>
       {formatToPercent({ part, total, withFraction })}
