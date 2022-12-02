@@ -153,7 +153,7 @@
     },
     "results": {
       "phrase": "If I had bought <currencyInput /> <itemPrice/> <nb>worth of Bitcoin</nb> rather than <object/> <frequency/> <nb>since <startInput/></nb>, <loader>I would have saved <t>{{saved}},<t/> and I would own about <t>{{bitcoinAmount}}</t> worth <t>{{bitcoinValue}}</t> today, that is to say <nb>a <t>{{profitOrLoss}}</t></nb> <nb>of <t>{{profitLoss}}</t> <small>(<percentPL/>)</small>.</nb></loader>",
-      "share": "If I had bought {{currency}}{{price}} worth of #Bitcoin instead of {{object}} {{frequency}} since {{start}}, I would have saved {{saved}}, and I'd own {{bitcoinAmount}}, worth {{bitcoinValue}} today, that is to say a {{profitOrLoss}} of {{profitLoss}} ({{percentPL}}).",
+      "share": "If I had bought {{currency}}{{price}} worth of #Bitcoin rather than {{object}} {{frequency}} since {{start}}, I would have saved {{saved}}, and I'd own {{bitcoinAmount}}, worth {{bitcoinValue}} today, that is to say a {{profitOrLoss}} of {{profitLoss}} ({{percentPL}}).",
       "title": "Results",
       "total_buys": "Total buys:",
       "total_spent": "Total saved:",
