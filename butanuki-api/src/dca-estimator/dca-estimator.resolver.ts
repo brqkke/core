@@ -8,6 +8,37 @@ registerEnumType(DCAInterval, {
   name: 'DCAInterval',
 });
 
+export const DCACConfigs = [
+  {
+    slug: 'cigarettes',
+    type: ItemType.CIGARETTES,
+    interval: DCAInterval.DAILY,
+    price: 10,
+    emojis: '🚬🚬🚬🚬🚬🚬🚬',
+  },
+  {
+    slug: 'coffee',
+    type: ItemType.COFFEE,
+    interval: DCAInterval.DAILY,
+    price: 6,
+    emojis: '☕☕☕☕☕☕☕',
+  },
+  {
+    slug: 'beer',
+    type: ItemType.BEER,
+    interval: DCAInterval.DAILY,
+    price: 7,
+    emojis: '🍺🍺🍺🍺🍺🍺🍺',
+  },
+  {
+    slug: 'fast-food',
+    type: ItemType.FASTFOOD,
+    interval: DCAInterval.DAILY,
+    price: 8,
+    emojis: '🍔🍟🥤🍗🍔🍟🥤',
+  },
+];
+
 @Resolver(() => EstimatorResult)
 export class DcaEstimatorResolver {
   constructor(
@@ -31,36 +62,7 @@ export class DcaEstimatorResolver {
 
   @Query(() => [DCAConfig])
   async dcaEstimatorConfigs(): Promise<DCAConfig[]> {
-    return [
-      {
-        slug: 'cigarettes',
-        type: ItemType.CIGARETTES,
-        interval: DCAInterval.DAILY,
-        price: 10,
-        emojis: '🚬🚬🚬🚬🚬🚬🚬',
-      },
-      {
-        slug: 'coffee',
-        type: ItemType.COFFEE,
-        interval: DCAInterval.DAILY,
-        price: 6,
-        emojis: '☕☕☕☕☕☕☕',
-      },
-      {
-        slug: 'beer',
-        type: ItemType.BEER,
-        interval: DCAInterval.DAILY,
-        price: 7,
-        emojis: '🍺🍺🍺🍺🍺🍺🍺',
-      },
-      {
-        slug: 'fast-food',
-        type: ItemType.FASTFOOD,
-        interval: DCAInterval.DAILY,
-        price: 8,
-        emojis: '🍔🍟🥤🍗🍔🍟🥤',
-      },
-    ];
+    return DCACConfigs;
   }
 
   // @ResolveField(() => Float)
