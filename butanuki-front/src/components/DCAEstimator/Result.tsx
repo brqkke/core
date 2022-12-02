@@ -1,4 +1,4 @@
-import { CurrencyInput, orderCurrencyToSymbol } from "./inputs/CurrencyInput";
+import { CurrencyInput } from "./inputs/CurrencyInput";
 import {
   DcaEstimatorConfigFragment,
   DcaInterval,
@@ -13,7 +13,11 @@ import React, { useCallback } from "react";
 import { formatAmount, usePublicPageLink } from "../../utils/i18n";
 import { Trans, useTranslation } from "react-i18next";
 import { EstimatorParams, ResultData } from "./SavingEstimator";
-import { FormatToPercent, formatToPercent } from "../PercentageUtils";
+import {
+  FormatToPercent,
+  formatToPercent,
+  nanToZero,
+} from "../PercentageUtils";
 import { LoadingCard } from "../LoadingCard";
 import { useDebounce } from "../../utils/hooks";
 import { useSavingEstimatorConfig } from "./SavingEstimatorConfigProvider";
@@ -245,8 +249,13 @@ const useTwitterShareLink = (
   const frequencyKey = `estimator.input.per.${params.frequency}` as const;
 
   const text = t("estimator.results.share", {
-    currency: orderCurrencyToSymbol(currency),
-    price: params.price,
+    price: formatAmount(
+      nanToZero(Number(params.price || 0)),
+      currency,
+      i18n.language as "fr" | "en",
+      false,
+      false
+    ),
     object: t(itemNameKey),
     frequency: t(frequencyKey),
     start: toHumanDate(params.since),

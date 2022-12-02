@@ -16,7 +16,7 @@ export function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/estimator" element={<EstimatorPage />} />
+        <Route path="/savings" element={<EstimatorPage />} />
         <Route path={"/logout"} element={<Logout />} />
         <Route
           path={"/login/verify/:token/:email"}

@@ -152,8 +152,8 @@
       "OTHER": "un bidule jetable inutile"
     },
     "results": {
-      "phrase": "Si j'avais acheté pour <nb><currencyInput /> <itemPrice/> de Bitcoin</nb> plutôt <nb>qu'<object/></nb> <frequency/> depuis <nb>le <startInput/>,</nb> <loader>j'aurais économisé <t>{{saved}},<t/> et j'aurais environ <t>{{bitcoinAmount}}</t> valant aujourd'hui <t>{{bitcoinValue}}</t>, c'est à dire une <t>{{profitOrLoss}}</t> <nb>de <t>{{profitLoss}}</t> <small>(<percentPL/>)</small>.</nb></loader>",
-      "share": "Si j'avais acheté pour {{currency}} {{price}} de #Bitcoin plutôt qu'{{object}} {{frequency}} depuis le {{start}}, j'aurais économisé {{saved}}, et j'aurais environ {{bitcoinAmount}}, valant aujourd'hui {{bitcoinValue}} c'est à dire une {{profitOrLoss}} de {{profitLoss}} ({{percentPL}}).",
+      "phrase": "Si j'avais acheté pour <nb><currencyInput /> <itemPrice/> de Bitcoin</nb> plutôt <nb>qu'<object/></nb> <frequency/> depuis <nb>le <startInput/>,</nb> <loader>j'aurais économisé <t>{{saved}},<t/> et j'aurais environ <t>{{bitcoinAmount}}</t> valant aujourd'hui <t>{{bitcoinValue}}</t>, <nb>c'est-à-dire</nb> une <t>{{profitOrLoss}}</t> <nb>de <t>{{profitLoss}}</t> <small>(<percentPL/>)</small>.</nb></loader>",
+      "share": "Si j'avais acheté pour {{price}} de #Bitcoin plutôt qu'{{object}} {{frequency}} depuis le {{start}}, j'aurais économisé {{saved}}, et j'aurais environ {{bitcoinAmount}}, valant aujourd'hui {{bitcoinValue}} c'est-à-dire une {{profitOrLoss}} de {{profitLoss}} ({{percentPL}}).",
       "title": "Résultats",
       "total_buys": "Nombre d'achats :",
       "total_spent": "Total épargné :",
