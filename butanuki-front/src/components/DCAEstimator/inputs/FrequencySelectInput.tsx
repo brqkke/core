@@ -14,7 +14,7 @@ export const FrequencySelectInput = ({
   const intervals = useMemo(sortedIntervals, []);
   return (
     <select
-      className="form-select"
+      className="form-select frequencySelector pe-3"
       onChange={(e) => onChange(e.target.value as DcaInterval)}
       value={value}
     >

@@ -10,7 +10,7 @@ import { ItemSelectInput } from "./inputs/ItemSelectInput";
 import { FrequencySelectInput } from "./inputs/FrequencySelectInput";
 import { DateInput } from "./inputs/DateInput";
 import React, { useCallback } from "react";
-import { formatAmount } from "../../utils/i18n";
+import { formatAmount, usePublicPageLink } from "../../utils/i18n";
 import { Trans, useTranslation } from "react-i18next";
 import { EstimatorParams, ResultData } from "./SavingEstimator";
 import { FormatToPercent, formatToPercent } from "../PercentageUtils";
@@ -18,6 +18,40 @@ import { LoadingCard } from "../LoadingCard";
 import { useDebounce } from "../../utils/hooks";
 import { useSavingEstimatorConfig } from "./SavingEstimatorConfigProvider";
 import { CopyButton } from "../buttons/CopyButton";
+import { Alert } from "../alerts/Alert";
+
+const Loader = ({
+  dateStatus,
+}: {
+  dateStatus: "valid" | "invalid" | "out-of-bound" | "incomplete";
+}) => {
+  switch (dateStatus) {
+    case "valid":
+      return <LoadingCard />;
+    default:
+      return null;
+  }
+};
+
+const ValidationError = ({
+  dateStatus,
+}: {
+  dateStatus: "valid" | "invalid" | "out-of-bound" | "incomplete";
+}) => {
+  const { t } = useTranslation();
+  switch (dateStatus) {
+    case "invalid":
+      return <Alert message={"invalid"} level={"danger"} />;
+    case "out-of-bound":
+      return (
+        <Alert message={t("estimator.error.invalid_date")} level={"warning"} />
+      );
+    case "incomplete":
+      return null;
+    default:
+      return null;
+  }
+};
 
 export const Result = ({
   params,
@@ -29,7 +63,9 @@ export const Result = ({
   onPriceChange,
   onFrequencyChange,
   onStartDateChange,
+  dateStatus,
 }: {
+  dateStatus: "valid" | "invalid" | "out-of-bound" | "incomplete";
   params: EstimatorParams;
   results?: ResultData;
   currency: OrderCurrency;
@@ -42,12 +78,13 @@ export const Result = ({
   onFrequencyChange: (value: DcaInterval) => void;
   onStartDateChange: (value: string) => void;
 }) => {
+  const link = usePublicPageLink();
   const loading = useDebounce(results === undefined, 250, true);
   const { t, i18n } = useTranslation();
   const share = useTwitterShareLink(params, currency, results);
   return (
     <div>
-      <h2 className="estimatorResult">
+      <h2 className="estimatorResult text-center">
         <Trans
           i18nKey="estimator.results.phrase"
           t={t}
@@ -75,7 +112,11 @@ export const Result = ({
               <DateInput value={start} onChange={onStartDateChange} />
             ),
             t: <React.Fragment />,
-            loader: loading ? <LoadingCard /> : <React.Fragment />,
+            loader: loading ? (
+              <Loader dateStatus={dateStatus} />
+            ) : (
+              <React.Fragment />
+            ),
             percentPL: results ? (
               <FormatToPercent
                 part={results.totalProfit}
@@ -86,6 +127,9 @@ export const Result = ({
               <React.Fragment />
             ),
             small: <small />,
+            p: <span />,
+            br: <br />,
+            nb: <span className="no-break" />,
           }}
           values={{
             saved: formatAmount(
@@ -108,10 +152,10 @@ export const Result = ({
                 ? t("estimator.profit")
                 : t("estimator.loss"),
             profitLoss: formatAmount(
-              results?.totalProfit || 0,
+              Math.abs(results?.totalProfit || 0),
               currency,
               i18n.language as "fr" | "en",
-              true
+              false
             ),
             percentPL: formatToPercent({
               part: results?.totalProfit || 0,
@@ -121,22 +165,52 @@ export const Result = ({
           }}
         />
       </h2>
-      <div className="socials">
-        <div className={"mt-5"}>
+      <ValidationError dateStatus={dateStatus} />
+      <div className="row text-center">
+        <div className="col-md-12">
+          <a className={"btn btn-success"} href={link("root")}>
+            {t("estimator.action.startNow")}
+          </a>
+        </div>
+        {dateStatus === "valid" && (
+          <Share params={params} currency={currency} results={results} />
+        )}
+      </div>
+    </div>
+  );
+};
+
+const Share = ({
+  params,
+  currency,
+  results,
+}: {
+  params: EstimatorParams;
+  currency: OrderCurrency;
+  results?: ResultData;
+}) => {
+  const { t } = useTranslation();
+  const link = usePublicPageLink();
+  const share = useTwitterShareLink(params, currency, results);
+  return (
+    <div className="col-md-12 mt-4">
+      <div className="socials card">
+        <div className={"card-body text-center"}>
+          <div className="card-title">
+            <h3>{t("estimator.share")}</h3>
+          </div>
           <CopyButton
             feedback={t("estimator.action.copyFeedback")}
             text={t("estimator.action.copyUrl")}
             value={share.documentUrl}
           />
-        </div>
-        <div>
           <a
             className={"btn btn-primary"}
             href={share.shareUrl}
             target={"_blank"}
             rel="noreferrer"
           >
-            Share on twitter
+            {t("estimator.action.shareOnTwitter")}
           </a>
         </div>
       </div>
@@ -200,10 +274,10 @@ const useTwitterShareLink = (
         ? t("estimator.profit")
         : t("estimator.loss"),
     profitLoss: formatAmount(
-      results?.totalProfit || 0,
+      Math.abs(results?.totalProfit || 0),
       currency,
       i18n.language as "fr" | "en",
-      true,
+      false,
       false
     ),
     percentPL: formatToPercent({

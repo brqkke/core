@@ -16,7 +16,7 @@ export const ItemSelectInput = ({
   const { t } = useTranslation();
   return (
     <select
-      className="form-select itemSelector ps-0 pe-2"
+      className="form-select itemSelector ps-2 pe-2"
       onChange={(e) => {
         const config = configs.find((c) => c.slug === e.target.value) || {
           slug: "custom",

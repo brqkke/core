@@ -20,7 +20,7 @@ export const CurrencyInput = ({
 }) => {
   return (
     <select
-      className="form-select currencySelector ps-0 pe-2"
+      className="form-select currencySelector ps-2 pe-2"
       onChange={(e) => onChange(e.target.value as OrderCurrency)}
       defaultValue={defaultValue}
     >

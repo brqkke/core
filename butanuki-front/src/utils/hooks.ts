@@ -33,7 +33,7 @@ export const useDebounce = <T>(value: T, delay: number, skipIfValueIs?: T) => {
 export const usePageTitle = (title: string) => {
   useEffect(() => {
     const originalTitle = document.title;
-    document.title = title;
+    document.title = title.replaceAll("<nb>", "").replaceAll("</nb>", "");
     return () => {
       document.title = originalTitle;
     };

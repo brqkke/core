@@ -122,13 +122,34 @@ const useEstimatorParams = () => {
   ]);
 };
 
+export const validateDate = (
+  date: string
+): "invalid" | "out-of-bound" | "incomplete" | "valid" => {
+  //after or equal to 2013-01-01 and before equal today
+  if (date.length < 10) {
+    return "incomplete";
+  }
+
+  if (Number.isNaN(Date.parse(date))) {
+    return "invalid";
+  }
+
+  const dateObj = new Date(date);
+  const today = new Date();
+  const minDate = new Date("2013-01-01");
+  if (dateObj < minDate || dateObj > today) {
+    return "out-of-bound";
+  }
+  return "valid";
+};
+
 export default function SavingEstimator() {
   const [, setUrlParam] = useParams();
   const config = useEstimatorParams();
 
   const [currency, setCurrency] = useState<OrderCurrency>(OrderCurrency.Eur);
   const [end] = useState<string>(() => formatDateYYYYMMDD(new Date()));
-
+  const dateStatus = validateDate(config.since);
   const result = useEstimationQuery({
     variables: {
       currency,
@@ -136,7 +157,7 @@ export default function SavingEstimator() {
       end: useDebounce(end, 500),
       interval: config.frequency,
     },
-    skip: !config.since || !end,
+    skip: !config.since || !end || dateStatus !== "valid",
   });
 
   const amounts: ResultData | undefined = useMemo(() => {
@@ -197,21 +218,20 @@ export default function SavingEstimator() {
         <h1 className={"mt-4"}>{config.emojis}💸</h1>
       </div>
       <div className="col-md-8 text-center mx-auto mt-4">
-        {
-          <Result
-            params={config}
-            results={amounts}
-            start={config.since}
-            onItemChange={onChanges.onItemChange}
-            onFrequencyChange={onChanges.onFrequencyChange}
-            onPriceChange={onChanges.onPriceChange}
-            onStartDateChange={onChanges.onSinceChange}
-            onCurrencyChange={(currency) => {
-              setCurrency(currency);
-            }}
-            currency={currency}
-          />
-        }
+        <Result
+          dateStatus={dateStatus}
+          params={config}
+          results={amounts}
+          start={config.since}
+          onItemChange={onChanges.onItemChange}
+          onFrequencyChange={onChanges.onFrequencyChange}
+          onPriceChange={onChanges.onPriceChange}
+          onStartDateChange={onChanges.onSinceChange}
+          onCurrencyChange={(currency) => {
+            setCurrency(currency);
+          }}
+          currency={currency}
+        />
       </div>
     </div>
   );

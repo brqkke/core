@@ -104,12 +104,15 @@ footer a:hover {
 }
 
 .estimatorResult input, .estimatorResult select {
-    text-align: center;
     display: inline-block;
     width: 150px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     border: 1px solid black;
     vertical-align: middle;
+}
+
+.estimatorResult input {
+    text-align: center;
 }
 
 .estimatorResult input:active, .estimatorResult select:active, .estimatorResult input:focus, .estimatorResult select:focus{
@@ -134,4 +137,13 @@ footer a:hover {
 
 .estimatorResult .itemSelector{
     width: 200px;
+}
+
+.estimatorResult .frequencySelector{
+    width: 130px;
+}
+
+
+.no-break{
+    display: inline-block;
 }
