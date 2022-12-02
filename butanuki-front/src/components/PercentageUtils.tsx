@@ -13,7 +13,7 @@ export const formatToPercent = ({
 }) => {
   const ratio = nanToZero(part / total);
   const sign = ratio >= 0 ? "+" : "";
-  return `${sign} ${(ratio * 100).toFixed(withFraction ? 2 : 0)}%`;
+  return `${sign}${(ratio * 100).toFixed(withFraction ? 2 : 0)}%`;
 };
 
 export const FormatToPercent = ({

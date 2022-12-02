@@ -114,10 +114,12 @@
     }
   },
   "estimator": {
+    "share": "Partager",
     "action": {
       "copyUrl": "Copier l'URL",
       "copyFeedback": "Copiée !",
-      "shareOnTwitter": "Partager sur Twitter"
+      "shareOnTwitter": "Partager sur Twitter",
+      "startNow": "Commencer à épargner maintenant"
     },
     "interval": {
       "DAILY": "Journalier",
@@ -125,7 +127,7 @@
       "MONTHLY": "Mensuel"
     },
     "error": {
-      "invalid_date": "Date(s) invalide(s) (min: 2013-01-01, max: today)"
+      "invalid_date": "Date invalide (min: 2013-01-01)"
     },
     "input": {
       "recurring_amount": "Montant récurrent",
@@ -139,7 +141,7 @@
         "MONTHLY": "par mois"
       }
     },
-    "title": "Combien de Bitcoin pourrais-je avoir ?",
+    "title": "<nb>Combien de Bitcoin</nb> <nb>pourrais-je avoir ?</nb>",
     "profit": "plus-value",
     "loss": "moins-value",
     "item": {
@@ -150,7 +152,7 @@
       "OTHER": "un bidule jetable inutile"
     },
     "results": {
-      "phrase": "Si j'avais acheté pour <currencyInput /> <itemPrice/> de Bitcoin <p>plutôt qu'<object/> <frequency/> depuis le <startInput/>,</p> <loader>j'aurais économisé <t>{{saved}},<t/> et j'aurais environ <t>{{bitcoinAmount}}</t> valant aujourd'hui <t>{{bitcoinValue}}</t>, c'est à dire une <t>{{profitOrLoss}}</t> de <t>{{profitLoss}}</t> <small>(<percentPL/>)</small>.</loader>",
+      "phrase": "Si j'avais acheté pour <nb><currencyInput /> <itemPrice/> de Bitcoin</nb> plutôt <nb>qu'<object/></nb> <frequency/> depuis <nb>le <startInput/>,</nb> <loader>j'aurais économisé <t>{{saved}},<t/> et j'aurais environ <t>{{bitcoinAmount}}</t> valant aujourd'hui <t>{{bitcoinValue}}</t>, c'est à dire une <t>{{profitOrLoss}}</t> <nb>de <t>{{profitLoss}}</t> <small>(<percentPL/>)</small>.</nb></loader>",
       "share": "Si j'avais acheté pour {{currency}} {{price}} de #Bitcoin plutôt qu'{{object}} {{frequency}} depuis le {{start}}, j'aurais économisé {{saved}}, et j'aurais environ {{bitcoinAmount}}, valant aujourd'hui {{bitcoinValue}} c'est à dire une {{profitOrLoss}} de {{profitLoss}} ({{percentPL}}).",
       "title": "Résultats",
       "total_buys": "Nombre d'achats :",

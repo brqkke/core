@@ -26,26 +26,24 @@ export const formatAmount = (
   withSign = false,
   withCents = true
 ) => {
-  const fullLocale = `${locale}-${locale.toUpperCase()}`;
-  if (currency === "btc") {
-    return new Intl.NumberFormat(fullLocale, {
-      style: "currency",
-      currency: "BTC",
-      currencyDisplay: "code",
-      minimumFractionDigits: withCents ? 8 : 0,
-      maximumFractionDigits: withCents ? 8 : 0,
-      signDisplay: withSign ? "always" : "auto",
-    })
-      .format(amount)
-      .replace(/BTC/, "₿");
-  }
-  return new Intl.NumberFormat(fullLocale, {
-    style: "currency",
-    currency: currency.toUpperCase(),
-    signDisplay: withSign ? "always" : "auto",
-    maximumFractionDigits: withCents ? undefined : 0,
-    minimumFractionDigits: withCents ? undefined : 0,
-  })
+  return (
+    currency === "btc"
+      ? new Intl.NumberFormat("en", {
+          style: "currency",
+          currency: "BTC",
+          currencyDisplay: "code",
+          minimumFractionDigits: withCents ? 8 : 0,
+          maximumFractionDigits: withCents ? 8 : 0,
+          signDisplay: withSign ? "always" : "auto",
+        })
+      : new Intl.NumberFormat("en", {
+          style: "currency",
+          currency: currency.toUpperCase(),
+          signDisplay: withSign ? "always" : "auto",
+          maximumFractionDigits: withCents ? undefined : 0,
+          minimumFractionDigits: withCents ? undefined : 0,
+        })
+  )
     .formatToParts(amount)
     .map((part, i) => {
       if (part.type === "group") {
@@ -56,12 +54,15 @@ export const formatAmount = (
       }
 
       if (part.type === "currency" && i < 2) {
-        return part.value + " ";
+        return part.value;
       }
 
       return part.value;
     })
-    .join("");
+    .join("")
+    .replace(/BTC\s?/, "₿")
+    .replaceAll("  ", " ")
+    .replaceAll(" ", "\u00A0");
 };
 
 export const useTranslateFrequency = () => {

@@ -34,7 +34,7 @@ export const CopyButton = ({
 
   return (
     <Row>
-      <Col xs={"6"} className={"mx-auto"}>
+      <Col sm={"6"} className={"mx-auto"}>
         <InputGroup className="mb-3">
           <FormControl disabled value={value} />
           <Button ref={target} onClick={copy} variant={"secondary"}>

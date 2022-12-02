@@ -7,7 +7,7 @@ export const PriceInput = ({
 }) => {
   return (
     <input
-      className="form-control priceInput pe-1"
+      className="form-control priceInput pe-1 ps-1"
       type="number"
       value={value}
       onChange={(e) => onChange(e.target.value)}
