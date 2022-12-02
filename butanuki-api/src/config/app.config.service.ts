@@ -79,7 +79,7 @@ export class AppConfigService {
         refreshRetryDelay: parseInt(
           config.get('BITY_REFRESH_DELAY', '' + 3 * 3600),
         ),
-        partnerFee: 0.007, //Fees percentage between 0 and 1 (3% = 0.03, 10% = 0.1, etc)
+        partnerFee: parseFloat(config.get('BITY_PARTNER_FEE', '0.007')), //Fees percentage between 0 and 1 (3% = 0.03, 10% = 0.1, etc)
       },
       singleLoginTokenTTL: 60 * 10, // 10 minutes
       sessionTokenTTL: 60 * 60, // 1h
