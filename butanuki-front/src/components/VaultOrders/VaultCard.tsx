@@ -15,7 +15,12 @@ export const VaultCard = ({
   maxOrdersTemplatesPerVault: number;
 }) => {
   return (
-    <div className="card mb-2">
+    <div
+      className="card mb-2"
+      style={{
+        background: "#ebfaeb",
+      }}
+    >
       <div className="card-body">
         <VaultHeaderCardBody vault={vault} />
       </div>

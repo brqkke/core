@@ -22,7 +22,7 @@ export const VaultHeaderCardBody = React.memo(
     return (
       <div className="row">
         <div className="col-6 col-md-4">
-          <h4>{vault.name}</h4>
+          <h2>{vault.name}</h2>
           <p className="text-muted mb-0">
             {t("app.vault.currency")} : {vault.currency}
           </p>
