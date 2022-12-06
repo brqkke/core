@@ -18,6 +18,21 @@ export const LoginLinkEmailContent = (props: { url: string }) => {
         votre navigateur.
       </p>
       <p>
+        <a
+          href={props.url}
+          style={{
+            backgroundColor: '#4CAF50',
+            display: 'inline-block',
+            padding: '0.8em 1em',
+            color: 'white',
+            textDecoration: 'none',
+            borderRadius: '0.5em',
+            margin: '1em 0em',
+          }}
+        >
+          Login
+        </a>
+        <br />
         <a href={props.url}>{props.url}</a>
       </p>
     </Layout>

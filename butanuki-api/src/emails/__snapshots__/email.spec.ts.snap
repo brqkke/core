@@ -2,7 +2,7 @@
 
 exports[`Email rendering send an email for bity relink 1`] = `
 Object {
-  "content": "<html><body><h1 style=\\"text-align:center\\">Butanuki</h1><h2>Your Bity account was unlinked</h2><p>You need to link it again in your Butanuki account if you want to keep your DCA working.</p><a href=\\"https://localhost:3000\\">Login to Butanuki</a></body></html>",
+  "content": "<html><body><h1 style=\\"text-align:center;margin-top:1em\\">Butanuki</h1><div style=\\"max-width:54em;margin:1em auto;mso-element-frame-width:54em;mso-element:para-border-div;mso-element-left:center;mso-element-wrap:no-wrap-beside;background-color:#efefef;border-radius:0.5em\\"><div style=\\"max-width:50em;margin:2em auto;mso-element-frame-width:50em;mso-element:para-border-div;mso-element-left:center;mso-element-wrap:no-wrap-beside;padding:2em 1em\\"><h2>Your Bity account was unlinked</h2><p>You need to link it again in your Butanuki account if you want to keep your DCA working.</p><a href=\\"https://localhost:3000\\">Login to Butanuki</a></div></div><table width=\\"100%\\" border=\\"0\\" cellSpacing=\\"0\\" cellPadding=\\"0\\"><tr><td style=\\"text-align:center\\"><small>Butanuki - <a href=\\"https://butanuki.com\\">Butanuki.com</a></small></td></tr></table></body></html>",
   "prefix": undefined,
   "subject": "It looks like your bity account is no more linked !",
   "to": "aa@aaa.com",
@@ -11,7 +11,7 @@ Object {
 
 exports[`Email rendering send an email for bity relink 2`] = `
 Object {
-  "content": "<html><body><h1 style=\\"text-align:center\\">Butanuki</h1><h2>Votre compte bity s&#x27;est délié</h2><p>Vous devez le lier à nouveau dans votre compte Butanuki si vous souhaitez que votre épargne récurrente continue de fonctionner.</p><a href=\\"https://localhost:3000\\">Se connecter à Butanuki</a></body></html>",
+  "content": "<html><body><h1 style=\\"text-align:center;margin-top:1em\\">Butanuki</h1><div style=\\"max-width:54em;margin:1em auto;mso-element-frame-width:54em;mso-element:para-border-div;mso-element-left:center;mso-element-wrap:no-wrap-beside;background-color:#efefef;border-radius:0.5em\\"><div style=\\"max-width:50em;margin:2em auto;mso-element-frame-width:50em;mso-element:para-border-div;mso-element-left:center;mso-element-wrap:no-wrap-beside;padding:2em 1em\\"><h2>Votre compte bity s&#x27;est délié</h2><p>Vous devez le lier à nouveau dans votre compte Butanuki si vous souhaitez que votre épargne récurrente continue de fonctionner.</p><a href=\\"https://localhost:3000\\">Se connecter à Butanuki</a></div></div><table width=\\"100%\\" border=\\"0\\" cellSpacing=\\"0\\" cellPadding=\\"0\\"><tr><td style=\\"text-align:center\\"><small>Butanuki - <a href=\\"https://butanuki.com\\">Butanuki.com</a></small></td></tr></table></body></html>",
   "prefix": undefined,
   "subject": "Votre compte bity ne semble plus lié !",
   "to": "aa@aaa.com",
@@ -20,7 +20,7 @@ Object {
 
 exports[`Email rendering sends an email with the order label 1`] = `
 Object {
-  "content": "<html><body><h1 style=\\"text-align:center\\">Butanuki</h1><h2>New order</h2><p>Here are the details of your new order of <b>EUR 10</b> to aaa...zzz:</p><p>IBAN : <b>1245 1234 1234</b><br/>BIC/SWIFT : <b>ABCDEF</b><br/>Recipient : <b>Bity co</b><br/>Account number : <b>9876543210</b><br/>Bank Code : <b>1234</b><br/>Bank Address : <b>42 space street</b><br/>Reference : <b>bity.com 123456</b><br/></p></body></html>",
+  "content": "<html><body><h1 style=\\"text-align:center;margin-top:1em\\">Butanuki</h1><div style=\\"max-width:54em;margin:1em auto;mso-element-frame-width:54em;mso-element:para-border-div;mso-element-left:center;mso-element-wrap:no-wrap-beside;background-color:#efefef;border-radius:0.5em\\"><div style=\\"max-width:50em;margin:2em auto;mso-element-frame-width:50em;mso-element:para-border-div;mso-element-left:center;mso-element-wrap:no-wrap-beside;padding:2em 1em\\"><h2>New order</h2><p>Here are the details of your new order of <b>EUR 10</b> to aaa...zzz:</p><p>IBAN : <b>1245 1234 1234</b><br/><br/>BIC/SWIFT : <b>ABCDEF</b><br/><br/>Recipient : <b>Bity co</b><br/><br/>Account number : <b>9876543210</b><br/><br/>Bank Code : <b>1234</b><br/><br/>Bank Address : <b>42 space street</b><br/><br/>Reference : <b><span>bity.</span><span>com 123456</span></b></p></div></div><table width=\\"100%\\" border=\\"0\\" cellSpacing=\\"0\\" cellPadding=\\"0\\"><tr><td style=\\"text-align:center\\"><small>Butanuki - <a href=\\"https://butanuki.com\\">Butanuki.com</a></small></td></tr></table></body></html>",
   "prefix": undefined,
   "subject": "New Butanuki order",
   "to": "aa@aaa.com",
@@ -29,7 +29,7 @@ Object {
 
 exports[`Email rendering sends an email with the order label 2`] = `
 Object {
-  "content": "<html><body><h1 style=\\"text-align:center\\">Butanuki</h1><h2>Nouvel ordre</h2><p>Voici les détails de votre nouvel ordre de <b>EUR 10</b> vers aaa...zzz :</p><p>IBAN : <b>1245 1234 1234</b><br/>BIC/SWIFT : <b>ABCDEF</b><br/>Recipient : <b>Bity co</b><br/>Account number : <b>9876543210</b><br/>Bank Code : <b>1234</b><br/>Bank Address : <b>42 space street</b><br/>Reference : <b>bity.com 123456</b><br/></p></body></html>",
+  "content": "<html><body><h1 style=\\"text-align:center;margin-top:1em\\">Butanuki</h1><div style=\\"max-width:54em;margin:1em auto;mso-element-frame-width:54em;mso-element:para-border-div;mso-element-left:center;mso-element-wrap:no-wrap-beside;background-color:#efefef;border-radius:0.5em\\"><div style=\\"max-width:50em;margin:2em auto;mso-element-frame-width:50em;mso-element:para-border-div;mso-element-left:center;mso-element-wrap:no-wrap-beside;padding:2em 1em\\"><h2>Nouvel ordre</h2><p>Voici les détails de votre nouvel ordre de <b>EUR 10</b> vers aaa...zzz :</p><p>IBAN : <b>1245 1234 1234</b><br/><br/>BIC/SWIFT : <b>ABCDEF</b><br/><br/>Recipient : <b>Bity co</b><br/><br/>Account number : <b>9876543210</b><br/><br/>Bank Code : <b>1234</b><br/><br/>Bank Address : <b>42 space street</b><br/><br/>Reference : <b><span>bity.</span><span>com 123456</span></b></p></div></div><table width=\\"100%\\" border=\\"0\\" cellSpacing=\\"0\\" cellPadding=\\"0\\"><tr><td style=\\"text-align:center\\"><small>Butanuki - <a href=\\"https://butanuki.com\\">Butanuki.com</a></small></td></tr></table></body></html>",
   "prefix": undefined,
   "subject": "Nouvel ordre Butanuki",
   "to": "aa@aaa.com",

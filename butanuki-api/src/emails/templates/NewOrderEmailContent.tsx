@@ -39,13 +39,17 @@ export const NewOrderEmailContent = (props: {
       <p>
         IBAN : <b>{props.iban}</b>
         <br />
+        <br />
         BIC/SWIFT : <b>{props.swift_bic}</b>
         <br />
+        <br />
         Recipient : <b>{props.recipient}</b>
+        <br />
         <br />
         {!!props.account_number && (
           <>
             Account number : <b>{props.account_number}</b>
+            <br />
             <br />
           </>
         )}
@@ -53,17 +57,28 @@ export const NewOrderEmailContent = (props: {
           <>
             Bank Code : <b>{props.bank_code}</b>
             <br />
+            <br />
           </>
         )}
         {!!props.bank_address && (
           <>
             Bank Address : <b>{props.bank_address}</b>
             <br />
+            <br />
           </>
         )}
         <>
-          Reference : <b>{props.reference}</b>
-          <br />
+          Reference :{' '}
+          <b>
+            {props.reference.split('.').map((part, i, list) => {
+              return (
+                <span key={i}>
+                  {part}
+                  {i < list.length - 1 && '.'}
+                </span>
+              );
+            })}
+          </b>
         </>
       </p>
     </Layout>
