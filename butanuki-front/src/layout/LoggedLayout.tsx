@@ -9,10 +9,15 @@ function UserAndBityStatus({ withBityStatus }: { withBityStatus?: boolean }) {
   return (
     <div className="row mb-4">
       <div className="col-md-12">
-        <div className="card">
+        <div
+          className="card"
+          style={{
+            background: "#fff5e6",
+          }}
+        >
           <div className="card-body">
             <div className="row">
-              <div className="col-md-12 d-flex justify-content-between align-items-center">
+              <div className="col-md-12 d-flex justify-content-between align-items-center flex-wrap">
                 <h3 className="card-title heading-bitcoin">
                   Hello {user.email}
                 </h3>
