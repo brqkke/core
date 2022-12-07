@@ -10,7 +10,13 @@ export class UserService {
     this.repository = db.getRepository(User);
   }
 
-  async findUserOrInit(email: string): Promise<User> {
+  async findUserOrInit({
+    email,
+    locale,
+  }: {
+    email: string;
+    locale: string;
+  }): Promise<User> {
     const lowerCaseEmail = email.toLowerCase();
     let user = await this.repository.findOneBy({
       email: lowerCaseEmail,
@@ -21,6 +27,7 @@ export class UserService {
     }
     user = new User();
     user.email = lowerCaseEmail;
+    user.locale = locale;
     return this.repository.save(user);
   }
 

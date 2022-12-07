@@ -9,6 +9,9 @@ export class EmailLoginDTO {
   @ApiProperty()
   @IsNotEmpty()
   captchaToken: string;
+
+  @ApiProperty()
+  locale?: string;
 }
 
 export class EmailLoginVerifyDTO {

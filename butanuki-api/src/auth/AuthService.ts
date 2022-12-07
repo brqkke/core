@@ -15,13 +15,13 @@ export class AuthService {
     private mailer: MailerService,
   ) {}
 
-  async sendUserLoginLink(user: User) {
+  async sendUserLoginLink(user: User, locale: string) {
     const tempCode = genRandomString(32);
     user.tempCode = tempCode;
     user.tempCodeExpireAt =
       Math.floor(Date.now() / 1000) + this.appConfig.config.singleLoginTokenTTL;
     await this.db.getRepository(User).save(user);
-    return this.mailer.sendSingleUseLoginLink(user.email, tempCode);
+    return this.mailer.sendSingleUseLoginLink(user.email, tempCode, locale);
   }
 
   async createUserSession(user: User): Promise<Session> {

@@ -31,7 +31,7 @@ jobs:
         image: postgres
         # Provide the password for postgres
         env:
-          POSTGRES_PASSWORD: butanuki
+          POSTGRES_PASSWORD: postgres
         ports:
           - 5432:5432
         # Set health checks to wait until postgres has started
@@ -59,7 +59,7 @@ jobs:
           docker run -d --name core -p 80:80 --net="host" --env-file butanuki-api/.env.development \
             -e DB_HOST=localhost \
             -e DB_NAME=postgres \
-            -e DB_PASSWORD=butanuki \
+            -e DB_PASSWORD=postgres \
             -e DB_USER=postgres \
             -e PORT=80 \
             -e USE_SSL=false  \

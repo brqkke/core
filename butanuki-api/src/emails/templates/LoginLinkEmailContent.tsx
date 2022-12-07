@@ -1,21 +1,15 @@
 import React from 'react';
 import { Layout } from './Layout';
+import { useTranslation } from 'react-i18next';
 
 export const LoginLinkEmailContent = (props: { url: string }) => {
+  const { t } = useTranslation();
   return (
-    <Layout subtitle={'Login link'}>
-      <h3>ENGLISH</h3>
+    <Layout subtitle={t('email.login.subtitle')}>
       <p>
-        Please click the link below to log into your account.
+        {t('email.login.body1')}
         <br />
-        If link doesn't work, copy-paste the full address in your browser.
-      </p>
-      <h3>FRANÇAIS</h3>
-      <p>
-        Cliquez sur le lien ci-dessous pour accéder à votre compte.
-        <br />
-        Si le lien ne fonctionne pas, copiez et collez l'adresse complète dans
-        votre navigateur.
+        {t('email.login.body2')}
       </p>
       <p>
         <a
@@ -30,7 +24,7 @@ export const LoginLinkEmailContent = (props: { url: string }) => {
             margin: '1em 0em',
           }}
         >
-          Login
+          {t('email.login.action')}
         </a>
         <br />
         <a href={props.url}>{props.url}</a>

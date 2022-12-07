@@ -10,6 +10,13 @@
       "subtitle": "Votre compte bity s'est délié",
       "body": "Vous devez le lier à nouveau dans votre compte Butanuki si vous souhaitez que votre épargne récurrente continue de fonctionner.",
       "login": "Se connecter à Butanuki"
+    },
+    "login": {
+      "subject": "Voici votre lien de connexion",
+      "subtitle": "Lien de connexion",
+      "body1": "Cliquez sur le lien ci-dessous pour accéder à votre compte.",
+      "body2": "Si le lien ne fonctionne pas, copiez et collez l'adresse complète dans votre navigateur.",
+      "action": "Se connecter à Butanuki"
     }
   }
 }

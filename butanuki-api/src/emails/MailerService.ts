@@ -39,14 +39,15 @@ export class MailerService {
     return this.transport.sendRawEmail({ to, content, subject, prefix });
   }
 
-  sendSingleUseLoginLink(to: string, token: string) {
+  sendSingleUseLoginLink(to: string, token: string, locale: string) {
     return this.renderAndSend({
       to,
-      subject: 'Here is your login link',
+      subject: this.i18n.getLng(locale).t('email.login.subject'),
       element: LoginLinkEmailContent,
       params: {
         url: `${this.appConfig.config.baseUrl}/login/verify/${token}/${to}`,
       },
+      locale,
     });
   }
 
