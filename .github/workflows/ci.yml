@@ -8,7 +8,22 @@ jobs:
   tests:
     name: Run Unit tests
     runs-on: ubuntu-latest
-
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js
@@ -31,7 +46,7 @@ jobs:
         image: postgres
         # Provide the password for postgres
         env:
-          POSTGRES_PASSWORD: butanuki
+          POSTGRES_PASSWORD: postgres
         ports:
           - 5432:5432
         # Set health checks to wait until postgres has started
@@ -59,7 +74,7 @@ jobs:
           docker run -d --name core -p 80:80 --net="host" --env-file butanuki-api/.env.development \
             -e DB_HOST=localhost \
             -e DB_NAME=postgres \
-            -e DB_PASSWORD=butanuki \
+            -e DB_PASSWORD=postgres \
             -e DB_USER=postgres \
             -e PORT=80 \
             -e USE_SSL=false  \

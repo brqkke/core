@@ -10,6 +10,13 @@
       "subtitle": "Your Bity account was unlinked",
       "body": "You need to link it again in your Butanuki account if you want to keep your DCA working.",
       "login": "Login to Butanuki"
+    },
+    "login": {
+      "subject": "Here is your login link",
+      "subtitle": "Login link",
+      "body1": "Please click the link below to log into your account.",
+      "body2": "If link doesn't work, copy-paste the full address in your browser.",
+      "action": "Login to Butanuki"
     }
   }
 }

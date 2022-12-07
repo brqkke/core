@@ -7,12 +7,13 @@ if(!function_exists("str_starts_with")){
         return strpos( $haystack , $needle ) === 0;
     }
 }
-
+$locale = $_GET["locale"] ?? "en";
 if(isset($_POST['email'], $_POST["g-recaptcha-response"])){
     $ch = curl_init("https://$appDomain/api/auth/login/email");
     $data = json_encode([
         "email" => $_POST["email"],
-        "captchaToken" => $_POST["g-recaptcha-response"]
+        "captchaToken" => $_POST["g-recaptcha-response"],
+        "locale" => $locale
     ]);
     curl_setopt( $ch, CURLOPT_POSTFIELDS, $data );
     curl_setopt( $ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
@@ -42,8 +43,13 @@ if(isset($_POST['email'], $_POST["g-recaptcha-response"])){
 <?php if(isset($_GET["success"])): ?>
     <div class="alert alert-success">Check emails</div>
 <?php else: ?>
-    <form action="login.php" id="login-form" method="post">
+<a href="login.php?locale=en">English</a> | <a href="login.php?locale=fr">Français</a>
+    <form action="login.php?locale=<?php echo urlencode($locale); ?>" id="login-form" method="post">
+    <?php if($locale === "fr"): ?>
+        <p>Entrez votre adresse email pour recevoir un lien de connexion</p>
+    <?php else: ?>
         <p>Enter your email address to receive a login link</p>
+    <?php endif; ?>
         <input class="form-control" name="email" placeholder="Email" />
         <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response-input"/>
         <div class="form-check">

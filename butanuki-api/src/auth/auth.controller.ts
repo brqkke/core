@@ -36,9 +36,15 @@ export class AuthController {
         'Captcha is invalid',
       );
     }
-
-    const user = await this.userService.findUserOrInit(body.email);
-    await this.authService.sendUserLoginLink(user);
+    let locale = body.locale || 'en';
+    if (!['en', 'fr'].includes(locale)) {
+      locale = 'en';
+    }
+    const user = await this.userService.findUserOrInit({
+      email: body.email,
+      locale,
+    });
+    await this.authService.sendUserLoginLink(user, locale);
 
     return {
       success: true,

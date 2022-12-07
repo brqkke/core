@@ -6,11 +6,15 @@ export const Layout = (
   return (
     <html>
       <body>
-        <h1 style={{ textAlign: 'center', marginTop: '1em' }}>Butanuki</h1>
+        <h1 style={{ textAlign: 'center', marginTop: '1em', marginBottom: 0 }}>
+          Butanuki
+        </h1>
+        <br style={{ lineHeight: 0 }} />
+        <br />
         <div
           style={{
             maxWidth: '54em',
-            margin: '1em auto',
+            margin: '0 auto',
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             ['msoElementFrameWidth']: '54em',
@@ -24,7 +28,7 @@ export const Layout = (
           <div
             style={{
               maxWidth: '50em',
-              margin: '2em auto',
+              margin: '0 auto',
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               ['msoElementFrameWidth']: '50em',
@@ -41,6 +45,9 @@ export const Layout = (
         <table width="100%" border={0} cellSpacing="0" cellPadding="0">
           <tr>
             <td style={{ textAlign: 'center' }}>
+              <br />
+              -
+              <br />
               <small>
                 Butanuki - <a href={'https://butanuki.com'}>Butanuki.com</a>
               </small>

@@ -54,25 +54,51 @@ describe('Email rendering', () => {
       userId: '123456',
     };
     const transport = module.get(MailerTransportService);
-    await mailerService.sendNewOrderEmail(order, 'aa@aaa.com', 'en');
-    expect(
-      jest.mocked(transport.sendRawEmail).mock.calls[0][0],
-    ).toMatchSnapshot();
     await mailerService.sendNewOrderEmail(order, 'aa@aaa.com', 'fr');
+    expect(jest.mocked(transport.sendRawEmail).mock.calls[0][0]).toMatchObject({
+      to: 'aa@aaa.com',
+      subject: 'Nouvel ordre Butanuki',
+      content: expect.stringContaining(
+        '<span>bity.</span><span>com 123456</span>',
+      ),
+    });
+
     expect(
-      jest.mocked(transport.sendRawEmail).mock.calls[1][0],
-    ).toMatchSnapshot();
+      jest.mocked(transport.sendRawEmail).mock.calls[0][0].content,
+    ).toContain('1245 1234 1234');
+    expect(
+      jest.mocked(transport.sendRawEmail).mock.calls[0][0].content,
+    ).toContain('aaa...zzz');
+    expect(
+      jest.mocked(transport.sendRawEmail).mock.calls[0][0].content,
+    ).toContain('Voici les détails');
+
+    await mailerService.sendNewOrderEmail(order, 'aa@aaa.com', 'en');
+    expect(jest.mocked(transport.sendRawEmail).mock.calls[1][0]).toMatchObject({
+      to: 'aa@aaa.com',
+      subject: 'New Butanuki order',
+      content: expect.stringContaining(
+        '<span>bity.</span><span>com 123456</span>',
+      ),
+    });
+    expect(
+      jest.mocked(transport.sendRawEmail).mock.calls[1][0].content,
+    ).toContain('1245 1234 1234');
+    expect(
+      jest.mocked(transport.sendRawEmail).mock.calls[1][0].content,
+    ).toContain('Here are the details');
   });
 
   it('send an email for bity relink', async () => {
     const transport = module.get(MailerTransportService);
-    await mailerService.sendBityRelink('aa@aaa.com', 'en');
-    expect(
-      jest.mocked(transport.sendRawEmail).mock.calls[0][0],
-    ).toMatchSnapshot();
     await mailerService.sendBityRelink('aa@aaa.com', 'fr');
     expect(
-      jest.mocked(transport.sendRawEmail).mock.calls[1][0],
-    ).toMatchSnapshot();
+      jest.mocked(transport.sendRawEmail).mock.calls[0][0].content,
+    ).toContain('Vous devez le lier à nouveau');
+
+    await mailerService.sendBityRelink('aa@aaa.com', 'en');
+    expect(
+      jest.mocked(transport.sendRawEmail).mock.calls[1][0].content,
+    ).toContain('You need to link it again');
   });
 });
