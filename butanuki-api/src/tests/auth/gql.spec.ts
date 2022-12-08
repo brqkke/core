@@ -37,7 +37,6 @@ describe('GraphQL endpoint', () => {
           }
         `,
       });
-    console.log(res);
     expect(res.status).toBe(200);
     expect(res.body).toMatchObject({
       data: {
