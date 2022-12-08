@@ -20,8 +20,8 @@ const makeTestDbConfig = (): PostgresConnectionOptions => {
     synchronize: false,
     migrationsRun: false,
     dropSchema: false,
-    logging: 'all',
-    logger: 'simple-console',
+    logging: false,
+    poolSize: 30,
   };
 };
 
@@ -37,7 +37,6 @@ export const useAppWithMockedDatabase = (): {
 
   let datasource: DataSource;
   beforeAll(async () => {
-    console.log('mocking database', dbName);
     datasource = new DataSource(makeTestDbConfig());
     await datasource.initialize();
     await datasource.query(`CREATE DATABASE ${dbName};`);

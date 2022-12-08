@@ -10,6 +10,12 @@ import ClientOAuth2 from 'client-oauth2';
 export class BityClientService {
   constructor(private config: AppConfigService, private http: HttpService) {}
 
+  public async makeTokenFromRedirectUrl(
+    redirectUrl: string,
+  ): Promise<ClientOAuth2.Token | null> {
+    return this.getBityOAuthClient().code.getToken(redirectUrl);
+  }
+
   public async refreshToken(
     refreshToken: string,
   ): Promise<ClientOAuth2.Token | null> {

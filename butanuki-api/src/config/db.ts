@@ -32,5 +32,6 @@ export default function makeDbConfigFromServiceConfig({
     // logging: 'all',
     // logger: 'simple-console',
     logging: ['query', 'error', 'info', 'warn'],
+    poolSize: 30,
   };
 }
