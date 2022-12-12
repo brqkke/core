@@ -88,6 +88,6 @@ jobs:
       - name: Test index.html
         run: curl http://localhost | grep 'Achat de Bitcoin récurrent automatique'
       - name: Test index.html savings
-        run: curl http://localhost/savings | grep 'If I had bought €10 worth of bitcoin...'
+        run: curl http://localhost/savings | grep 'If I had bought €10 worth of bitcoin'
       - name: Logs
         run: docker logs core

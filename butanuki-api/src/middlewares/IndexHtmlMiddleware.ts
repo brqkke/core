@@ -39,7 +39,7 @@ export class IndexHtmlMiddleware implements NestMiddleware {
 
       const metatags = {
         title: 'Butanuki - How much Bitcoin could I own today?',
-        description: 'If I had bought €10 worth of bitcoin...',
+        description: 'If I had bought €10 worth of bitcoin instead of...',
         image: `https://butanuki.com/img/${config.slug}.jpg`,
       };
 

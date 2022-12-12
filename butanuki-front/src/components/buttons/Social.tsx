@@ -46,7 +46,7 @@ export const ShareButton: React.FC<ShareButtonProps> = (props) => {
       href={shareUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="btn btn-primary btn-sm mx-1"
+      className="btn btn-primary btn-sm m-1"
     >
       {icon && <FontAwesomeIcon icon={icon} />} {buttonText}
     </a>
