@@ -23,6 +23,7 @@ import { useDebounce } from "../../utils/hooks";
 import { useSavingEstimatorConfig } from "./SavingEstimatorConfigProvider";
 import { CopyButton } from "../buttons/CopyButton";
 import { Alert } from "../alerts/Alert";
+import { ShareButton } from "../buttons/Social";
 
 const Loader = ({
   dateStatus,
@@ -85,7 +86,7 @@ export const Result = ({
   const link = usePublicPageLink();
   const loading = useDebounce(results === undefined, 250, true);
   const { t, i18n } = useTranslation();
-  const share = useTwitterShareLink(params, currency, results);
+
   return (
     <div>
       <h2 className="estimatorResult text-center">
@@ -194,8 +195,7 @@ const Share = ({
   results?: ResultData;
 }) => {
   const { t } = useTranslation();
-  const link = usePublicPageLink();
-  const share = useTwitterShareLink(params, currency, results);
+  const share = useShareLink(params, currency, results);
   return (
     <div className="col-md-12 mt-4">
       <div className="socials card">
@@ -206,16 +206,26 @@ const Share = ({
           <CopyButton
             feedback={t("estimator.action.copyFeedback")}
             text={t("estimator.action.copyUrl")}
-            value={share.documentUrl}
+            value={share.url}
           />
-          <a
-            className={"btn btn-primary"}
-            href={share.shareUrl}
-            target={"_blank"}
-            rel="noreferrer"
-          >
-            {t("estimator.action.shareOnTwitter")}
-          </a>
+          <ShareButton
+            url={share.url}
+            buttonText={t("estimator.action.shareOnTwitter")}
+            text={share.text}
+            platform={"twitter"}
+          />
+          <ShareButton
+            url={share.url}
+            buttonText={t("estimator.action.shareOnFacebook")}
+            text={share.text}
+            platform={"facebook"}
+          />
+          <ShareButton
+            url={share.url}
+            buttonText={t("estimator.action.shareOnLinkedIn")}
+            text={share.text}
+            platform={"linkedin"}
+          />
         </div>
       </div>
     </div>
@@ -234,11 +244,11 @@ const toHumanDate = (date: string) => {
   return `${day}/${month}/${year}`;
 };
 
-const useTwitterShareLink = (
+const useShareLink = (
   params: EstimatorParams,
   currency: OrderCurrency,
   results?: ResultData
-): { shareUrl: string; documentUrl: string; copy: () => Promise<void> } => {
+) => {
   const { t, i18n } = useTranslation();
 
   const configs = useSavingEstimatorConfig();
@@ -295,14 +305,12 @@ const useTwitterShareLink = (
       withFraction: false,
     }),
   });
-
-  const url = new URL("https://twitter.com/intent/tweet");
-  url.searchParams.set("url", window.location.href);
-  url.searchParams.set("text", text);
-
   return {
-    documentUrl: window.location.href,
-    shareUrl: url.toString(),
-    copy: useCallback(() => copyToClipboard(window.location.href), []),
+    text,
+    url: window.location.href,
+    copyToClipboard: useCallback(
+      () => copyToClipboard(window.location.href),
+      []
+    ),
   };
 };

@@ -85,5 +85,9 @@ jobs:
         run: ci/wait-for-it.sh -h localhost -p 80
       - name: Test version
         run: curl http://localhost/api/status | grep ok
+      - name: Test index.html
+        run: curl http://localhost | grep 'Achat de Bitcoin récurrent automatique'
+      - name: Test index.html savings
+        run: curl http://localhost/savings | grep 'If I had bought €10 worth of bitcoin...'
       - name: Logs
         run: docker logs core
