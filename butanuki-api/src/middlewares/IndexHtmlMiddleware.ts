@@ -37,15 +37,35 @@ export class IndexHtmlMiddleware implements NestMiddleware {
         await fs.readFile(path.join(STATIC_PATH, '/index.html'), 'utf8')
       ).toString();
 
+      const metatags = {
+        title: 'Butanuki - How much Bitcoin could I own today?',
+        description: 'If I had bought €10 worth of bitcoin...',
+        image: `https://butanuki.com/img/${config.slug}.jpg`,
+      };
+
+      const meta: { name?: string; property?: string; value: string }[] = [];
+      meta.push({ name: 'description', value: metatags.description });
+      Object.entries(metatags).forEach(([key, value]) => {
+        meta.push({ name: 'twitter:' + key, value });
+      });
+      meta.push({ name: 'twitter:card', value: 'summary_large_image' });
+      meta.push({ name: 'twitter:site', value: '@Butanuki21' });
+      meta.push({ name: 'twitter:creator', value: '@Butanuki21' });
+      Object.entries(metatags).forEach(([key, value]) => {
+        meta.push({ property: 'og:' + key, value });
+      });
+
       //Add twitter card meta tags
       this.cachedIndexHtml[config.slug] = this.replaceBetween(
         content,
-        `<meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@Butanuki21">
-    <meta name="twitter:creator" content="@Butanuki21">
-    <meta name="twitter:title" content="Butanuki - How much Bitcoin could I own today?">
-    <meta name="twitter:description" content="If I had bought €10 worth of Bitcoin...">
-    <meta name="twitter:image" content="https://butanuki.com/img/${config.slug}.jpg">`,
+        meta
+          .map((m) => {
+            return `<meta ${m.name ? 'name="' + m.name + '"' : ''}${
+              m.property ? 'property="' + m.property + '"' : ''
+            } content="${m.value}">`;
+          })
+          .join('\n'),
+        // add og: meta tags
       );
     }
 

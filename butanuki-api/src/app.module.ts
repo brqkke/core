@@ -38,18 +38,27 @@ export const STATIC_PATH = join(__dirname, '..', 'front-build/');
     MailerModule,
     AuthModule,
     UserModule,
-    ServeStaticModule.forRoot({
-      rootPath: STATIC_PATH,
-      exclude: ['/api/graphql', '/savings'],
-      serveStaticOptions: {
-        setHeaders: (res, path, stat) => {
-          if (
-            path.replace(STATIC_PATH, '') === 'index.html' &&
-            res instanceof ServerResponse
-          ) {
-            res.setHeader('Link', '</api/config>; rel="preload"; as="fetch"');
-          }
-        },
+    ServeStaticModule.forRootAsync({
+      useFactory: () => {
+        return [
+          {
+            rootPath: STATIC_PATH,
+            exclude: ['/api/graphql', '/savings'],
+            serveStaticOptions: {
+              setHeaders: (res, path, stat) => {
+                if (
+                  path.replace(STATIC_PATH, '') === 'index.html' &&
+                  res instanceof ServerResponse
+                ) {
+                  res.setHeader(
+                    'Link',
+                    '</api/config>; rel="preload"; as="fetch"',
+                  );
+                }
+              },
+            },
+          },
+        ];
       },
     }),
     GraphQLModule.forRootAsync<ApolloDriverConfig>({

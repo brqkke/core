@@ -119,6 +119,8 @@
       "copyUrl": "Copy URL",
       "copyFeedback": "Copied!",
       "shareOnTwitter": "Share on Twitter",
+      "shareOnFacebook": "Share on Facebook",
+      "shareOnLinkedIn": "Share on LinkedIn",
       "startNow": "Start saving now"
     },
     "interval": {
