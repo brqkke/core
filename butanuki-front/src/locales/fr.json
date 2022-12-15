@@ -17,7 +17,7 @@
     }
   },
   "homepage": {
-    "hello": "Bientôt, un distributeur automatique de Bitcoin et cryptomonnaies ouvert 24h/24 au centre-ville de Genève!",
+    "hello": "Bientôt, un distributeur automatique de Bitcoin ouvert 24h/24 au centre-ville de Genève!",
     "get_started": "Commencez ici: ",
     "get_started_call_to_action": "Acheter du Bitcoin",
     "subtitle": "L'épargne Bitcoin facile",
@@ -64,7 +64,7 @@
       },
       "click_here": "Cliquez ici",
       "try_again": "Rééssayer",
-      "setup_dca": "Mettre en place le DCA"
+      "setup_dca": "Mettre en place le plan épargne"
     },
     "order": {
       "amount": "Montant",
@@ -76,7 +76,7 @@
       "save": "Sauvegarder",
       "go_back": "Retour",
       "warning_reset": "Attention, vous aurez un nouveau label de paiement!",
-      "create_order_text": "Besoin de faire un achat supplémentaire ?",
+      "create_order_text": "Besoin de créer un plan épargne supplémentaire ?",
       "create_order": "Ajouter un nouvel ordre",
       "name": "Nom",
       "name_placeholder": "Donnez un nom à cet ordre pour le retrouver facilement",
@@ -93,7 +93,7 @@
       "statistics": {
         "total_spent": "Total épargné",
         "total_spent_desc": "Montant total de {{currency}} épargné dans cette tirelire",
-        "total_received": "Montant de bitcoins reçus.",
+        "total_received": "Montant de bitcoins reçus",
         "valuation": "Valeur actuelle"
       }
     },
