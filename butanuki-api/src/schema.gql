@@ -44,13 +44,22 @@ type BityPaymentDetails {
 type Order {
   id: String!
   transferLabel: String!
-  status: String!
+  status: OrderStatus!
   orderTemplateId: String
   amount: Float!
   filledAmount: Float
   currency: OrderCurrency!
   redactedCryptoAddress: String
   bankDetails: BityPaymentDetails
+}
+
+enum OrderStatus {
+  TO_CANCEL
+  OPEN
+  FILLED
+  FILLED_NEED_RENEW
+  CANCELLED_NEED_RENEW
+  CANCELLED
 }
 
 type User {

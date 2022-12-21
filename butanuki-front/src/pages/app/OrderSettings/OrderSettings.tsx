@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { ApiErrorAlert } from "../../../components/alerts/ApiErrorAlert";
 import {
   ErrorType,
+  OrderStatus,
   useAddOrderMutation,
   useBityStatusQuery,
   useOrderQuery,
@@ -112,7 +113,12 @@ export function OrderSettings() {
     !order.data || order.data.orderTemplate.amount !== amount;
   const addressChanged = !!cryptoAddress;
   const amountIsValid = (amountChanged && !!amount) || !amountChanged;
-  const addressIsValid = (!amountChanged && !addressChanged) || addressChanged;
+  const addressIsValid =
+    (!amountChanged &&
+      !addressChanged &&
+      order.data?.orderTemplate.activeOrder?.status !==
+        OrderStatus.Cancelled) ||
+    addressChanged; //If the order is cancelled, we don't allow submiting the form without setting the address
 
   return (
     <LoggedLayout>

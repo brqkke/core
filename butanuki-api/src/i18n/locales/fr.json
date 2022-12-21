@@ -17,6 +17,14 @@
       "body1": "Cliquez sur le lien ci-dessous pour accéder à votre compte.",
       "body2": "Si le lien ne fonctionne pas, copiez et collez l'adresse complète dans votre navigateur.",
       "action": "Se connecter à Butanuki"
+    },
+    "order_cancelled": {
+      "subject": "[#{{ref}}] Votre achat via bity a été annulé",
+      "subtitle": "Votre achat {{ref}} a été annulé",
+      "body": "Nous sommes désolés de vous informer que votre achat <b>{{vaultName}} - {{orderName}}</b> pour un montant de <1>{{currency}} {{amount}}</1> à envoyer à {{address}}</b> a été annulé par bity. Référence : {{transferLabel}}",
+      "body2": "Vous pouvez vous connecter à votre compte pour le remettre en place.",
+      "body3": "N'oubliez pas de mettre à jour l'ancien label de transfert ({{transferLabel}}) avec la nouvelle référence ensuite.",
+      "login": "Se connecter à Butanuki"
     }
   }
 }

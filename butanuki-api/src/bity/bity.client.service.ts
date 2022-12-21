@@ -8,7 +8,7 @@ import ClientOAuth2 from 'client-oauth2';
 
 @Injectable()
 export class BityClientService {
-  constructor(private config: AppConfigService, private http: HttpService) {}
+  constructor(protected config: AppConfigService, private http: HttpService) {}
 
   public async makeTokenFromRedirectUrl(
     redirectUrl: string,

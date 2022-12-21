@@ -81,7 +81,8 @@
       "name": "Nom",
       "name_placeholder": "Donnez un nom à cet ordre pour le retrouver facilement",
       "editing": "Edition de l'ordre {{name}}",
-      "creating": "Ajout d'un ordre dans la tirelire {{name}}"
+      "creating": "Ajout d'un ordre dans la tirelire {{name}}",
+      "cancelled_warning": "Attention, cet ordre a été annulé par Bity. Vous devez le reconfigurer pour qu'il fonctionne à nouveau."
     },
     "vault": {
       "add": "Ajouter une tirelire",

@@ -6,6 +6,9 @@ import { DataSource } from 'typeorm';
 import { buildRepositories, Repositories } from '../utils';
 import { UserRole } from '../entities/enums/UserRole';
 import { UserStatus } from '../entities/enums/UserStatus';
+import { MockFunctionMetadata, ModuleMocker } from 'jest-mock';
+import { MailerTransportService } from '../emails/MailerTransportService';
+import { ModuleMetadata } from '@nestjs/common/interfaces/modules/module-metadata.interface';
 
 const makeTestDbConfig = (): PostgresConnectionOptions => {
   return {
@@ -25,11 +28,18 @@ const makeTestDbConfig = (): PostgresConnectionOptions => {
   };
 };
 
-export const useAppWithMockedDatabase = (): {
+export const useAppWithMockedDatabase = (
+  modules: ModuleMetadata['imports'] = [AppModule],
+  mocks?:
+    | undefined
+    | ({ moduleMocker: ModuleMocker } & {
+        mockEmail?: boolean;
+      }),
+): {
   testingModuleBuilder?: TestingModuleBuilder;
   db?: Repositories;
 } => {
-  const dbName = `butanuki_test_${Math.random().toString(36).substring(7)}`;
+  const dbName = `butanuki_test_${Math.random().toString(36).substring(2)}`;
   const ref: {
     testingModuleBuilder?: TestingModuleBuilder;
     db?: Repositories;
@@ -45,11 +55,27 @@ export const useAppWithMockedDatabase = (): {
     await datasource.initialize();
     await datasource.runMigrations();
     ref.testingModuleBuilder = Test.createTestingModule({
-      imports: [AppModule],
+      imports: modules,
     })
       .overrideProvider(DataSource)
       .useValue(datasource);
     ref.db = buildRepositories(datasource.manager);
+    if (mocks) {
+      const { moduleMocker, mockEmail } = mocks;
+      if (mockEmail) {
+        ref.testingModuleBuilder = ref.testingModuleBuilder
+          ?.overrideProvider(MailerTransportService)
+          .useFactory({
+            factory: () => {
+              const mockMetadata = moduleMocker.getMetadata(
+                MailerTransportService,
+              ) as MockFunctionMetadata<any, any>;
+              const Mock = moduleMocker.generateFromMetadata(mockMetadata);
+              return new Mock();
+            },
+          });
+      }
+    }
   });
 
   afterAll(async () => {
@@ -64,8 +90,8 @@ export const useAppWithMockedDatabase = (): {
 };
 
 export const makeUser = async (db: Repositories) => {
-  const randomName = Math.random().toString(36).substring(7);
-  const randomLastName = Math.random().toString(36).substring(7);
+  const randomName = Math.random().toString(36).substring(2);
+  const randomLastName = Math.random().toString(36).substring(2);
   const randomEmail = `${randomName}.${randomLastName}@example.com`;
 
   return db.user.save({

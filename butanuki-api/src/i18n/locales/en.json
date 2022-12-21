@@ -17,6 +17,14 @@
       "body1": "Please click the link below to log into your account.",
       "body2": "If link doesn't work, copy-paste the full address in your browser.",
       "action": "Login to Butanuki"
+    },
+    "order_cancelled": {
+      "subject": "[#{{ref}}] Your bity order was cancelled",
+      "subtitle": "Your order {{ref}} was cancelled",
+      "body": "We're sorry to inform you your order <b>{{vaultName}} - {{orderName}}</b> of <1>{{currency}} {{amount}}</1> to {{address}} was cancelled by bity. Ref: {{transferLabel}}",
+      "body2": "You can login into your account to set it up again.",
+      "body3": "Don't forget to update the the old transfer label ({{transferLabel}}) with the new reference afterwards.",
+      "login": "Login to Butanuki"
     }
   }
 }

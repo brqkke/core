@@ -72,7 +72,11 @@ export class OrderService {
         },
         id: orderTemplateId,
         orders: {
-          status: IsOrderStatusActive(),
+          status: In([
+            OrderStatus.FILLED_NEED_RENEW,
+            OrderStatus.OPEN,
+            OrderStatus.CANCELLED,
+          ]),
         },
       },
       order: { createdAt: 'DESC' },

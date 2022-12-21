@@ -6,6 +6,7 @@ import { AppConfigService } from '../../config/app.config.service';
 import { buildRepositories, Repositories } from '../../utils';
 import { Order } from '../../entities/Order';
 import { OrderStatus } from '../../entities/enums/OrderStatus';
+import { MailerService } from '../../emails/MailerService';
 
 @Task({
   name: 'CHECK_PENDING_ORDERS',
@@ -18,6 +19,7 @@ export class CheckPendingOrdersTask extends AbstractTask {
     private bity: BityService,
     private orders: OrderService,
     private appConfig: AppConfigService,
+    private mailer: MailerService,
   ) {
     super();
     this.db = buildRepositories(dataSource.manager);
@@ -84,7 +86,22 @@ export class CheckPendingOrdersTask extends AbstractTask {
           lastCheckedAt: new Date(),
         },
       );
-      //TODO : Send mail ?
+      if (orderDb.user) {
+        const template = await this.db.orderTemplate.findOneOrFail({
+          where: {
+            id: orderDb.orderTemplateId || '',
+          },
+          relations: {
+            vault: true,
+          },
+        });
+        await this.mailer.sendOrderCancelledEmail(
+          orderDb,
+          template,
+          orderDb.user.email,
+          orderDb.user.locale,
+        );
+      }
     } else {
       await this.db.order.update(
         {
