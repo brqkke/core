@@ -10,6 +10,8 @@ import { Order } from '../entities/Order';
 import { Token } from '../entities/Token';
 import { TokenStatusReporting } from './templates/TokenStatusReporting';
 import { I18nService } from '../i18n/i18n.service';
+import { BityOrderCancelled } from './templates/BityOrderCancelled';
+import { OrderTemplate } from '../entities/OrderTemplate';
 
 @Injectable()
 export class MailerService {
@@ -103,6 +105,31 @@ export class MailerService {
       element: TokenStatusReporting,
       subject: `Bity token refresh error ${token.id}`,
       prefix: '[BTNK Alert] ',
+    });
+  }
+
+  async sendOrderCancelledEmail(
+    order: Order,
+    orderTemplateWithVault: OrderTemplate,
+    email: string,
+    locale: string,
+  ) {
+    return this.renderAndSend({
+      to: email,
+      params: {
+        transferLabel: order.transferLabel,
+        currency: order.currency,
+        amount: order.amount,
+        address: order.redactedCryptoAddress || '',
+        orderName: orderTemplateWithVault.name,
+        vaultName: orderTemplateWithVault.vault.name,
+        appUrl: this.appConfig.config.baseUrl,
+      },
+      element: BityOrderCancelled,
+      subject: this.i18n
+        .getLng(locale)
+        .t('email.order_cancelled.subject', { ref: order.transferLabel }),
+      locale,
     });
   }
 }

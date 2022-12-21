@@ -147,3 +147,7 @@ footer a:hover {
 .no-break{
     display: inline-block;
 }
+
+.card.active-order .card-header, .card.active-order .card-footer {
+    background-color: #e6f2ff;
+}

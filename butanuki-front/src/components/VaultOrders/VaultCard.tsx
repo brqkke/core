@@ -55,7 +55,7 @@ const NoOrders = React.memo(
         {t("app.home.bity.not_setup")}{" "}
         <Link
           to={`/vault/${vaultId}/new-order`}
-          className={`btn btn-success btn-sm ${disabled ? "disabled" : ""}`}
+          className={`btn btn-primary btn-sm ${disabled ? "disabled" : ""}`}
         >
           {t("app.home.setup_dca")}
         </Link>
@@ -72,7 +72,7 @@ const AddOrder = React.memo(
         {t("app.order.create_order_text")}{" "}
         <Link
           to={`/vault/${vaultId}/new-order`}
-          className={`btn btn-success btn-sm ${disabled ? "disabled" : ""}`}
+          className={`btn btn-primary btn-sm ${disabled ? "disabled" : ""}`}
         >
           {t("app.order.create_order")}
         </Link>

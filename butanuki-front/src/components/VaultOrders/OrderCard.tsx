@@ -1,6 +1,7 @@
-import React from "react";
+import React, { Suspense } from "react";
 import {
   BityPaymentDetails,
+  OrderStatus,
   OrderTemplateInfosFragment,
   useDeleteOrderMutation,
 } from "../../generated/graphql";
@@ -8,6 +9,9 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { DeleteBtnWithConfirm } from "../buttons/DeleteBtnWithConfirm";
 import { formatAmount } from "../../utils/i18n";
+import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons/faTriangleExclamation";
+
+const FontAwesomeIcon = React.lazy(() => import("../icon/FontAwesome"));
 
 const RenderIbanWithSpaces = React.memo((props: { iban: string }) => {
   const { iban } = props;
@@ -35,9 +39,11 @@ const PaymentDetails = React.memo(
   ({
     transferLabel,
     details,
+    orderStatus,
   }: {
     details: BityPaymentDetails;
     transferLabel: string;
+    orderStatus: OrderStatus;
   }) => {
     const { t } = useTranslation();
     return (
@@ -60,61 +66,76 @@ const PaymentDetails = React.memo(
               }}
             >
               <strong>{transferLabel}</strong>
+              {orderStatus === OrderStatus.Cancelled && (
+                <span className="text-danger">
+                  <>
+                    {" "}
+                    <Suspense fallback={null}>
+                      <FontAwesomeIcon icon={faTriangleExclamation} />
+                    </Suspense>
+                    &nbsp;({t("app.order.cancelled_warning")})
+                  </>
+                </span>
+              )}
             </p>
           </div>
         </div>
-        <hr />
-        <div className="row">
-          <div className="col-lg-6 col-md-8">
+        {orderStatus !== OrderStatus.Cancelled && (
+          <>
+            <hr />
             <div className="row">
-              <div className="col-md-3">
-                <p className="mb-0">IBAN</p>
+              <div className="col-lg-6 col-md-8">
+                <div className="row">
+                  <div className="col-md-3">
+                    <p className="mb-0">IBAN</p>
+                  </div>
+                  <div className="col-md-9">
+                    <p className="text-muted">
+                      <RenderIbanWithSpaces iban={details.iban || ""} />
+                    </p>
+                  </div>
+                </div>
+                {/*<hr />*/}
+                <div className="row">
+                  <div className="col-md-3">
+                    <p className="mb-0">BIC/SWIFT</p>
+                  </div>
+                  <div className="col-md-9">
+                    <p className="text-muted">{details.swift_bic}</p>
+                  </div>
+                </div>
               </div>
-              <div className="col-md-9">
-                <p className="text-muted">
-                  <RenderIbanWithSpaces iban={details.iban || ""} />
-                </p>
+              <div className="col-lg-6 col-md-4">
+                {/*<hr />*/}
+                <div className="row">
+                  <div className="col-md-3">
+                    <p className="mb-0">Recipient</p>
+                  </div>
+                  <div className="col-md-9">
+                    <p
+                      className="text-muted mb-0"
+                      style={{
+                        wordBreak: "break-word",
+                        whiteSpace: "break-spaces",
+                      }}
+                    >
+                      {details.recipient &&
+                        details.recipient.split(",").map((part, i, parts) => {
+                          const words = part.trim();
+                          return (
+                            <React.Fragment key={i}>
+                              {words}
+                              {i < parts.length - 1 && <br />}
+                            </React.Fragment>
+                          );
+                        })}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
-            {/*<hr />*/}
-            <div className="row">
-              <div className="col-md-3">
-                <p className="mb-0">BIC/SWIFT</p>
-              </div>
-              <div className="col-md-9">
-                <p className="text-muted">{details.swift_bic}</p>
-              </div>
-            </div>
-          </div>
-          <div className="col-lg-6 col-md-4">
-            {/*<hr />*/}
-            <div className="row">
-              <div className="col-md-3">
-                <p className="mb-0">Recipient</p>
-              </div>
-              <div className="col-md-9">
-                <p
-                  className="text-muted mb-0"
-                  style={{
-                    wordBreak: "break-word",
-                    whiteSpace: "break-spaces",
-                  }}
-                >
-                  {details.recipient &&
-                    details.recipient.split(",").map((part, i, parts) => {
-                      const words = part.trim();
-                      return (
-                        <React.Fragment key={i}>
-                          {words}
-                          {i < parts.length - 1 && <br />}
-                        </React.Fragment>
-                      );
-                    })}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+          </>
+        )}
       </div>
     );
   }
@@ -141,7 +162,13 @@ export const OrderCard = ({
   });
 
   return (
-    <div className="card">
+    <div
+      className={`card ${
+        order.activeOrder?.status !== OrderStatus.Cancelled
+          ? "active-order"
+          : ""
+      }`}
+    >
       <div className="card-header">
         <div className="row">
           <div className="col-12">
@@ -186,6 +213,7 @@ export const OrderCard = ({
           <div className="col-sm-12 mt-2">
             {order.activeOrder?.bankDetails && (
               <PaymentDetails
+                orderStatus={order.activeOrder.status}
                 details={order.activeOrder.bankDetails}
                 transferLabel={order.activeOrder.transferLabel}
               />

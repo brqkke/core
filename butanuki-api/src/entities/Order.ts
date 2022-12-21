@@ -11,7 +11,6 @@ import {
 import { OrderStatus } from './enums/OrderStatus';
 import { User } from './User';
 import { OrderCurrency } from './enums/OrderCurrency';
-import { Vault } from './Vault';
 import { Field, Float, ObjectType } from '@nestjs/graphql';
 import { OrderTemplate } from './OrderTemplate';
 
@@ -52,7 +51,7 @@ export class Order {
   transferLabel: string;
 
   @Column({ type: 'enum', enum: OrderStatus })
-  @Field()
+  @Field(() => OrderStatus)
   status: OrderStatus;
 
   @Column()
@@ -85,7 +84,7 @@ export class Order {
   @ManyToOne(() => OrderTemplate, { nullable: true })
   @Index()
   @JoinColumn()
-  orderTemplate?: Vault | null;
+  orderTemplate?: OrderTemplate | null;
 
   @Column({ nullable: true })
   @Field(() => String, { nullable: true })

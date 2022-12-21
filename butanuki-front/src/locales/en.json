@@ -81,7 +81,8 @@
       "name": "Name",
       "name_placeholder": "You can set a name for this order to easily find it",
       "editing": "Editing you order {{name}}",
-      "creating": "Creating a new order in your piggy bank {{name}}"
+      "creating": "Creating a new order in your piggy bank {{name}}",
+      "cancelled_warning": "Warning, this order has been cancelled by Bity. You need to reconfigure it to make it work again."
     },
     "vault": {
       "add": "Add a new piggy bank",

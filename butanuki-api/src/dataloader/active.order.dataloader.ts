@@ -2,7 +2,7 @@ import { Repositories } from '../utils';
 import DataLoader from 'dataloader';
 import { Order } from '../entities/Order';
 import { In } from 'typeorm';
-import { IsOrderStatusActive } from '../order/order.service';
+import { OrderStatus } from '../entities/enums/OrderStatus';
 
 export const createActiveOrderByTemplateIdDataloader = (db: Repositories) => {
   return new DataLoader<string, Order | null>(async (keys: string[]) => {
@@ -14,7 +14,14 @@ export const createActiveOrderByTemplateIdDataloader = (db: Repositories) => {
     //   order: { createdAt: 'DESC' },
     // }
     const data = await db.order.find({
-      where: { orderTemplateId: In(keys), status: IsOrderStatusActive() },
+      where: {
+        orderTemplateId: In(keys),
+        status: In([
+          OrderStatus.FILLED_NEED_RENEW,
+          OrderStatus.OPEN,
+          OrderStatus.CANCELLED,
+        ]),
+      },
       order: { createdAt: 'DESC' },
     });
     const map = data.reduce((map, current) => {

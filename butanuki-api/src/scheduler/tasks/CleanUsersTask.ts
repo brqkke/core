@@ -9,7 +9,7 @@ import { OrderStatus } from '../../entities/enums/OrderStatus';
 @Task({
   name: 'CLEAN_USERS',
 })
-export class CheckPendingOrdersTask extends AbstractTask {
+export class CleanUsersTask extends AbstractTask {
   private db: Repositories;
 
   constructor(dataSource: DataSource) {

@@ -133,7 +133,7 @@ export const VaultForm = ({ onSave, cancel }: Props) => {
           </div>
           <div className="btn-group">
             <LoadingBtn
-              level={"primary"}
+              level={"success"}
               text={t("app.action.submit")}
               loading={addResult.loading}
               type={"submit"}
@@ -172,7 +172,7 @@ export const VaultFormCard = ({
     </div>
   ) : totalCurrentVaults < maxVaults ? (
     <button
-      className={"btn btn-primary"}
+      className={"btn btn-success"}
       disabled={disabled}
       onClick={openForm}
     >
