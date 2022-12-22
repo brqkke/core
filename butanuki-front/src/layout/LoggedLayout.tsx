@@ -19,7 +19,7 @@ function UserAndBityStatus({ withBityStatus }: { withBityStatus?: boolean }) {
             <div className="row">
               <div className="col-md-12 d-flex justify-content-between align-items-center flex-wrap">
                 <h3 className="card-title heading-bitcoin">
-                  Hello {user.email}
+                  👋 Hello {user.email}
                 </h3>
                 <Link className="btn btn-warning btn-sm" to={"/logout"}>
                   Logout
