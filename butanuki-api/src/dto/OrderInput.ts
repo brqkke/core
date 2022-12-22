@@ -1,4 +1,5 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
+import { OrderFrequency } from '../entities/enums/OrderFrequency';
 
 @InputType('OrderInput')
 export class OrderInput {
@@ -10,6 +11,9 @@ export class OrderInput {
 
   @Field(() => String, { nullable: true })
   name?: string;
+
+  @Field(() => OrderFrequency)
+  frequency: OrderFrequency;
 }
 
 @InputType('CreateOrderInput')
@@ -22,4 +26,7 @@ export class CreateOrderInput {
 
   @Field(() => String, { nullable: true })
   name: string;
+
+  @Field(() => OrderFrequency)
+  frequency: OrderFrequency;
 }

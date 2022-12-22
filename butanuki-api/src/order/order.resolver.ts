@@ -66,10 +66,6 @@ export class OrderResolver {
       orderTemplateId,
     );
 
-    if (!data.cryptoAddress && !data.name && !data.amount) {
-      return template;
-    }
-
     const { newOrder, template: updatedTemplate } =
       await this.orderTemplateService.updateTemplate(user, template, data);
     if (newOrder) {

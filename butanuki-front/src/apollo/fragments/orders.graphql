@@ -25,6 +25,7 @@ fragment OrderTemplateInfos on OrderTemplate{
     name
     amount
     vaultId
+    frequency
     activeOrder {
         ...OrderInfos
     }
