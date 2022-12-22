@@ -172,7 +172,7 @@ export const OrderCard = ({
       <div className="card-header">
         <div className="row">
           <div className="col-12">
-            <h4 className={"mb-0"}>{order.name}</h4>
+            <h4 className={"mb-0"}>🔄 {order.name}</h4>
           </div>
         </div>
       </div>
