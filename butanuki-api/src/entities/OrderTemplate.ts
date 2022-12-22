@@ -12,6 +12,7 @@ import { Vault } from './Vault';
 import { OrderCurrency } from './enums/OrderCurrency';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Order } from './Order';
+import { OrderFrequency } from './enums/OrderFrequency';
 
 @Entity()
 @ObjectType()
@@ -48,4 +49,8 @@ export class OrderTemplate {
 
   @Column()
   createdAt: Date;
+
+  @Column({ type: 'enum', enum: OrderFrequency })
+  @Field(() => OrderFrequency)
+  frequency: OrderFrequency;
 }

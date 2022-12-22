@@ -178,7 +178,7 @@ export const OrderCard = ({
       </div>
       <div className="card-body">
         <div className="row">
-          <div className="col-md-6">
+          <div className="col-md-6 col-lg-4">
             <div className="row">
               <div className="col-sm-6">
                 <p className="mb-0">{t("app.order.amount")}</p>
@@ -195,14 +195,26 @@ export const OrderCard = ({
               </div>
             </div>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-6 col-lg-4">
             <div className="row">
               <div className="col-sm-6">
                 <p className="mb-0">{t("app.order.crypto_address")}</p>
               </div>
               <div className="col-sm-6">
-                <p className="text-muted mb-0">
+                <p className="text-muted mb-lg-0">
                   {order.activeOrder?.redactedCryptoAddress}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-6 col-12 col-lg-4">
+            <div className="row">
+              <div className="col-sm-6">
+                <p className="mb-0">{t("app.order.frequency")}</p>
+              </div>
+              <div className="col-sm-6">
+                <p className="text-muted mb-0">
+                  {t(`app.order.frequencies.${order.frequency}` as const)}
                 </p>
               </div>
             </div>

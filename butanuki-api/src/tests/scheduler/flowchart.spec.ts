@@ -17,6 +17,7 @@ import { VaultInput } from '../../vault/types';
 import { OrderTemplateService } from '../../order/order.template.service';
 import { OrderStatus } from '../../entities/enums/OrderStatus';
 import { MailerTransportService } from '../../emails/MailerTransportService';
+import { OrderFrequency } from '../../entities/enums/OrderFrequency';
 
 const moduleMocker = new ModuleMocker(global);
 describe('Background process flowchart', () => {
@@ -98,6 +99,7 @@ describe('Background process flowchart', () => {
         name: 'test order',
         amount: 100,
         cryptoAddress: 'bc1q123',
+        frequency: OrderFrequency.WEEKLY,
       },
     );
     console.log(order);

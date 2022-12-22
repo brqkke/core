@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { ApiErrorAlert } from "../../../components/alerts/ApiErrorAlert";
 import {
   ErrorType,
+  OrderFrequency,
   OrderStatus,
   useAddOrderMutation,
   useBityStatusQuery,
@@ -37,6 +38,7 @@ export function OrderSettings() {
     onCompleted: (data) => {
       setName(data.orderTemplate.name);
       setAmount(data.orderTemplate.amount);
+      setFrequency(data.orderTemplate.frequency);
       setCryptoAddress("");
     },
   });
@@ -48,18 +50,35 @@ export function OrderSettings() {
   const [amount, setAmount] = useState(10);
   const [cryptoAddress, setCryptoAddress] = useState("");
   const [name, setName] = useState("");
+  const [frequency, setFrequency] = useState<OrderFrequency>(
+    OrderFrequency.Weekly
+  );
 
   const [error, setError] = useState<ErrorType | undefined>();
 
   const navigate = useNavigate();
 
+  const amountChanged =
+    !order.data || order.data.orderTemplate.amount !== amount;
+  const addressChanged = !!cryptoAddress;
+  const amountIsValid = (amountChanged && !!amount) || !amountChanged;
+  const addressIsValid =
+    (!amountChanged &&
+      !addressChanged &&
+      order.data?.orderTemplate.activeOrder?.status !==
+        OrderStatus.Cancelled) ||
+    addressChanged; //If the order is cancelled, we don't allow submiting the form without setting the address
+
   const submit = useCallback(async () => {
+    if (!amountIsValid || !addressIsValid) {
+      return;
+    }
     setError(undefined);
     if (orderId) {
       await updateOrder({
         variables: {
           orderTemplateId: orderId,
-          data: { amount, cryptoAddress, name },
+          data: { amount, cryptoAddress, name, frequency },
         },
         onCompleted: () => {
           navigate(`/`);
@@ -72,7 +91,7 @@ export function OrderSettings() {
       await placeOrder({
         variables: {
           vaultId: vaultId || "",
-          data: { amount, cryptoAddress, name },
+          data: { amount, cryptoAddress, name, frequency },
         },
         onCompleted: () => {
           navigate(`/`);
@@ -84,15 +103,18 @@ export function OrderSettings() {
     }
     refetchBityStatus();
   }, [
+    amountIsValid,
+    addressIsValid,
     orderId,
     refetchBityStatus,
     updateOrder,
     amount,
     cryptoAddress,
     name,
+    frequency,
+    navigate,
     placeOrder,
     vaultId,
-    navigate,
   ]);
 
   const loading = useDebounce(vault.loading || order.loading, 100, true);
@@ -108,17 +130,6 @@ export function OrderSettings() {
       </LoggedLayout>
     );
   }
-
-  const amountChanged =
-    !order.data || order.data.orderTemplate.amount !== amount;
-  const addressChanged = !!cryptoAddress;
-  const amountIsValid = (amountChanged && !!amount) || !amountChanged;
-  const addressIsValid =
-    (!amountChanged &&
-      !addressChanged &&
-      order.data?.orderTemplate.activeOrder?.status !==
-        OrderStatus.Cancelled) ||
-    addressChanged; //If the order is cancelled, we don't allow submiting the form without setting the address
 
   return (
     <LoggedLayout>
@@ -150,70 +161,66 @@ export function OrderSettings() {
               return false;
             }}
           >
-            <div className="form-group">
-              <div className="input-group">
-                <div className="input-group-prepend">
-                  <span className="input-group-text">
-                    {t("app.order.name")}
-                  </span>
-                </div>
-                <input
-                  className={"form-control"}
-                  onChange={(ev) => {
-                    setName(ev.target.value);
-                  }}
-                  value={name}
-                  placeholder={t("app.order.name_placeholder")}
-                />
+            <div className="input-group mb-2">
+              <span className="input-group-text">{t("app.order.name")}</span>
+              <input
+                className={"form-control"}
+                onChange={(ev) => {
+                  setName(ev.target.value);
+                }}
+                value={name}
+                placeholder={t("app.order.name_placeholder")}
+              />
+            </div>
+            <div className="input-group mb-2">
+              <span className="input-group-text">{t("app.order.amount")}</span>
+              <input
+                className={"form-control"}
+                onChange={(ev) => {
+                  setAmount(parseInt(ev.target.value));
+                }}
+                id={"inputAmount"}
+                value={amount}
+                type={"number"}
+                min={0}
+                placeholder={"Order amount"}
+              />
+              <div className="input-group-text">
+                {vault.data.vault.currency}
               </div>
             </div>
-            <div className="form-group">
-              <div className="input-group">
-                <div className="input-group-prepend">
-                  <span className="input-group-text">
-                    {t("app.order.amount")}
-                  </span>
-                </div>
-                <input
-                  className={"form-control"}
-                  onChange={(ev) => {
-                    setAmount(parseInt(ev.target.value));
-                  }}
-                  id={"inputAmount"}
-                  value={amount}
-                  type={"number"}
-                  min={0}
-                  placeholder={"Order amount"}
-                />
-                <div className="input-group-append">
-                  <select
-                    className="form-control custom-select"
-                    id="currencySelect"
-                    value={vault.data.vault.currency}
-                    disabled={true}
-                  >
-                    <option value={"CHF"}>CHF</option>
-                    <option value={"EUR"}>EUR</option>
-                  </select>
-                </div>
-              </div>
+            <div className="input-group mb-2">
+              <span className="input-group-text">
+                {t("app.order.frequency")}
+              </span>
+              <select
+                className={"form-select"}
+                onChange={(ev) => {
+                  setFrequency(ev.target.value as OrderFrequency);
+                }}
+                value={frequency}
+              >
+                {Object.values(OrderFrequency).map(
+                  (frequency: OrderFrequency) => (
+                    <option key={frequency} value={frequency}>
+                      {t(`app.order.frequencies.${frequency}` as const)}
+                    </option>
+                  )
+                )}
+              </select>
             </div>
-            <div className="form-group">
-              <div className="input-group">
-                <div className="input-group-prepend">
-                  <span className="input-group-text">
-                    {t("app.order.crypto_address")}
-                  </span>
-                </div>
-                <input
-                  className={"form-control"}
-                  onChange={(ev) => {
-                    setCryptoAddress(ev.target.value);
-                  }}
-                  value={cryptoAddress}
-                  placeholder={t("app.order.crypto_address_desc")}
-                />
-              </div>
+            <div className="input-group mb-2">
+              <span className="input-group-text">
+                {t("app.order.crypto_address")}
+              </span>
+              <input
+                className={"form-control"}
+                onChange={(ev) => {
+                  setCryptoAddress(ev.target.value);
+                }}
+                value={cryptoAddress}
+                placeholder={t("app.order.crypto_address_desc")}
+              />
             </div>
             <br />
             {order.data?.orderTemplate && (amountChanged || addressChanged) && (

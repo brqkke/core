@@ -28,8 +28,14 @@ type OrderTemplate {
   name: String!
   vaultId: ID!
   amount: Float!
+  frequency: OrderFrequency!
   activeOrder: Order
   vault: Vault!
+}
+
+enum OrderFrequency {
+  WEEKLY
+  MONTHLY
 }
 
 type BityPaymentDetails {
@@ -151,12 +157,14 @@ input OrderInput {
   amount: Int!
   cryptoAddress: String
   name: String
+  frequency: OrderFrequency!
 }
 
 input CreateOrderInput {
   amount: Int!
   cryptoAddress: String
   name: String
+  frequency: OrderFrequency!
 }
 
 input VaultInput {

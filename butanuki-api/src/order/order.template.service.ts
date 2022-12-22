@@ -52,6 +52,7 @@ export class OrderTemplateService {
       currency: vault.currency,
       amount: data.amount,
       createdAt: new Date(),
+      frequency: data.frequency,
     });
     try {
       const newOrder = await this.orderService.placeBityOrder({
@@ -76,7 +77,8 @@ export class OrderTemplateService {
     template: OrderTemplate,
     data: OrderInput,
   ): Promise<{ template: OrderTemplate; newOrder: Order | null }> {
-    template.name = data.name || template.name;
+    template.name = data.name ?? template.name;
+    template.frequency = data.frequency;
     if (!data.cryptoAddress && data.amount && data.amount !== template.amount) {
       throw new BadRequestException({
         success: false,
