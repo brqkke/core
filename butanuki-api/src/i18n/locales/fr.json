@@ -6,8 +6,8 @@
       "body": "Voici les détails de votre nouvel ordre de <1>{{currency}} {{amount}}</1> vers {{address}} :"
     },
     "bity_token_broken": {
-      "subject": "Votre compte bity ne semble plus lié !",
-      "subtitle": "Votre compte bity s'est délié",
+      "subject": "Votre compte Bity ne semble plus lié !",
+      "subtitle": "Votre compte Bity s'est délié",
       "body": "Vous devez le lier à nouveau dans votre compte Butanuki si vous souhaitez que votre épargne récurrente continue de fonctionner.",
       "login": "Se connecter à Butanuki"
     },
@@ -19,10 +19,10 @@
       "action": "Se connecter à Butanuki"
     },
     "order_cancelled": {
-      "subject": "[#{{ref}}] Votre achat via bity a été annulé",
+      "subject": "[#{{ref}}] Votre achat via Bity a été annulé",
       "subtitle": "Votre achat {{ref}} a été annulé",
-      "body": "Nous sommes désolés de vous informer que votre achat <b>{{vaultName}} - {{orderName}}</b> pour un montant de <1>{{currency}} {{amount}}</1> à envoyer à {{address}}</b> a été annulé par bity. Référence : {{transferLabel}}",
-      "body2": "Vous pouvez vous connecter à votre compte pour le remettre en place.",
+      "body": "Nous sommes désolés de vous informer que votre achat <b>\uD83D\uDC3D{{vaultName}} - \uD83D\uDD04{{orderName}}</b> pour un montant de <1>{{currency}} {{amount}}</1> à envoyer à {{address}}</b> a été annulé par Bity. Référence : {{transferLabel}}",
+      "body2": "Connectez-vous à votre compte pour le remettre en place.",
       "body3": "N'oubliez pas de mettre à jour l'ancien label de transfert ({{transferLabel}}) avec la nouvelle référence ensuite.",
       "login": "Se connecter à Butanuki"
     }

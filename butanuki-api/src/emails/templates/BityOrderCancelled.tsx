@@ -43,7 +43,7 @@ export const BityOrderCancelled = ({
         We're sorry to inform you your order
         <b>
           <>
-            {{ vaultName }} - {{ orderName }}
+            🐽{{ vaultName }} - 🔄{{ orderName }}
           </>
         </b>
         of
@@ -52,7 +52,7 @@ export const BityOrderCancelled = ({
             {{ currency }} {{ amount }}
           </>
         </b>{' '}
-        to {{ address }} was cancelled by bity. Ref: {{ transferLabel }}
+        to {{ address }} was cancelled by Bity. Ref: {{ transferLabel }}
       </Trans>
       <p>{t('email.order_cancelled.body2')}</p>
       <a href={appUrl}>{t('email.order_cancelled.login')}</a>

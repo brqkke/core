@@ -6,7 +6,7 @@
       "body": "Here are the details of your new order of <1>{{currency}} {{amount}}</1> to {{address}}:"
     },
     "bity_token_broken": {
-      "subject": "It looks like your bity account is no more linked !",
+      "subject": "It looks like your Bity account is no more linked !",
       "subtitle": "Your Bity account was unlinked",
       "body": "You need to link it again in your Butanuki account if you want to keep your DCA working.",
       "login": "Login to Butanuki"
@@ -19,10 +19,10 @@
       "action": "Login to Butanuki"
     },
     "order_cancelled": {
-      "subject": "[#{{ref}}] Your bity order was cancelled",
+      "subject": "[#{{ref}}] Your Bity order was cancelled",
       "subtitle": "Your order {{ref}} was cancelled",
-      "body": "We're sorry to inform you your order <b>{{vaultName}} - {{orderName}}</b> of <1>{{currency}} {{amount}}</1> to {{address}} was cancelled by bity. Ref: {{transferLabel}}",
-      "body2": "You can login into your account to set it up again.",
+      "body": "We're sorry to inform you your order <b>\uD83D\uDC3D {{vaultName}} - \uD83D\uDD04 {{orderName}}</b> of <1>{{currency}} {{amount}}</1> to {{address}} was cancelled by Bity. Ref: {{transferLabel}}",
+      "body2": "Please login into your account to set it up again.",
       "body3": "Don't forget to update the the old transfer label ({{transferLabel}}) with the new reference afterwards.",
       "login": "Login to Butanuki"
     }
