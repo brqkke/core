@@ -17,7 +17,7 @@
     }
   },
   "homepage": {
-    "hello": "Soon, a Bitcoin & cryptocurrencies ATM open 24/7 in Geneva city-center.",
+    "hello": "Soon, a Bitcoin ATM open 24/7 in Geneva city-center.",
     "get_started": "Get started here: ",
     "get_started_call_to_action": "Buy Bitcoin",
     "subtitle": "Easy Bitcoin Saving",
@@ -44,8 +44,8 @@
       "NeedVerifiedBityAccount": "You must verify your account and your IBAN (with Bity) before being able to setup a DCA with Butanuki.",
       "Unknown": "An unknown error occured. Please try again later.",
       "UnknownBityError": "Please try again. If the error persists, please disconnect your Butanuki account from Bity, then reconnect it.",
-      "TooManyOrdersInVault": "You have too many orders in your vault.",
-      "TooManyVaults": "You have too many vaults."
+      "TooManyOrdersInVault": "You have too many orders in your piggy bank.",
+      "TooManyVaults": "You have too many piggy banks."
     },
     "login": {
       "enter_email": "Enter your email to receive a unique login link",
@@ -60,11 +60,11 @@
         "broken": "It looks like the link between Butanuki and your Bity account is broken.",
         "to_link": "to link it now.",
         "to_unlink": "to unlink it.",
-        "not_setup": "DCA not setup"
+        "not_setup": "Saving plan not setup"
       },
       "click_here": "Click here",
       "try_again": "Try again",
-      "setup_dca": "Setup DCA"
+      "setup_dca": "Setup saving plan"
     },
     "order": {
       "amount": "Amount",
@@ -76,7 +76,7 @@
       "save": "Save",
       "go_back": "Go back",
       "warning_reset": "Warning, you will get a new Bank Transfer Reference",
-      "create_order_text": "Need to buy more?",
+      "create_order_text": "Need to plan other saving plans?",
       "create_order": "Add a new order",
       "name": "Name",
       "name_placeholder": "You can set a name for this order to easily find it",
@@ -109,7 +109,7 @@
     },
     "bity": {
       "error": {
-        "input_payment_information_required": "You must verify your account and your IBAN (with Bity) before being able to setup a DCA with Butanuki.",
+        "input_payment_information_required": "You must verify your account and your IBAN (with Bity) before being able to setup a saving plan with Butanuki.",
         "cant_refresh_token": "Please try again. If the error persists, please disconnect your Butanuki account from Bity, then reconnect it."
       }
     }
