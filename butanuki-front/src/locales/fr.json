@@ -83,10 +83,10 @@
       "editing": "Edition de l'ordre {{name}}",
       "creating": "Ajout d'un ordre dans la tirelire {{name}}",
       "cancelled_warning": "Attention, cet ordre a été annulé par Bity. Vous devez le reconfigurer pour qu'il fonctionne à nouveau.",
-      "frequency": "Fréquence d'achat",
+      "frequency": "Fréquence",
       "frequencies": {
-        "WEEKLY": "Toutes les semaines",
-        "MONTHLY": "Tous les mois"
+        "WEEKLY": "Chaque semaine",
+        "MONTHLY": "Chaque mois"
       }
     },
     "vault": {

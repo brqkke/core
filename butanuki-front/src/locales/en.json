@@ -83,10 +83,10 @@
       "editing": "Editing you order {{name}}",
       "creating": "Creating a new order in your piggy bank {{name}}",
       "cancelled_warning": "Warning, this order has been cancelled by Bity. You need to reconfigure it to make it work again.",
-      "frequency": "Buying frequency",
+      "frequency": "Frequency",
       "frequencies": {
-        "WEEKLY": "Every week",
-        "MONTHLY": "Every month"
+        "WEEKLY": "Weekly",
+        "MONTHLY": "Monthly"
       }
     },
     "vault": {
