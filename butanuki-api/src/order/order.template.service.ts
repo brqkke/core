@@ -61,6 +61,7 @@ export class OrderTemplateService {
         token: user.token,
         currency: template.currency,
         cryptoAddress: data.cryptoAddress,
+        customPartnerFee: user.customPartnerFee,
       });
       if (!newOrder) {
         throw new InternalServerErrorException("Can't create order");
@@ -92,6 +93,7 @@ export class OrderTemplateService {
         token: user.token,
         currency: template.currency,
         cryptoAddress: data.cryptoAddress,
+        customPartnerFee: user.customPartnerFee,
       });
       if (!newOrder) {
         throw new InternalServerErrorException(

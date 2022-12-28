@@ -120,12 +120,12 @@ enum DCAInterval {
 }
 
 type Query {
-  me: User!
-  orderTemplate(id: ID!): OrderTemplate!
   linkUrl: String!
-  vault(id: ID!): Vault!
-  errors: [ErrorType!]!
+  orderTemplate(id: ID!): OrderTemplate!
   currentPrice(currency: OrderCurrency!): Float!
+  vault(id: ID!): Vault!
+  me: User!
+  errors: [ErrorType!]!
   averageCostEstimator(currency: OrderCurrency!, start: String!, end: String!, interval: DCAInterval!): EstimatorResult!
   dcaEstimatorConfigs: [DCAConfig!]!
 }
@@ -142,15 +142,15 @@ enum ErrorType {
 }
 
 type Mutation {
-  updateLocale(locale: String!): User!
+  unlinkBity: User!
+  linkBity(redirectedFrom: String!): User!
   updateOrderTemplate(data: OrderInput!, orderTemplateId: ID!): OrderTemplate!
   createOrder(vaultId: ID!, data: CreateOrderInput!): OrderTemplate!
   deleteOrderTemplate(orderTemplateId: ID!): OrderTemplate!
-  unlinkBity: User!
-  linkBity(redirectedFrom: String!): User!
   addVault(data: VaultInput!): Vault!
   updateVault(id: ID!, data: UpdateVaultInput!): Vault!
   deleteVault(vaultId: ID!): Vault!
+  updateLocale(locale: String!): User!
 }
 
 input OrderInput {
