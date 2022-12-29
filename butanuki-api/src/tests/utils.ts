@@ -1,3 +1,4 @@
+import { INestApplication } from '@nestjs/common';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import { Test } from '@nestjs/testing';
 import { AppModule } from '../app.module';
@@ -9,6 +10,14 @@ import { UserStatus } from '../entities/enums/UserStatus';
 import { MockFunctionMetadata, ModuleMocker } from 'jest-mock';
 import { MailerTransportService } from '../emails/MailerTransportService';
 import { ModuleMetadata } from '@nestjs/common/interfaces/modules/module-metadata.interface';
+import { OrderCurrency } from '../entities/enums/OrderCurrency';
+import { BityService } from '../bity/bity.service';
+import { User } from '../entities/User';
+
+if (process.env.JEST_WORKER_ID === undefined) {
+  console.error("Can't import test utils outside of jest");
+  process.exit(1);
+}
 
 const makeTestDbConfig = (): PostgresConnectionOptions => {
   return {
@@ -102,4 +111,30 @@ export const makeUser = async (db: Repositories) => {
     tempCodeExpireAt: 0,
     tempCode: '',
   });
+};
+
+export const makeVault = async (
+  db: Repositories,
+  userId: string,
+  currency: OrderCurrency = OrderCurrency.EUR,
+) => {
+  const randomName = Math.random().toString(36).substring(2);
+  return db.vault.save({
+    name: randomName,
+    currency,
+    userId,
+    createdAt: new Date(),
+  });
+};
+
+export const linkBityMock = async (
+  db: Repositories,
+  user: User,
+  app: INestApplication,
+) => {
+  const token = await app
+    .get(BityService)
+    .getTokenFromCodeRedirectUrl(JSON.stringify({ userId: user.id }));
+  expect(token).toBeDefined();
+  await app.get(BityService).useTokenOnUser(token!, user);
 };

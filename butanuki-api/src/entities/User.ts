@@ -56,6 +56,9 @@ export class User {
 
   @OneToMany(() => Vault, (vault) => vault.user)
   vaults?: Vault[];
+
+  @Column({ nullable: true, type: 'real' })
+  customPartnerFee?: number;
 }
 
 export type UserWithToken = User & { token: Token };

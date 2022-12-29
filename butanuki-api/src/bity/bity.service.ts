@@ -249,11 +249,13 @@ export class BityService {
     cryptoAddress,
     token,
     currency,
+    customPartnerFee,
   }: {
     currency: 'EUR' | 'CHF';
     amount: number;
     cryptoAddress: string;
     token: Token;
+    customPartnerFee: number | undefined;
   }) {
     const body = {
       input: { amount: '' + amount, currency },
@@ -262,7 +264,9 @@ export class BityService {
         crypto_address: cryptoAddress,
         type: 'crypto_address',
       },
-      partner_fee: { factor: this.config.config.bity.partnerFee },
+      partner_fee: {
+        factor: customPartnerFee ?? this.config.config.bity.partnerFee,
+      },
     };
     const { response, newToken } = await this.doBityRequestWithRetryRefresh({
       token,

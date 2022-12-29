@@ -158,18 +158,21 @@ export class OrderService {
     token,
     currency,
     template,
+    customPartnerFee,
   }: {
     currency: OrderCurrency;
     amount: number;
     cryptoAddress: string;
     token: Token;
     template: OrderTemplate;
+    customPartnerFee: number | undefined;
   }) {
     const bityOrder = await this.bity.placeBityOrder({
       amount,
       currency,
       token,
       cryptoAddress,
+      customPartnerFee,
     });
     if (bityOrder) {
       if (!bityOrder.payment_details?.reference) {
