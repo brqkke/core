@@ -18,7 +18,6 @@ export class RecaptchaService {
         }),
       ),
     );
-    console.log(r);
     return r.data.success === true;
   }
 }

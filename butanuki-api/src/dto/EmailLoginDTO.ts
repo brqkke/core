@@ -22,4 +22,7 @@ export class EmailLoginVerifyDTO {
   @ApiProperty()
   @IsNotEmpty()
   tempCode: string;
+
+  @ApiProperty()
+  mfaCode?: string;
 }

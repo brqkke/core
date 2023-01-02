@@ -2,10 +2,10 @@ import { useUserContext } from "../context/UserContext";
 import { MainLayout } from "./MainLayout";
 import { BityStatus } from "../components/BityStatus";
 import { Link } from "react-router-dom";
+import { UserRole } from "../generated/graphql";
 
 function UserAndBityStatus({ withBityStatus }: { withBityStatus?: boolean }) {
   const user = useUserContext();
-
   return (
     <div className="row mb-4">
       <div className="col-md-12">
@@ -21,9 +21,18 @@ function UserAndBityStatus({ withBityStatus }: { withBityStatus?: boolean }) {
                 <h3 className="card-title heading-bitcoin">
                   👋 Hello {user.email}
                 </h3>
-                <Link className="btn btn-warning btn-sm" to={"/logout"}>
-                  Logout
-                </Link>
+                <div>
+                  <h4>
+                    {user.role === UserRole.Admin && (
+                      <Link to={"/admin"} className="btn btn-primary btn-sm">
+                        Admin
+                      </Link>
+                    )}
+                  </h4>
+                  <Link className="btn btn-warning btn-sm" to={"/logout"}>
+                    Logout
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

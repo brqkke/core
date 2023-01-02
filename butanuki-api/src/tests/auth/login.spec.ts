@@ -4,10 +4,28 @@ import { AuthController } from '../../auth/auth.controller';
 import request from 'supertest';
 import { MailerTransportService } from '../../emails/MailerTransportService';
 import { MockFunctionMetadata, ModuleMocker } from 'jest-mock';
-import { useAppWithMockedDatabase } from '../utils';
+import { makeUser, useAppWithMockedDatabase } from '../utils';
 import { invariant } from 'graphql/jsutils/invariant';
+import { MfaService, MfaServiceInterface } from '../../mfa/mfa.service';
 
 const moduleMocker = new ModuleMocker(global);
+
+const mockedMfaService: MfaServiceInterface = {
+  verifyMfa({
+    mfaCode,
+    mfaSecret,
+  }: {
+    mfaCode: string;
+    mfaSecret: string;
+  }): boolean {
+    return mfaCode === mfaSecret;
+  },
+
+  generateMfaHOTP(mfaSecret: string, offset: number): string {
+    return mfaSecret;
+  },
+};
+
 describe('AuthController', () => {
   let app: INestApplication;
   const recaptchaService: RecaptchaService = {
@@ -36,6 +54,8 @@ describe('AuthController', () => {
           return new Mock();
         },
       })
+      .overrideProvider(MfaService)
+      .useValue(mockedMfaService)
       .compile();
     app = moduleRef.createNestApplication();
     await app.init();
@@ -109,5 +129,58 @@ describe('AuthController', () => {
         captchaToken: 'valid',
       })
       .expect({ success: true });
+  });
+
+  it('must provide mfatoken if mfa is enabled', async () => {
+    const transport = app.get(MailerTransportService);
+    const mocked = jest.mocked(transport.sendRawEmail);
+    let user = await makeUser(testingModule.db!);
+    user.mfaSecret = 'secret123';
+    await testingModule.db!.user.save(user); //mfa is set but not enabled
+    await request(app.getHttpServer()).post('/auth/login/email').send({
+      email: user.email,
+      captchaToken: 'valid',
+      locale: 'en',
+    });
+    user = await testingModule.db!.user.findOneByOrFail({ id: user.id });
+    let tempCode = user.tempCode;
+    const verify = await request(app.getHttpServer())
+      .post('/auth/login/email/verify')
+      .send({
+        email: user.email,
+        tempCode,
+      });
+    expect(verify.status).toBe(201); //mfa is not enabled, so we can login
+
+    await request(app.getHttpServer()).post('/auth/login/email').send({
+      email: user.email,
+      captchaToken: 'valid',
+      locale: 'en',
+    });
+    user = await testingModule.db!.user.findOneByOrFail({ id: user.id });
+    tempCode = user.tempCode;
+    user.mfaEnabled = true;
+    await testingModule.db!.user.save(user); //mfa is set and enabled
+
+    const verify2 = await request(app.getHttpServer())
+      .post('/auth/login/email/verify')
+      .send({
+        email: user.email,
+        tempCode,
+        mfaCode: '123456', // invalid code
+      });
+    expect(verify2.status).toBe(401);
+    expect(verify2.body).toMatchObject({
+      error: 'mfa',
+    });
+
+    const verify3 = await request(app.getHttpServer())
+      .post('/auth/login/email/verify')
+      .send({
+        email: user.email,
+        tempCode,
+        mfaCode: 'secret123', // valid code
+      });
+    expect(verify3.status).toBe(201);
   });
 });

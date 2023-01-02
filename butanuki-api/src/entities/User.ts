@@ -1,4 +1,5 @@
 import {
+  Check,
   Column,
   Entity,
   Index,
@@ -16,6 +17,7 @@ import { Vault } from './Vault';
 
 @Entity()
 @ObjectType()
+@Check(`"mfaEnabled" = false OR "mfaSecret" IS NOT NULL`)
 export class User {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => ID)
@@ -45,6 +47,7 @@ export class User {
   status: UserStatus = UserStatus.ACTIVE;
 
   @Column({ type: 'enum', default: UserRole.USER, enum: UserRole })
+  @Field(() => UserRole)
   role: UserRole = UserRole.USER;
 
   @Column()
@@ -59,6 +62,13 @@ export class User {
 
   @Column({ nullable: true, type: 'real' })
   customPartnerFee?: number;
+
+  @Column({ nullable: true, type: 'varchar' })
+  mfaSecret?: string | null; // base32 encoded secret
+
+  @Column()
+  @Field(() => Boolean)
+  mfaEnabled: boolean = false;
 }
 
 export type UserWithToken = User & { token: Token };

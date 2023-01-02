@@ -1,0 +1,14 @@
+query users($pagination: PaginationInput!){
+    users(pagination: $pagination){
+        count
+        items {
+            id
+            email
+            role
+            bityTokenStatus {
+                linked
+                linkStatus
+            }
+        }
+    }
+}

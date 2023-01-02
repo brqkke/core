@@ -21,7 +21,12 @@ export class AuthService {
     user.tempCodeExpireAt =
       Math.floor(Date.now() / 1000) + this.appConfig.config.singleLoginTokenTTL;
     await this.db.getRepository(User).save(user);
-    return this.mailer.sendSingleUseLoginLink(user.email, tempCode, locale);
+    return this.mailer.sendSingleUseLoginLink(
+      user.email,
+      tempCode,
+      locale,
+      user.mfaEnabled,
+    );
   }
 
   async createUserSession(user: User): Promise<Session> {

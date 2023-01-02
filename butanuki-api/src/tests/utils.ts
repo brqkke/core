@@ -98,7 +98,7 @@ export const useAppWithMockedDatabase = (
   return ref;
 };
 
-export const makeUser = async (db: Repositories) => {
+export const makeUser = async (db: Repositories): Promise<User> => {
   const randomName = Math.random().toString(36).substring(2);
   const randomLastName = Math.random().toString(36).substring(2);
   const randomEmail = `${randomName}.${randomLastName}@example.com`;
@@ -110,6 +110,7 @@ export const makeUser = async (db: Repositories) => {
     status: UserStatus.ACTIVE,
     tempCodeExpireAt: 0,
     tempCode: '',
+    mfaEnabled: false,
   });
 };
 

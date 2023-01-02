@@ -9,9 +9,10 @@ import { AuthController } from './auth.controller';
 import { RecaptchaService } from '../services/RecaptchaService';
 import { HttpModule } from '@nestjs/axios';
 import { UserModule } from '../user/user.module';
+import { MfaModule } from '../mfa/mfa.module';
 
 @Module({
-  imports: [AppConfigModule, MailerModule, HttpModule, UserModule],
+  imports: [AppConfigModule, MailerModule, HttpModule, UserModule, MfaModule],
   providers: [
     AuthService,
     { provide: APP_GUARD, useClass: AuthenticationGuard },

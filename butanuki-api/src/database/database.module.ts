@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import makeDbConfigFromServiceConfig from '../config/db';
 import { AppConfigService } from '../config/app.config.service';
 import { AppConfigModule } from '../config/config.module';
+import { PaginationService } from './pagination.service';
 
 @Module({
   imports: [
@@ -12,5 +13,7 @@ import { AppConfigModule } from '../config/config.module';
       imports: [AppConfigModule],
     }),
   ],
+  providers: [PaginationService],
+  exports: [PaginationService],
 })
 export class DatabaseModule {}
