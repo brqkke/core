@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { PaginationInput } from "../generated/graphql";
 
 export const useEffectOnce = (effect: React.EffectCallback) => {
   const effectRef = React.useRef(effect);
@@ -38,4 +39,31 @@ export const usePageTitle = (title: string) => {
       document.title = originalTitle;
     };
   }, [title]);
+};
+
+export const usePagination = (): {
+  paginationInput: PaginationInput;
+  gotoPage: (page: number) => void;
+} => {
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageSize, setPageSize] = useState(2);
+
+  const paginationInput: PaginationInput = useMemo(() => {
+    return {
+      count: pageSize,
+      page: currentPage,
+    };
+  }, [currentPage, pageSize]);
+
+  const next = useCallback(() => {
+    setCurrentPage((prev) => prev + 1);
+  }, []);
+  const previous = useCallback(() => {
+    setCurrentPage((prev) => prev - 1);
+  }, []);
+
+  return {
+    gotoPage: setCurrentPage,
+    paginationInput,
+  };
 };

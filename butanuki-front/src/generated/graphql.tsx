@@ -86,7 +86,10 @@ export type Mutation = {
   createOrder: OrderTemplate;
   deleteOrderTemplate: OrderTemplate;
   deleteVault: Vault;
+  disableMfa: User;
+  enableMfa: User;
   linkBity: User;
+  setupMfa: Scalars['String'];
   unlinkBity: User;
   updateLocale: User;
   updateOrderTemplate: OrderTemplate;
@@ -112,6 +115,16 @@ export type MutationDeleteOrderTemplateArgs = {
 
 export type MutationDeleteVaultArgs = {
   vaultId: Scalars['ID'];
+};
+
+
+export type MutationDisableMfaArgs = {
+  code: Scalars['String'];
+};
+
+
+export type MutationEnableMfaArgs = {
+  code: Scalars['String'];
 };
 
 
@@ -186,6 +199,28 @@ export type OrderTemplate = {
   vaultId: Scalars['ID'];
 };
 
+export type PaginatedUser = {
+  __typename?: 'PaginatedUser';
+  items: Array<User>;
+  pagination: Pagination;
+};
+
+export type Pagination = {
+  __typename?: 'Pagination';
+  count: Scalars['Int'];
+  firstPage: Scalars['Int'];
+  lastPage: Scalars['Int'];
+  nextPage: Scalars['Int'];
+  page: Scalars['Int'];
+  pages: Scalars['Int'];
+  previousPage: Scalars['Int'];
+};
+
+export type PaginationInput = {
+  count?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   averageCostEstimator: EstimatorResult;
@@ -195,6 +230,7 @@ export type Query = {
   linkUrl: Scalars['String'];
   me: User;
   orderTemplate: OrderTemplate;
+  users: PaginatedUser;
   vault: Vault;
 };
 
@@ -214,6 +250,11 @@ export type QueryCurrentPriceArgs = {
 
 export type QueryOrderTemplateArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryUsersArgs = {
+  pagination: PaginationInput;
 };
 
 
@@ -237,8 +278,15 @@ export type User = {
   email: Scalars['String'];
   id: Scalars['ID'];
   locale: Scalars['String'];
+  mfaEnabled: Scalars['Boolean'];
+  role: UserRole;
   vaults: Array<Vault>;
 };
+
+export enum UserRole {
+  Admin = 'ADMIN',
+  User = 'USER'
+}
 
 export type Vault = {
   __typename?: 'Vault';
@@ -263,7 +311,7 @@ export type VaultStatistics = {
   totalSpent: Scalars['Float'];
 };
 
-export type UserProfileFragment = { __typename?: 'User', id: string, locale: string, email: string, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } };
+export type UserProfileFragment = { __typename?: 'User', id: string, locale: string, email: string, role: UserRole, mfaEnabled: boolean, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } };
 
 export type BityStatusFragment = { __typename?: 'User', id: string, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } };
 
@@ -276,6 +324,8 @@ export type BankDetailsFragment = { __typename?: 'BityPaymentDetails', account_n
 export type OrderInfosFragment = { __typename?: 'Order', id: string, amount: number, currency: OrderCurrency, redactedCryptoAddress?: string | null, status: OrderStatus, transferLabel: string, orderTemplateId?: string | null, bankDetails?: { __typename?: 'BityPaymentDetails', account_number?: string | null, bank_address?: string | null, bank_code?: string | null, iban?: string | null, recipient?: string | null, swift_bic?: string | null } | null };
 
 export type OrderTemplateInfosFragment = { __typename?: 'OrderTemplate', id: string, name: string, amount: number, vaultId: string, frequency: OrderFrequency, activeOrder?: { __typename?: 'Order', id: string, amount: number, currency: OrderCurrency, redactedCryptoAddress?: string | null, status: OrderStatus, transferLabel: string, orderTemplateId?: string | null, bankDetails?: { __typename?: 'BityPaymentDetails', account_number?: string | null, bank_address?: string | null, bank_code?: string | null, iban?: string | null, recipient?: string | null, swift_bic?: string | null } | null } | null };
+
+export type PaginationInfosFragment = { __typename?: 'Pagination', firstPage: number, previousPage: number, page: number, nextPage: number, lastPage: number, count: number };
 
 export type EstimationQueryVariables = Exact<{
   currency: OrderCurrency;
@@ -328,7 +378,14 @@ export type BityLinkUrlQuery = { __typename?: 'Query', linkUrl: string };
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, locale: string, email: string, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, locale: string, email: string, role: UserRole, mfaEnabled: boolean, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } } };
+
+export type UsersQueryVariables = Exact<{
+  pagination: PaginationInput;
+}>;
+
+
+export type UsersQuery = { __typename?: 'Query', users: { __typename?: 'PaginatedUser', pagination: { __typename?: 'Pagination', firstPage: number, previousPage: number, page: number, nextPage: number, lastPage: number, count: number }, items: Array<{ __typename?: 'User', id: string, email: string, role: UserRole, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } }> } };
 
 export type AddVaultMutationVariables = Exact<{
   data: VaultInput;
@@ -384,6 +441,25 @@ export type OrderQueryVariables = Exact<{
 
 export type OrderQuery = { __typename?: 'Query', orderTemplate: { __typename?: 'OrderTemplate', id: string, name: string, amount: number, vaultId: string, frequency: OrderFrequency, activeOrder?: { __typename?: 'Order', id: string, amount: number, currency: OrderCurrency, redactedCryptoAddress?: string | null, status: OrderStatus, transferLabel: string, orderTemplateId?: string | null, bankDetails?: { __typename?: 'BityPaymentDetails', account_number?: string | null, bank_address?: string | null, bank_code?: string | null, iban?: string | null, recipient?: string | null, swift_bic?: string | null } | null } | null } };
 
+export type SetupMfaMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SetupMfaMutation = { __typename?: 'Mutation', setupMfa: string };
+
+export type EnableMfaMutationVariables = Exact<{
+  code: Scalars['String'];
+}>;
+
+
+export type EnableMfaMutation = { __typename?: 'Mutation', enableMfa: { __typename?: 'User', id: string, mfaEnabled: boolean } };
+
+export type DisableMfaMutationVariables = Exact<{
+  code: Scalars['String'];
+}>;
+
+
+export type DisableMfaMutation = { __typename?: 'Mutation', disableMfa: { __typename?: 'User', id: string, mfaEnabled: boolean } };
+
 export type UpdateVaultMutationVariables = Exact<{
   id: Scalars['ID'];
   data: UpdateVaultInput;
@@ -407,6 +483,8 @@ export const UserProfileFragmentDoc = gql`
   id
   locale
   email
+  role
+  mfaEnabled
 }
     ${BityStatusFragmentDoc}`;
 export const VaultShortInfosFragmentDoc = gql`
@@ -467,6 +545,16 @@ export const VaultInfosFragmentDoc = gql`
   bitcoinPrice
 }
     ${OrderTemplateInfosFragmentDoc}`;
+export const PaginationInfosFragmentDoc = gql`
+    fragment PaginationInfos on Pagination {
+  firstPage
+  previousPage
+  page
+  nextPage
+  lastPage
+  count
+}
+    `;
 export const DcaEstimatorConfigFragmentDoc = gql`
     fragment dcaEstimatorConfig on DCAConfig {
   slug
@@ -760,6 +848,52 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const UsersDocument = gql`
+    query users($pagination: PaginationInput!) {
+  users(pagination: $pagination) {
+    pagination {
+      ...PaginationInfos
+    }
+    items {
+      id
+      email
+      role
+      bityTokenStatus {
+        linked
+        linkStatus
+      }
+    }
+  }
+}
+    ${PaginationInfosFragmentDoc}`;
+
+/**
+ * __useUsersQuery__
+ *
+ * To run a query within a React component, call `useUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUsersQuery({
+ *   variables: {
+ *      pagination: // value for 'pagination'
+ *   },
+ * });
+ */
+export function useUsersQuery(baseOptions: Apollo.QueryHookOptions<UsersQuery, UsersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
+      }
+export function useUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UsersQuery, UsersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
+        }
+export type UsersQueryHookResult = ReturnType<typeof useUsersQuery>;
+export type UsersLazyQueryHookResult = ReturnType<typeof useUsersLazyQuery>;
+export type UsersQueryResult = Apollo.QueryResult<UsersQuery, UsersQueryVariables>;
 export const AddVaultDocument = gql`
     mutation addVault($data: VaultInput!) {
   addVault(data: $data) {
@@ -1042,6 +1176,104 @@ export function useOrderLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Orde
 export type OrderQueryHookResult = ReturnType<typeof useOrderQuery>;
 export type OrderLazyQueryHookResult = ReturnType<typeof useOrderLazyQuery>;
 export type OrderQueryResult = Apollo.QueryResult<OrderQuery, OrderQueryVariables>;
+export const SetupMfaDocument = gql`
+    mutation setupMfa {
+  setupMfa
+}
+    `;
+export type SetupMfaMutationFn = Apollo.MutationFunction<SetupMfaMutation, SetupMfaMutationVariables>;
+
+/**
+ * __useSetupMfaMutation__
+ *
+ * To run a mutation, you first call `useSetupMfaMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetupMfaMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setupMfaMutation, { data, loading, error }] = useSetupMfaMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSetupMfaMutation(baseOptions?: Apollo.MutationHookOptions<SetupMfaMutation, SetupMfaMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetupMfaMutation, SetupMfaMutationVariables>(SetupMfaDocument, options);
+      }
+export type SetupMfaMutationHookResult = ReturnType<typeof useSetupMfaMutation>;
+export type SetupMfaMutationResult = Apollo.MutationResult<SetupMfaMutation>;
+export type SetupMfaMutationOptions = Apollo.BaseMutationOptions<SetupMfaMutation, SetupMfaMutationVariables>;
+export const EnableMfaDocument = gql`
+    mutation enableMfa($code: String!) {
+  enableMfa(code: $code) {
+    id
+    mfaEnabled
+  }
+}
+    `;
+export type EnableMfaMutationFn = Apollo.MutationFunction<EnableMfaMutation, EnableMfaMutationVariables>;
+
+/**
+ * __useEnableMfaMutation__
+ *
+ * To run a mutation, you first call `useEnableMfaMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEnableMfaMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [enableMfaMutation, { data, loading, error }] = useEnableMfaMutation({
+ *   variables: {
+ *      code: // value for 'code'
+ *   },
+ * });
+ */
+export function useEnableMfaMutation(baseOptions?: Apollo.MutationHookOptions<EnableMfaMutation, EnableMfaMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EnableMfaMutation, EnableMfaMutationVariables>(EnableMfaDocument, options);
+      }
+export type EnableMfaMutationHookResult = ReturnType<typeof useEnableMfaMutation>;
+export type EnableMfaMutationResult = Apollo.MutationResult<EnableMfaMutation>;
+export type EnableMfaMutationOptions = Apollo.BaseMutationOptions<EnableMfaMutation, EnableMfaMutationVariables>;
+export const DisableMfaDocument = gql`
+    mutation disableMfa($code: String!) {
+  disableMfa(code: $code) {
+    id
+    mfaEnabled
+  }
+}
+    `;
+export type DisableMfaMutationFn = Apollo.MutationFunction<DisableMfaMutation, DisableMfaMutationVariables>;
+
+/**
+ * __useDisableMfaMutation__
+ *
+ * To run a mutation, you first call `useDisableMfaMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDisableMfaMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [disableMfaMutation, { data, loading, error }] = useDisableMfaMutation({
+ *   variables: {
+ *      code: // value for 'code'
+ *   },
+ * });
+ */
+export function useDisableMfaMutation(baseOptions?: Apollo.MutationHookOptions<DisableMfaMutation, DisableMfaMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DisableMfaMutation, DisableMfaMutationVariables>(DisableMfaDocument, options);
+      }
+export type DisableMfaMutationHookResult = ReturnType<typeof useDisableMfaMutation>;
+export type DisableMfaMutationResult = Apollo.MutationResult<DisableMfaMutation>;
+export type DisableMfaMutationOptions = Apollo.BaseMutationOptions<DisableMfaMutation, DisableMfaMutationVariables>;
 export const UpdateVaultDocument = gql`
     mutation updateVault($id: ID!, $data: UpdateVaultInput!) {
   updateVault(id: $id, data: $data) {

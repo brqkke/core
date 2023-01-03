@@ -1,0 +1,17 @@
+mutation setupMfa{
+    setupMfa
+}
+
+mutation enableMfa($code: String!){
+    enableMfa(code: $code){
+        id
+        mfaEnabled
+    }
+}
+
+mutation disableMfa($code: String!){
+    disableMfa(code: $code){
+        id
+        mfaEnabled
+    }
+}

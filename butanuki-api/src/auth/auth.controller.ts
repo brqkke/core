@@ -14,6 +14,7 @@ import { User } from '../entities/User';
 import { CurrentUser, Roles } from '../decorator/user.decorator';
 import { UserRole } from '../entities/enums/UserRole';
 import { AuthService } from './AuthService';
+import { MfaService } from '../mfa/mfa.service';
 
 @Controller('auth')
 export class AuthController {
@@ -22,6 +23,7 @@ export class AuthController {
     private recaptchaService: RecaptchaService,
     private authService: AuthService,
     private userService: UserService,
+    private mfaService: MfaService,
   ) {}
 
   @Post('login/email')
@@ -60,9 +62,22 @@ export class AuthController {
     const user = await this.userService.findUserWithLoginToken(
       body.tempCode,
       body.email,
+      !!body.mfaCode,
     );
+
     if (!user) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException({ error: 'token' });
+    }
+
+    if (body.mfaCode && user.mfaSecret) {
+      const mfaValid = this.mfaService.verifyMfa({
+        mfaCode: body.mfaCode,
+        mfaSecret: user.mfaSecret,
+      });
+
+      if (!mfaValid) {
+        throw new UnauthorizedException({ error: 'mfa' });
+      }
     }
 
     const session = await this.authService.createUserSession(user);

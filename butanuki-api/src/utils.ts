@@ -61,3 +61,41 @@ export function acquireLockOnEntity<Entity extends ObjectLiteral & EntityClass>(
 }
 
 export const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+export function base32Encode(buffer: Buffer): string {
+  const base32Chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+
+  const binary = [...buffer]
+    .map((byte) => {
+      return byte.toString(2).padStart(8, '0');
+    })
+    .join('');
+  const fiveBitInts = [];
+  for (let i = 0; i < binary.length; i += 5) {
+    fiveBitInts.push(binary.slice(i, i + 5));
+  }
+  return fiveBitInts
+    .map((fiveBitInt) => {
+      const decimal = parseInt(fiveBitInt, 2);
+      return base32Chars[decimal];
+    })
+    .join('');
+}
+
+export function base32Decode(base32: string): Buffer {
+  const base32Chars = Object.fromEntries(
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'.split('').map((c, i) => [c, i]),
+  );
+
+  const binary = [...base32]
+    .map((char) => {
+      const decimal = base32Chars[char];
+      return decimal.toString(2).padStart(5, '0');
+    })
+    .join('');
+  const bytes = [];
+  for (let i = 0; i < binary.length; i += 8) {
+    bytes.push(binary.slice(i, i + 8));
+  }
+  return Buffer.from(bytes.map((byte) => parseInt(byte, 2)));
+}

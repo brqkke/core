@@ -22,6 +22,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 
 const authLink = setContext((req, { headers }) => {
   const token = localStorage.getItem("sessionKey");
+
   return {
     headers: {
       ...headers,

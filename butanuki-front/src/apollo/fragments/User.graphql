@@ -3,6 +3,8 @@ fragment UserProfile on User{
     id
     locale
     email
+    role
+    mfaEnabled
 }
 
 fragment BityStatus on User{

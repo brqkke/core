@@ -42,12 +42,17 @@ const useVerifyEmail = ({
   };
 };
 
-export function LoginValidate() {
+const LoginWithoutMfa = ({
+  token,
+  email,
+}: {
+  token: string;
+  email: string;
+}) => {
   const navigate = useNavigate();
-  const { token, email } = useParams<{ token: string; email: string }>();
   const { loading, result } = useVerifyEmail({
-    token: token || "",
-    email: email || "",
+    token,
+    email,
   });
 
   useEffect(() => {
@@ -61,9 +66,78 @@ export function LoginValidate() {
       navigate("/login");
     }
   }, [loading, result, navigate]);
+
+  return <LoadingCard />;
+};
+
+const LoginWithMfa = ({ token, email }: { token: string; email: string }) => {
+  const [totp, setTotp] = useState("");
+  const navigate = useNavigate();
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const reset = () => {
+    setTotp("");
+    inputRef.current?.focus();
+  };
+
+  useEffect(() => {
+    if (totp.length === 6) {
+      post<
+        { tempCode: string; email: string; mfaCode: string },
+        { sessionToken: string; success: boolean }
+      >("/auth/login/email/verify", {
+        tempCode: token,
+        email,
+        mfaCode: totp,
+      }).then((r) => {
+        if (r.response && r.response.success) {
+          window.localStorage.setItem("sessionKey", r.response.sessionToken);
+          navigate("/");
+        } else {
+          reset();
+        }
+        console.log(r);
+      });
+    }
+  }, [navigate, totp, token, email]);
+
   return (
-    <MainLayout>
-      <LoadingCard />
-    </MainLayout>
+    <div className="row">
+      <div className="col-4">
+        <h1>Enter your 2FA code</h1>
+        <input
+          className="form-control"
+          placeholder="XXXXXX"
+          ref={inputRef}
+          type="number"
+          maxLength={6}
+          value={totp}
+          autoFocus={true}
+          onChange={(e) => {
+            setTotp(e.target.value);
+          }}
+        />
+      </div>
+    </div>
   );
+};
+
+export function LoginValidate() {
+  const { token, email } = useParams();
+
+  const promptMFACode =
+    new URLSearchParams(document.location.search).get("promptMfa") === "true";
+
+  if (!promptMFACode) {
+    return (
+      <MainLayout>
+        <LoginWithoutMfa email={email || ""} token={token || ""} />
+      </MainLayout>
+    );
+  } else {
+    return (
+      <MainLayout>
+        <LoginWithMfa email={email || ""} token={token || ""} />
+      </MainLayout>
+    );
+  }
 }

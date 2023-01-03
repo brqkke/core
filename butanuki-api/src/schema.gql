@@ -71,9 +71,31 @@ enum OrderStatus {
 type User {
   id: ID!
   email: String!
+  role: UserRole!
   locale: String!
+  mfaEnabled: Boolean!
   bityTokenStatus: BityLinkStatus!
   vaults: [Vault!]!
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+type Pagination {
+  count: Int!
+  page: Int!
+  pages: Int!
+  firstPage: Int!
+  lastPage: Int!
+  nextPage: Int!
+  previousPage: Int!
+}
+
+type PaginatedUser {
+  pagination: Pagination!
+  items: [User!]!
 }
 
 type BityLinkStatus {
@@ -120,14 +142,20 @@ enum DCAInterval {
 }
 
 type Query {
-  linkUrl: String!
-  orderTemplate(id: ID!): OrderTemplate!
-  currentPrice(currency: OrderCurrency!): Float!
-  vault(id: ID!): Vault!
   me: User!
+  users(pagination: PaginationInput!): PaginatedUser!
+  orderTemplate(id: ID!): OrderTemplate!
+  linkUrl: String!
+  vault(id: ID!): Vault!
   errors: [ErrorType!]!
+  currentPrice(currency: OrderCurrency!): Float!
   averageCostEstimator(currency: OrderCurrency!, start: String!, end: String!, interval: DCAInterval!): EstimatorResult!
   dcaEstimatorConfigs: [DCAConfig!]!
+}
+
+input PaginationInput {
+  page: Int = 0
+  count: Int = 10
 }
 
 """Error type"""
@@ -142,15 +170,18 @@ enum ErrorType {
 }
 
 type Mutation {
-  unlinkBity: User!
-  linkBity(redirectedFrom: String!): User!
+  updateLocale(locale: String!): User!
+  setupMfa: String!
+  disableMfa(code: String!): User!
+  enableMfa(code: String!): User!
   updateOrderTemplate(data: OrderInput!, orderTemplateId: ID!): OrderTemplate!
   createOrder(vaultId: ID!, data: CreateOrderInput!): OrderTemplate!
   deleteOrderTemplate(orderTemplateId: ID!): OrderTemplate!
+  unlinkBity: User!
+  linkBity(redirectedFrom: String!): User!
   addVault(data: VaultInput!): Vault!
   updateVault(id: ID!, data: UpdateVaultInput!): Vault!
   deleteVault(vaultId: ID!): Vault!
-  updateLocale(locale: String!): User!
 }
 
 input OrderInput {

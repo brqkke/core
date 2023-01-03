@@ -34,12 +34,24 @@ export class UserService {
   async findUserWithLoginToken(
     tempCode: string,
     email: string,
+    withMfa: boolean,
   ): Promise<User | null> {
     return this.repository.findOneBy({
       email,
       tempCode,
       tempCodeExpireAt: MoreThan(Math.floor(Date.now() / 1000)),
       status: UserStatus.ACTIVE,
+      mfaEnabled: withMfa,
     });
+  }
+
+  async setupMfa(user: User, mfaSecret: string): Promise<void> {
+    user.mfaSecret = mfaSecret;
+    await this.repository.save(user);
+  }
+
+  async removeMfa(user: User): Promise<void> {
+    user.mfaSecret = null;
+    await this.repository.save(user);
   }
 }
