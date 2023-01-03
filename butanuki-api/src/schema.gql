@@ -83,8 +83,18 @@ enum UserRole {
   USER
 }
 
-type PaginatedUser {
+type Pagination {
   count: Int!
+  page: Int!
+  pages: Int!
+  firstPage: Int!
+  lastPage: Int!
+  nextPage: Int!
+  previousPage: Int!
+}
+
+type PaginatedUser {
+  pagination: Pagination!
   items: [User!]!
 }
 

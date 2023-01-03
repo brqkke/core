@@ -56,7 +56,9 @@ describe('GraphQL endpoint', () => {
         query: `
           query users{
             users(pagination: { count: 10, page: 0 }) {
-              count
+              pagination {
+                count
+              }
               items {
                 email
               }
@@ -64,7 +66,6 @@ describe('GraphQL endpoint', () => {
           }
         `,
       });
-    console.log(res.body);
     expect(res.body.errors[0].extensions.code).toBe('FORBIDDEN');
     expect(res.body).toMatchObject({
       data: null,
@@ -78,7 +79,9 @@ describe('GraphQL endpoint', () => {
         query: `
           query users{
             users(pagination: { count: 10, page: 0 }) {
-              count
+              pagination {
+                count
+              }
               items {
                 email
               }
@@ -90,7 +93,9 @@ describe('GraphQL endpoint', () => {
     expect(res2.body).toMatchObject({
       data: {
         users: {
-          count: 1,
+          pagination: {
+            count: 1,
+          },
           items: [
             {
               email: user.email,

@@ -1,4 +1,4 @@
-import { useLocation, useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import React, { useEffect, useState } from "react";
 import { post } from "../api/call";
 import { LoadingCard } from "../components/LoadingCard";
@@ -122,7 +122,6 @@ const LoginWithMfa = ({ token, email }: { token: string; email: string }) => {
 };
 
 export function LoginValidate() {
-  const location = useLocation();
   const { token, email } = useParams();
 
   const promptMFACode =

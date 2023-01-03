@@ -1,5 +1,6 @@
 import { useUsersQuery } from "../../../generated/graphql";
 import { usePagination } from "../../../utils/hooks";
+import { Pagination } from "../../../components/pagination/Pagination";
 
 export const AdminUsers = () => {
   const pagination = usePagination();
@@ -30,6 +31,12 @@ export const AdminUsers = () => {
           ))}
         </tbody>
       </table>
+      {(users.data || users.previousData) && (
+        <Pagination
+          paginationInfos={(users.data || users.previousData)!.users.pagination}
+          onChange={pagination.gotoPage}
+        />
+      )}
     </div>
   );
 };

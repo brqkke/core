@@ -9,6 +9,6 @@ export default function QRCodeDisplay({ url }: { url: string }) {
         if (error) console.error(error);
       });
     }
-  });
+  }, [url]);
   return <canvas ref={canvaRef} />;
 }

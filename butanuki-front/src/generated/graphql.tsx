@@ -201,8 +201,19 @@ export type OrderTemplate = {
 
 export type PaginatedUser = {
   __typename?: 'PaginatedUser';
-  count: Scalars['Int'];
   items: Array<User>;
+  pagination: Pagination;
+};
+
+export type Pagination = {
+  __typename?: 'Pagination';
+  count: Scalars['Int'];
+  firstPage: Scalars['Int'];
+  lastPage: Scalars['Int'];
+  nextPage: Scalars['Int'];
+  page: Scalars['Int'];
+  pages: Scalars['Int'];
+  previousPage: Scalars['Int'];
 };
 
 export type PaginationInput = {
@@ -314,6 +325,8 @@ export type OrderInfosFragment = { __typename?: 'Order', id: string, amount: num
 
 export type OrderTemplateInfosFragment = { __typename?: 'OrderTemplate', id: string, name: string, amount: number, vaultId: string, frequency: OrderFrequency, activeOrder?: { __typename?: 'Order', id: string, amount: number, currency: OrderCurrency, redactedCryptoAddress?: string | null, status: OrderStatus, transferLabel: string, orderTemplateId?: string | null, bankDetails?: { __typename?: 'BityPaymentDetails', account_number?: string | null, bank_address?: string | null, bank_code?: string | null, iban?: string | null, recipient?: string | null, swift_bic?: string | null } | null } | null };
 
+export type PaginationInfosFragment = { __typename?: 'Pagination', firstPage: number, previousPage: number, page: number, nextPage: number, lastPage: number, count: number };
+
 export type EstimationQueryVariables = Exact<{
   currency: OrderCurrency;
   start: Scalars['String'];
@@ -372,7 +385,7 @@ export type UsersQueryVariables = Exact<{
 }>;
 
 
-export type UsersQuery = { __typename?: 'Query', users: { __typename?: 'PaginatedUser', count: number, items: Array<{ __typename?: 'User', id: string, email: string, role: UserRole, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } }> } };
+export type UsersQuery = { __typename?: 'Query', users: { __typename?: 'PaginatedUser', pagination: { __typename?: 'Pagination', firstPage: number, previousPage: number, page: number, nextPage: number, lastPage: number, count: number }, items: Array<{ __typename?: 'User', id: string, email: string, role: UserRole, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } }> } };
 
 export type AddVaultMutationVariables = Exact<{
   data: VaultInput;
@@ -532,6 +545,16 @@ export const VaultInfosFragmentDoc = gql`
   bitcoinPrice
 }
     ${OrderTemplateInfosFragmentDoc}`;
+export const PaginationInfosFragmentDoc = gql`
+    fragment PaginationInfos on Pagination {
+  firstPage
+  previousPage
+  page
+  nextPage
+  lastPage
+  count
+}
+    `;
 export const DcaEstimatorConfigFragmentDoc = gql`
     fragment dcaEstimatorConfig on DCAConfig {
   slug
@@ -828,7 +851,9 @@ export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const UsersDocument = gql`
     query users($pagination: PaginationInput!) {
   users(pagination: $pagination) {
-    count
+    pagination {
+      ...PaginationInfos
+    }
     items {
       id
       email
@@ -840,7 +865,7 @@ export const UsersDocument = gql`
     }
   }
 }
-    `;
+    ${PaginationInfosFragmentDoc}`;
 
 /**
  * __useUsersQuery__

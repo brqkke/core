@@ -26,13 +26,13 @@ describe('Pagination', () => {
       mockedAppDB.db!.user.createQueryBuilder('user'),
       { page: 0, count: 10 },
     );
-    expect(users.count).toBe(20);
+    expect(users.pagination.count).toBe(20);
     expect(users.items).toHaveLength(10);
     const users2 = await pagination.paginate(
       mockedAppDB.db!.user.createQueryBuilder('user'),
       { page: 1, count: 10 },
     );
-    expect(users2.count).toBe(20);
+    expect(users2.pagination.count).toBe(20);
     expect(users2.items).toHaveLength(10);
     const users1Ids = new Set(users.items.map((u) => u.id));
     const users2Ids = new Set(users2.items.map((u) => u.id));
@@ -43,7 +43,7 @@ describe('Pagination', () => {
       mockedAppDB.db!.user.createQueryBuilder('user'),
       { page: 2, count: 10 },
     );
-    expect(users3.count).toBe(20);
+    expect(users3.pagination.count).toBe(20);
     expect(users3.items).toHaveLength(0);
   });
 });

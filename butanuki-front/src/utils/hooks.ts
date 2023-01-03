@@ -42,12 +42,11 @@ export const usePageTitle = (title: string) => {
 };
 
 export const usePagination = (): {
-  next: () => void;
-  previous: () => void;
   paginationInput: PaginationInput;
+  gotoPage: (page: number) => void;
 } => {
   const [currentPage, setCurrentPage] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(2);
 
   const paginationInput: PaginationInput = useMemo(() => {
     return {
@@ -64,8 +63,7 @@ export const usePagination = (): {
   }, []);
 
   return {
-    next,
-    previous,
+    gotoPage: setCurrentPage,
     paginationInput,
   };
 };

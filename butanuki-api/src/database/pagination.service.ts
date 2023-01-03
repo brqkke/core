@@ -1,9 +1,9 @@
 import { DataSource, SelectQueryBuilder } from 'typeorm';
-import { PaginationInput } from '../dto/Paginated';
+import { Pagination, PaginationInput } from '../dto/Paginated';
 import { ObjectLiteral } from 'typeorm/common/ObjectLiteral';
 
 interface PaginatedResponse<T> {
-  count: number;
+  pagination: Pagination;
   items: T[];
 }
 
@@ -12,15 +12,26 @@ export class PaginationService {
 
   async paginate<T extends ObjectLiteral>(
     query: SelectQueryBuilder<T>,
-    pagination: PaginationInput,
+    input: PaginationInput,
   ): Promise<PaginatedResponse<T>> {
     const [items, count] = await query
-      .skip(pagination.page * pagination.count)
-      .take(pagination.count)
+      .skip(input.page * input.count)
+      .take(input.count)
       .getManyAndCount();
-
-    return {
+    const lastPage = Math.ceil(count / input.count) - 1; // 0 based
+    const nextPage = Math.min(input.page + 1, lastPage);
+    const previousPage = Math.max(input.page - 1, 0);
+    const pagination: Pagination = {
+      page: input.page,
       count,
+      pages: Math.ceil(count / input.count),
+      firstPage: 0,
+      lastPage,
+      nextPage,
+      previousPage,
+    };
+    return {
+      pagination,
       items,
     };
   }
