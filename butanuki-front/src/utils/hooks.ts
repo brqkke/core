@@ -46,7 +46,7 @@ export const usePagination = (): {
   gotoPage: (page: number) => void;
 } => {
   const [currentPage, setCurrentPage] = useState(0);
-  const [pageSize, setPageSize] = useState(2);
+  const [pageSize, setPageSize] = useState(10);
 
   const paginationInput: PaginationInput = useMemo(() => {
     return {

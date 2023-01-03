@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import crypto from 'crypto';
 import { base32Decode } from '../utils';
+import qs from 'querystring';
 
 export interface MfaServiceInterface {
   verifyMfa({
@@ -47,10 +48,11 @@ export class MfaService implements MfaServiceInterface {
     issuer: string;
     account: string;
   }): string {
-    const urlBuilder = new URL('otpauth://totp');
+    const urlBuilder = new URL(
+      'otpauth://totp/' + qs.escape(issuer) + ':' + qs.escape(account),
+    );
     urlBuilder.searchParams.append('secret', secret);
     urlBuilder.searchParams.append('issuer', issuer);
-    urlBuilder.searchParams.append('account', account);
     return urlBuilder.toString();
   }
 
