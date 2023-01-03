@@ -86,7 +86,8 @@
       "frequency": "Frequency",
       "frequencies": {
         "WEEKLY": "Weekly",
-        "MONTHLY": "Monthly"
+        "MONTHLY": "Monthly",
+        "UNIQUE": "One-time buy"
       }
     },
     "vault": {

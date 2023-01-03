@@ -34,6 +34,7 @@ type OrderTemplate {
 }
 
 enum OrderFrequency {
+  UNIQUE
   WEEKLY
   MONTHLY
 }

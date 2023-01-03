@@ -169,6 +169,7 @@ export enum OrderCurrency {
 
 export enum OrderFrequency {
   Monthly = 'MONTHLY',
+  Unique = 'UNIQUE',
   Weekly = 'WEEKLY'
 }
 

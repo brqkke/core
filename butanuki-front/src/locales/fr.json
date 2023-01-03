@@ -86,7 +86,8 @@
       "frequency": "Fréquence",
       "frequencies": {
         "WEEKLY": "Chaque semaine",
-        "MONTHLY": "Chaque mois"
+        "MONTHLY": "Chaque mois",
+        "UNIQUE": "Ordre unique"
       }
     },
     "vault": {

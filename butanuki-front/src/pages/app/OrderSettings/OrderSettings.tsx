@@ -19,6 +19,12 @@ import { LoggedLayout } from "../../../layout/LoggedLayout";
 import { LoadingCard } from "../../../components/LoadingCard";
 import { useDebounce } from "../../../utils/hooks";
 
+const sortedOrderFrequency = [
+  OrderFrequency.Weekly,
+  OrderFrequency.Monthly,
+  OrderFrequency.Unique,
+];
+
 export function OrderSettings() {
   const { vaultId, orderId } = useParams<{
     vaultId: string;
@@ -200,13 +206,11 @@ export function OrderSettings() {
                 }}
                 value={frequency}
               >
-                {Object.values(OrderFrequency).map(
-                  (frequency: OrderFrequency) => (
-                    <option key={frequency} value={frequency}>
-                      {t(`app.order.frequencies.${frequency}` as const)}
-                    </option>
-                  )
-                )}
+                {sortedOrderFrequency.map((frequency: OrderFrequency) => (
+                  <option key={frequency} value={frequency}>
+                    {t(`app.order.frequencies.${frequency}` as const)}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="input-group mb-2">
