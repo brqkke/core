@@ -7,6 +7,7 @@ import {
 } from "../../../generated/graphql";
 import { Suspense, useState } from "react";
 import { LazyQRCodeDisplay } from "../../../components/QRCode/LazyQRCodeDisplay";
+import { CopyButton } from "../../../components/buttons/CopyButton";
 
 export const MfaSettingsPage = () => {
   const user = useUserContext();
@@ -43,6 +44,15 @@ const MfaSetup = () => {
             <Suspense fallback={<div>Loading...</div>}>
               <LazyQRCodeDisplay url={setupResult.data.setupMfa} />
             </Suspense>
+            Or copy this code :{" "}
+            <CopyButton
+              value={
+                new URL(setupResult.data.setupMfa).searchParams.get("secret") ||
+                ""
+              }
+              text={"Copy"}
+              feedback={"Copied"}
+            />
           </div>
           <div className="col-12">
             <input
