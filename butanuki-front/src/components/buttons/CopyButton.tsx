@@ -4,8 +4,6 @@ import Overlay from "react-bootstrap/Overlay";
 import Tooltip from "react-bootstrap/Tooltip";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 
 export const CopyButton = ({
   value,
@@ -33,22 +31,18 @@ export const CopyButton = ({
   }, [value]);
 
   return (
-    <Row>
-      <Col sm={"6"} className={"mx-auto"}>
-        <InputGroup className="mb-3">
-          <FormControl disabled value={value} />
-          <Button ref={target} onClick={copy} variant={"secondary"}>
-            {text}
-          </Button>
-          <Overlay target={target.current} show={show} placement="right">
-            {(props) => (
-              <Tooltip id={id} {...props}>
-                {feedback}
-              </Tooltip>
-            )}
-          </Overlay>
-        </InputGroup>
-      </Col>
-    </Row>
+    <InputGroup className="mb-3">
+      <FormControl disabled value={value} />
+      <Button ref={target} onClick={copy} variant={"secondary"}>
+        {text}
+      </Button>
+      <Overlay target={target.current} show={show} placement="right">
+        {(props) => (
+          <Tooltip id={id} {...props}>
+            {feedback}
+          </Tooltip>
+        )}
+      </Overlay>
+    </InputGroup>
   );
 };

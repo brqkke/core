@@ -24,6 +24,7 @@ import { useSavingEstimatorConfig } from "./SavingEstimatorConfigProvider";
 import { CopyButton } from "../buttons/CopyButton";
 import { Alert } from "../alerts/Alert";
 import { ShareButton } from "../buttons/Social";
+import { Col, Row } from "react-bootstrap";
 
 const Loader = ({
   dateStatus,
@@ -203,11 +204,15 @@ const Share = ({
           <div className="card-title">
             <h3>{t("estimator.share")}</h3>
           </div>
-          <CopyButton
-            feedback={t("estimator.action.copyFeedback")}
-            text={t("estimator.action.copyUrl")}
-            value={share.url}
-          />
+          <Row>
+            <Col sm={"6"} className={"mx-auto"}>
+              <CopyButton
+                feedback={t("estimator.action.copyFeedback")}
+                text={t("estimator.action.copyUrl")}
+                value={share.url}
+              />
+            </Col>
+          </Row>
           <ShareButton
             url={share.url}
             buttonText={t("estimator.action.shareOnTwitter")}
