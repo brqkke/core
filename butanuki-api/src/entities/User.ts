@@ -8,12 +8,19 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserStatus } from './enums/UserStatus';
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import {
+  Field,
+  ID,
+  InputType,
+  ObjectType,
+  registerEnumType,
+} from '@nestjs/graphql';
 import { Session } from './Session';
 import { UserRole } from './enums/UserRole';
 import { Order } from './Order';
 import { Token } from './Token';
 import { Vault } from './Vault';
+import { SortedInput } from '../dto/Sort';
 
 @Entity()
 @ObjectType()
@@ -72,3 +79,14 @@ export class User {
 }
 
 export type UserWithToken = User & { token: Token };
+
+export enum UserSortFields {
+  EMAIL = 'email',
+  BITY_STATUS = 'bityStatus',
+}
+registerEnumType(UserSortFields, {
+  name: 'UserSortFields',
+});
+
+@InputType('SortUserInput')
+export class SortUserInput extends SortedInput(UserSortFields) {}

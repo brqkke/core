@@ -144,7 +144,7 @@ enum DCAInterval {
 
 type Query {
   me: User!
-  users(pagination: PaginationInput!): PaginatedUser!
+  users(pagination: PaginationInput!, query: String, sort: [SortUserInput!]): PaginatedUser!
   orderTemplate(id: ID!): OrderTemplate!
   linkUrl: String!
   vault(id: ID!): Vault!
@@ -157,6 +157,21 @@ type Query {
 input PaginationInput {
   page: Int = 0
   count: Int = 10
+}
+
+input SortUserInput {
+  order: Sort = ASC
+  sortBy: UserSortFields!
+}
+
+enum Sort {
+  ASC
+  DESC
+}
+
+enum UserSortFields {
+  EMAIL
+  BITY_STATUS
 }
 
 """Error type"""

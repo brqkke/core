@@ -1,5 +1,5 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { User } from '../entities/User';
+import { SortUserInput, User, UserSortFields } from '../entities/User';
 import { CurrentUser, Roles } from '../decorator/user.decorator';
 import { UserRole } from '../entities/enums/UserRole';
 import { DataSource } from 'typeorm';
@@ -7,6 +7,8 @@ import { base32Encode, buildRepositories, Repositories } from '../utils';
 import { PaginatedUser, PaginationInput } from '../dto/Paginated';
 import { PaginationService } from '../database/pagination.service';
 import { MfaService } from '../mfa/mfa.service';
+import { UserService } from './user.service';
+import { Sort } from '../dto/Sort';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -16,6 +18,7 @@ export class UserResolver {
     db: DataSource,
     private pagination: PaginationService,
     private mfaService: MfaService,
+    private userService: UserService,
   ) {
     this.db = buildRepositories(db.manager);
   }
@@ -44,11 +47,20 @@ export class UserResolver {
   async users(
     @Args({ name: 'pagination', type: () => PaginationInput })
     pagination: PaginationInput,
+    @Args({ name: 'query', type: () => String, nullable: true })
+    query?: string,
+    @Args({ name: 'sort', type: () => [SortUserInput], nullable: true })
+    sort?: SortUserInput[],
   ): Promise<PaginatedUser> {
-    return this.pagination.paginate(
-      this.db.user.createQueryBuilder('user'),
-      pagination,
-    );
+    const q = this.db.user.createQueryBuilder('user');
+    if (!sort) {
+      sort = [{ sortBy: UserSortFields.EMAIL, order: Sort.ASC }];
+    }
+    this.userService.applySortOnQuery(q, sort);
+    if (query) {
+      this.userService.applySearchOnQuery(q, query);
+    }
+    return this.pagination.paginate(q, pagination);
   }
 
   @Mutation(() => String)

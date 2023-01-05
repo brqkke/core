@@ -22,19 +22,19 @@ export const Pagination = ({
     [onChange, paginationInfos.nextPage]
   );
 
-  // const gotoFirst: React.MouseEventHandler<HTMLAnchorElement> = useCallback(
-  //   (e) => {
-  //     onChange(0);
-  //   },
-  //   [onChange]
-  // );
-  //
-  // const gotoLast: React.MouseEventHandler<HTMLAnchorElement> = useCallback(
-  //   (e) => {
-  //     onChange(paginationInfos.lastPage);
-  //   },
-  //   [onChange, paginationInfos.lastPage]
-  // );
+  const gotoFirst: React.MouseEventHandler<HTMLAnchorElement> = useCallback(
+    (e) => {
+      onChange(0);
+    },
+    [onChange]
+  );
+
+  const gotoLast: React.MouseEventHandler<HTMLAnchorElement> = useCallback(
+    (e) => {
+      onChange(paginationInfos.lastPage);
+    },
+    [onChange, paginationInfos.lastPage]
+  );
 
   const displayedPages = useMemo(() => {
     const pages = [];
@@ -53,6 +53,19 @@ export const Pagination = ({
       </p>
       <nav aria-label="Page navigation example">
         <ul className="pagination justify-content-center">
+          <li className="page-item">
+            <a
+              className={`page-link ${
+                paginationInfos.firstPage === paginationInfos.page
+                  ? "disabled"
+                  : ""
+              }`}
+              href="#"
+              onClick={gotoFirst}
+            >
+              First
+            </a>
+          </li>
           <li
             className={`page-item ${
               paginationInfos.previousPage === paginationInfos.page
@@ -88,6 +101,19 @@ export const Pagination = ({
               onClick={next}
             >
               Next
+            </a>
+          </li>
+          <li className="page-item">
+            <a
+              className={`page-link ${
+                paginationInfos.lastPage === paginationInfos.page
+                  ? "disabled"
+                  : ""
+              }`}
+              href="#"
+              onClick={gotoLast}
+            >
+              Last
             </a>
           </li>
         </ul>

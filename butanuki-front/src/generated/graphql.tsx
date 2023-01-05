@@ -256,11 +256,23 @@ export type QueryOrderTemplateArgs = {
 
 export type QueryUsersArgs = {
   pagination: PaginationInput;
+  query?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Array<SortUserInput>>;
 };
 
 
 export type QueryVaultArgs = {
   id: Scalars['ID'];
+};
+
+export enum Sort {
+  Asc = 'ASC',
+  Desc = 'DESC'
+}
+
+export type SortUserInput = {
+  order?: InputMaybe<Sort>;
+  sortBy: UserSortFields;
 };
 
 export enum TokenStatus {
@@ -287,6 +299,11 @@ export type User = {
 export enum UserRole {
   Admin = 'ADMIN',
   User = 'USER'
+}
+
+export enum UserSortFields {
+  BityStatus = 'BITY_STATUS',
+  Email = 'EMAIL'
 }
 
 export type Vault = {
@@ -383,6 +400,8 @@ export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: str
 
 export type UsersQueryVariables = Exact<{
   pagination: PaginationInput;
+  query?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Array<SortUserInput> | SortUserInput>;
 }>;
 
 
@@ -850,8 +869,8 @@ export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const UsersDocument = gql`
-    query users($pagination: PaginationInput!) {
-  users(pagination: $pagination) {
+    query users($pagination: PaginationInput!, $query: String, $sort: [SortUserInput!]) {
+  users(pagination: $pagination, query: $query, sort: $sort) {
     pagination {
       ...PaginationInfos
     }
@@ -881,6 +900,8 @@ export const UsersDocument = gql`
  * const { data, loading, error } = useUsersQuery({
  *   variables: {
  *      pagination: // value for 'pagination'
+ *      query: // value for 'query'
+ *      sort: // value for 'sort'
  *   },
  * });
  */

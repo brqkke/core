@@ -1,5 +1,5 @@
-query users($pagination: PaginationInput!){
-    users(pagination: $pagination){
+query users($pagination: PaginationInput!, $query: String, $sort: [SortUserInput!]){
+    users(pagination: $pagination, query: $query, sort: $sort) {
         pagination {
             ...PaginationInfos
         }

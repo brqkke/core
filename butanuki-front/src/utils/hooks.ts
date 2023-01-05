@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { PaginationInput } from "../generated/graphql";
+import { PaginationInput, Sort } from "../generated/graphql";
 
 export const useEffectOnce = (effect: React.EffectCallback) => {
   const effectRef = React.useRef(effect);
@@ -44,6 +44,7 @@ export const usePageTitle = (title: string) => {
 export const usePagination = (): {
   paginationInput: PaginationInput;
   gotoPage: (page: number) => void;
+  reset: () => void;
 } => {
   const [currentPage, setCurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
@@ -55,15 +56,51 @@ export const usePagination = (): {
     };
   }, [currentPage, pageSize]);
 
-  const next = useCallback(() => {
-    setCurrentPage((prev) => prev + 1);
-  }, []);
-  const previous = useCallback(() => {
-    setCurrentPage((prev) => prev - 1);
+  const reset = useCallback(() => {
+    setCurrentPage(0);
+    setPageSize(10);
   }, []);
 
-  return {
-    gotoPage: setCurrentPage,
-    paginationInput,
-  };
+  return useMemo(
+    () => ({
+      gotoPage: setCurrentPage,
+      paginationInput,
+      reset,
+    }),
+    [paginationInput, reset]
+  );
+};
+
+export const useSorting = <E extends object>(
+  Enum: E,
+  defaultSortBy: E[keyof E],
+  defaultOrder: Sort = Sort.Asc
+) => {
+  type SortBy = E[keyof E];
+  const [sortBy, setSortBy] = useState<E[keyof E]>(defaultSortBy);
+  const [order, setOrder] = useState<Sort>(defaultOrder);
+
+  const sortingInput: { order: Sort; sortBy: E[keyof E] } = useMemo(() => {
+    return { order, sortBy };
+  }, [sortBy, order]);
+
+  const onToggle = useCallback(
+    (by: SortBy) => {
+      if (sortBy === by) {
+        setOrder((o) => (o === Sort.Asc ? Sort.Desc : Sort.Asc));
+      } else {
+        setSortBy(by);
+        setOrder(Sort.Asc);
+      }
+    },
+    [sortBy]
+  );
+
+  return useMemo(
+    () => ({
+      sortingInput,
+      onToggle,
+    }),
+    [sortingInput, onToggle]
+  );
 };

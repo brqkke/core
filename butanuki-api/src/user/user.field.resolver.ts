@@ -12,6 +12,8 @@ import { DataSource } from 'typeorm';
 import { buildRepositories, Repositories } from '../utils';
 import { TokenStatus } from '../entities/enums/TokenStatus';
 import { Vault } from '../entities/Vault';
+import { DLoaders } from '../dataloader/dataloaders';
+import { Dataloaders } from '../decorator/dataloader.decorator';
 
 @ObjectType('BityLinkStatus')
 class BityLinkStatus {
@@ -32,10 +34,13 @@ export class UserFieldResolver {
 
   @ResolveField(() => BityLinkStatus)
   @Roles(UserRole.USER)
-  async bityTokenStatus(@Root() user: User): Promise<BityLinkStatus> {
+  async bityTokenStatus(
+    @Root() user: User,
+    @Dataloaders() dataloader: DLoaders,
+  ): Promise<BityLinkStatus> {
     const token =
       user.token ||
-      (await this.db.token.findOne({ where: { userId: user.id } }));
+      (await dataloader.tokenByUserId.load(user.id).catch(() => null));
     return {
       linked: !!token,
       linkStatus: token?.status || null,
