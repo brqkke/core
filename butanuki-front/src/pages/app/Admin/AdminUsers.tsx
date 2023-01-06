@@ -1,21 +1,63 @@
-import { UserSortFields, useUsersQuery } from "../../../generated/graphql";
+import {
+  Sort,
+  UserSortFields,
+  useUsersQuery,
+} from "../../../generated/graphql";
 import { usePagination, useSorting } from "../../../utils/hooks";
 import { Pagination } from "../../../components/pagination/Pagination";
 import React, { useCallback, useMemo, useState } from "react";
 import { debounce } from "lodash";
 
+const BooleanFilter = ({
+  falseText,
+  trueText,
+  unsetText,
+  text,
+  onChange,
+}: {
+  text: string;
+  trueText: string;
+  falseText: string;
+  unsetText: string;
+  onChange: (value?: boolean) => void;
+}) => {
+  return (
+    <p>
+      {text}:{" "}
+      <select
+        className="form-select"
+        onChange={(e) => {
+          onChange(e.target.value ? JSON.parse(e.target.value) : undefined);
+        }}
+      >
+        <option value="">{unsetText}</option>
+        <option value={"true"}>{trueText}</option>
+        <option value={"false"}>{falseText}</option>
+      </select>
+    </p>
+  );
+};
+
 export const AdminUsers = () => {
   const { gotoPage, paginationInput, reset } = usePagination();
   const { sortingInput, onToggle } = useSorting(
     UserSortFields,
-    UserSortFields.Email
+    UserSortFields.Email,
+    Sort.Asc,
+    reset
   );
+  const [filterActiveBity, setFilterActiveBity] = useState<boolean>();
+  const [filterHasOpenOrders, setFilterHasOpenOrders] = useState<boolean>();
   const [search, setSearch] = useState("");
   const users = useUsersQuery({
     variables: {
       pagination: paginationInput,
       query: search,
       sort: sortingInput,
+      filters: {
+        hasActiveBityToken: filterActiveBity,
+        hasOrders: filterHasOpenOrders,
+      },
     },
   });
 
@@ -34,27 +76,82 @@ export const AdminUsers = () => {
   return (
     <div>
       <h4>Users</h4>
-      <div className="input-group mb-3">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Search"
-          onChange={debouncedSearch}
-        />
+      <div className="row mb-3">
+        <div className="col-md-4">
+          <p>
+            Email
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search"
+              onChange={debouncedSearch}
+            />
+          </p>
+        </div>
+        <div className="col-md-4">
+          <BooleanFilter
+            text="Active Bity Token"
+            trueText="Yes"
+            falseText="No"
+            unsetText=""
+            onChange={setFilterActiveBity}
+          />
+        </div>
+        <div className="col-md-4">
+          <BooleanFilter
+            text="Has Open Orders"
+            trueText="Yes"
+            falseText="No"
+            unsetText=""
+            onChange={setFilterHasOpenOrders}
+          />
+        </div>
       </div>
       <table className="table">
         <thead>
           <tr>
             <th scope="col">
               Email{" "}
-              <button onClick={() => onToggle(UserSortFields.Email)}>
+              <button
+                className={"btn btn-sm"}
+                onClick={() => onToggle(UserSortFields.Email)}
+              >
                 /\ \/
               </button>
             </th>
-            <th scope="col">Role</th>
+            <th scope="col">
+              Role{" "}
+              <button
+                className={"btn btn-sm"}
+                onClick={() => onToggle(UserSortFields.Role)}
+              >
+                /\ \/
+              </button>
+            </th>
             <th scope="col">
               Bity Status{" "}
-              <button onClick={() => onToggle(UserSortFields.BityStatus)}>
+              <button
+                className={"btn btn-sm"}
+                onClick={() => onToggle(UserSortFields.BityStatus)}
+              >
+                /\ \/
+              </button>
+            </th>
+            <th scope="col">
+              Has open orders{" "}
+              <button
+                className={"btn btn-sm"}
+                onClick={() => onToggle(UserSortFields.HasOpenOrders)}
+              >
+                /\ \/
+              </button>
+            </th>
+            <th scope="col">
+              Created at{" "}
+              <button
+                className={"btn btn-sm"}
+                onClick={() => onToggle(UserSortFields.CreatedAt)}
+              >
                 /\ \/
               </button>
             </th>
@@ -66,6 +163,8 @@ export const AdminUsers = () => {
               <td>{user.email}</td>
               <td>{user.role}</td>
               <td>{user.bityTokenStatus?.linkStatus}</td>
+              <td>{user.hasOpenOrders ? "Yes" : "No"}</td>
+              <td>{user.createdAt}</td>
             </tr>
           ))}
         </tbody>

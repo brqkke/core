@@ -47,7 +47,7 @@ export const usePagination = (): {
   reset: () => void;
 } => {
   const [currentPage, setCurrentPage] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(5);
 
   const paginationInput: PaginationInput = useMemo(() => {
     return {
@@ -58,7 +58,6 @@ export const usePagination = (): {
 
   const reset = useCallback(() => {
     setCurrentPage(0);
-    setPageSize(10);
   }, []);
 
   return useMemo(
@@ -74,7 +73,8 @@ export const usePagination = (): {
 export const useSorting = <E extends object>(
   Enum: E,
   defaultSortBy: E[keyof E],
-  defaultOrder: Sort = Sort.Asc
+  defaultOrder: Sort,
+  onChange?: () => void
 ) => {
   type SortBy = E[keyof E];
   const [sortBy, setSortBy] = useState<E[keyof E]>(defaultSortBy);
@@ -92,15 +92,19 @@ export const useSorting = <E extends object>(
         setSortBy(by);
         setOrder(Sort.Asc);
       }
+      onChange?.();
     },
-    [sortBy]
+    [onChange, sortBy]
   );
 
   return useMemo(
     () => ({
-      sortingInput,
+      sortingInput:
+        sortingInput.sortBy === defaultSortBy
+          ? [sortingInput]
+          : [sortingInput, { order: defaultOrder, sortBy: defaultSortBy }],
       onToggle,
     }),
-    [sortingInput, onToggle]
+    [sortingInput, defaultSortBy, defaultOrder, onToggle]
   );
 };

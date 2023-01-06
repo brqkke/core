@@ -75,8 +75,10 @@ type User {
   role: UserRole!
   locale: String!
   mfaEnabled: Boolean!
+  createdAt: DateTime!
   bityTokenStatus: BityLinkStatus!
   vaults: [Vault!]!
+  hasOpenOrders: Boolean!
 }
 
 enum UserRole {
@@ -144,7 +146,7 @@ enum DCAInterval {
 
 type Query {
   me: User!
-  users(pagination: PaginationInput!, query: String, sort: [SortUserInput!]): PaginatedUser!
+  users(pagination: PaginationInput!, query: String, sort: [SortUserInput!], filters: UserFilterInput): PaginatedUser!
   orderTemplate(id: ID!): OrderTemplate!
   linkUrl: String!
   vault(id: ID!): Vault!
@@ -172,6 +174,14 @@ enum Sort {
 enum UserSortFields {
   EMAIL
   BITY_STATUS
+  CREATED_AT
+  HAS_OPEN_ORDERS
+  ROLE
+}
+
+input UserFilterInput {
+  hasOrders: Boolean
+  hasActiveBityToken: Boolean
 }
 
 """Error type"""

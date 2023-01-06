@@ -1,6 +1,7 @@
 import {
   Check,
   Column,
+  CreateDateColumn,
   Entity,
   Index,
   OneToMany,
@@ -76,13 +77,21 @@ export class User {
   @Column()
   @Field(() => Boolean)
   mfaEnabled: boolean = false;
+
+  @CreateDateColumn()
+  @Index()
+  @Field(() => Date)
+  createdAt: Date = new Date();
 }
 
 export type UserWithToken = User & { token: Token };
 
 export enum UserSortFields {
-  EMAIL = 'email',
-  BITY_STATUS = 'bityStatus',
+  EMAIL = 'EMAIL',
+  BITY_STATUS = 'BITY_STATUS',
+  CREATED_AT = 'CREATED_AT',
+  HAS_OPEN_ORDERS = 'HAS_OPEN_ORDERS',
+  ROLE = 'ROLE',
 }
 registerEnumType(UserSortFields, {
   name: 'UserSortFields',

@@ -9,6 +9,7 @@ import { PaginationService } from '../database/pagination.service';
 import { MfaService } from '../mfa/mfa.service';
 import { UserService } from './user.service';
 import { Sort } from '../dto/Sort';
+import { UserFilterInput } from '../dto/UserFilter';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -51,12 +52,17 @@ export class UserResolver {
     query?: string,
     @Args({ name: 'sort', type: () => [SortUserInput], nullable: true })
     sort?: SortUserInput[],
+    @Args({ name: 'filters', type: () => UserFilterInput, nullable: true })
+    filters?: UserFilterInput,
   ): Promise<PaginatedUser> {
-    const q = this.db.user.createQueryBuilder('user');
+    const q = this.db.user.createQueryBuilder('u');
     if (!sort) {
       sort = [{ sortBy: UserSortFields.EMAIL, order: Sort.ASC }];
     }
     this.userService.applySortOnQuery(q, sort);
+    if (filters) {
+      this.userService.applyFiltersOnQuery(q, filters);
+    }
     if (query) {
       this.userService.applySearchOnQuery(q, query);
     }

@@ -55,4 +55,13 @@ export class UserFieldResolver {
       order: { createdAt: 'ASC' },
     });
   }
+
+  @ResolveField(() => Boolean)
+  @Roles(UserRole.USER)
+  async hasOpenOrders(
+    @Dataloaders() dataloader: DLoaders,
+    @Root() user: User,
+  ): Promise<boolean> {
+    return dataloader.userHasOpenOrder.load(user.id);
+  }
 }

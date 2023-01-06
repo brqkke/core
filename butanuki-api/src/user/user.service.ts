@@ -2,6 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { DataSource, MoreThan, Repository, SelectQueryBuilder } from 'typeorm';
 import { SortUserInput, User, UserSortFields } from '../entities/User';
 import { UserStatus } from '../entities/enums/UserStatus';
+import { Order } from '../entities/Order';
+import { OrderStatus } from '../entities/enums/OrderStatus';
+import { UserFilterInput } from '../dto/UserFilter';
+import { isNil } from 'lodash';
+import { Token } from '../entities/Token';
+import { TokenStatus } from '../entities/enums/TokenStatus';
 
 @Injectable()
 export class UserService {
@@ -59,7 +65,54 @@ export class UserService {
     query: SelectQueryBuilder<User>,
     search: string,
   ): SelectQueryBuilder<User> {
-    query.andWhere(`${query.alias}.email ILIKE '%'||:search||'%'`, { search });
+    query.andWhere(`"${query.alias}".email ILIKE '%'||:search||'%'`, {
+      search,
+    });
+    return query;
+  }
+
+  applyFiltersOnQuery(
+    query: SelectQueryBuilder<User>,
+    filters: UserFilterInput,
+  ): SelectQueryBuilder<User> {
+    if (!isNil(filters.hasActiveBityToken)) {
+      query.andWhere(
+        (qb) => {
+          const subQuery = qb
+            .subQuery()
+            .select('t."userId"')
+            .from(Token, 't')
+            .where(`t.status = :tokenStatus`)
+            .getQuery();
+          if (filters.hasActiveBityToken) {
+            return `${query.alias}.id IN ${subQuery}`;
+          } else {
+            return `${query.alias}.id NOT IN ${subQuery}`;
+          }
+        },
+        { tokenStatus: TokenStatus.ACTIVE },
+      );
+    }
+    if (!isNil(filters.hasOrders)) {
+      query.andWhere(
+        (qb) => {
+          const subQuery = qb
+            .subQuery()
+            .select('o."userId"')
+            .distinctOn(['o."userId"'])
+            .from(Order, 'o')
+            .where(`o.status = :orderStatus`)
+            .getQuery();
+          if (filters.hasOrders) {
+            return `${query.alias}.id IN ${subQuery}`;
+          } else {
+            return `${query.alias}.id NOT IN ${subQuery}`;
+          }
+        },
+        { orderStatus: OrderStatus.OPEN },
+      );
+    }
+
     return query;
   }
 
@@ -67,19 +120,48 @@ export class UserService {
     query: SelectQueryBuilder<User>,
     sort: SortUserInput[],
   ): SelectQueryBuilder<User> {
+    const simpleFields: { [key in UserSortFields]?: string } = {
+      [UserSortFields.EMAIL]: 'email',
+      [UserSortFields.CREATED_AT]: 'createdAt',
+      [UserSortFields.ROLE]: 'role',
+    };
+    console.log('sort', sort);
     sort.forEach(({ sortBy, order }, i) => {
+      if (sortBy in simpleFields) {
+        console.log(
+          'simpleFields[sortBy]',
+          simpleFields[sortBy],
+          `${query.alias}."${simpleFields[sortBy]}"`,
+        );
+        query.addOrderBy(`${query.alias}."${simpleFields[sortBy]}"`, order);
+        return;
+      }
       switch (sortBy) {
-        case UserSortFields.EMAIL:
-          query.addOrderBy(`${query.alias}.email`, order);
-          break;
         case UserSortFields.BITY_STATUS:
-          query.leftJoinAndSelect(
+          query.leftJoin(
             `${query.alias}.token`,
             `token_${i}`,
             `token_${i}."userId" = ${query.alias}.id`,
           );
           query.addOrderBy(`token_${i}.status`, order);
           break;
+        case UserSortFields.HAS_OPEN_ORDERS:
+          query
+            .addSelect((qb) => {
+              return qb
+                .select('COUNT(*) > 0', 'hasOpenOrders')
+                .from(Order, `order_${i}`)
+                .where(
+                  `order_${i}."userId" = "${query.alias}".id AND order_${i}.status = :status${i}`,
+                  {
+                    [`status${i}`]: OrderStatus.OPEN,
+                  },
+                );
+            })
+            .addOrderBy(`"hasOpenOrders"`, order);
+          break;
+        default:
+          throw new Error(`Unknown sort field: ${sortBy}`);
       }
     });
     return query;
