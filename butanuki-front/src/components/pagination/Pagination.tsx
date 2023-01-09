@@ -12,28 +12,28 @@ export const Pagination = ({
   pageSize: number;
   setPageSize: (pageSize: number) => void;
 }) => {
-  const prev: React.MouseEventHandler<HTMLAnchorElement> = useCallback(
+  const prev: React.MouseEventHandler<HTMLButtonElement> = useCallback(
     (e) => {
       onChange(paginationInfos.previousPage);
     },
     [paginationInfos.previousPage, onChange]
   );
 
-  const next: React.MouseEventHandler<HTMLAnchorElement> = useCallback(
+  const next: React.MouseEventHandler<HTMLButtonElement> = useCallback(
     (e) => {
       onChange(paginationInfos.nextPage);
     },
     [onChange, paginationInfos.nextPage]
   );
 
-  const gotoFirst: React.MouseEventHandler<HTMLAnchorElement> = useCallback(
+  const gotoFirst: React.MouseEventHandler<HTMLButtonElement> = useCallback(
     (e) => {
       onChange(0);
     },
     [onChange]
   );
 
-  const gotoLast: React.MouseEventHandler<HTMLAnchorElement> = useCallback(
+  const gotoLast: React.MouseEventHandler<HTMLButtonElement> = useCallback(
     (e) => {
       onChange(paginationInfos.lastPage);
     },
@@ -92,7 +92,7 @@ export const Pagination = ({
         <nav aria-label="Page navigation example">
           <ul className="pagination justify-content-center">
             <li className="page-item">
-              <a
+              <button
                 className={`page-link ${
                   paginationInfos.firstPage === paginationInfos.page
                     ? "disabled"
@@ -101,7 +101,7 @@ export const Pagination = ({
                 onClick={gotoFirst}
               >
                 First
-              </a>
+              </button>
             </li>
             <li
               className={`page-item ${
@@ -110,9 +110,9 @@ export const Pagination = ({
                   : ""
               }`}
             >
-              <a className="page-link" onClick={prev}>
+              <button className="page-link" onClick={prev}>
                 Previous
-              </a>
+              </button>
             </li>
             {displayedPages.map((page, i, array) => {
               const addEllipsis = i > 0 && array[i - 1] !== page - 1;
@@ -120,24 +120,24 @@ export const Pagination = ({
                 <React.Fragment key={page}>
                   {addEllipsis && (
                     <li className="page-item">
-                      <a className={`page-link disabled`}>...</a>
+                      <button className={`page-link disabled`}>...</button>
                     </li>
                   )}
                   <li className="page-item" key={page}>
-                    <a
+                    <button
                       className={`page-link ${
                         page === paginationInfos.page ? "active" : ""
                       }`}
                       onClick={() => onChange(page)}
                     >
                       {page + 1}
-                    </a>
+                    </button>
                   </li>
                 </React.Fragment>
               );
             })}
             <li className="page-item">
-              <a
+              <button
                 className={`page-link ${
                   paginationInfos.nextPage === paginationInfos.page
                     ? "disabled"
@@ -146,10 +146,10 @@ export const Pagination = ({
                 onClick={next}
               >
                 Next
-              </a>
+              </button>
             </li>
             <li className="page-item">
-              <a
+              <button
                 className={`page-link ${
                   paginationInfos.lastPage === paginationInfos.page
                     ? "disabled"
@@ -158,7 +158,7 @@ export const Pagination = ({
                 onClick={gotoLast}
               >
                 Last
-              </a>
+              </button>
             </li>
           </ul>
         </nav>
