@@ -218,8 +218,8 @@ export type Pagination = {
 };
 
 export type PaginationInput = {
-  count?: InputMaybe<Scalars['Int']>;
-  page?: InputMaybe<Scalars['Int']>;
+  count: Scalars['Int'];
+  page: Scalars['Int'];
 };
 
 export type Query = {
@@ -255,12 +255,25 @@ export type QueryOrderTemplateArgs = {
 
 
 export type QueryUsersArgs = {
+  filters?: InputMaybe<UserFilterInput>;
   pagination: PaginationInput;
+  query?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Array<SortUserInput>>;
 };
 
 
 export type QueryVaultArgs = {
   id: Scalars['ID'];
+};
+
+export enum Sort {
+  Asc = 'ASC',
+  Desc = 'DESC'
+}
+
+export type SortUserInput = {
+  order?: InputMaybe<Sort>;
+  sortBy: UserSortFields;
 };
 
 export enum TokenStatus {
@@ -276,7 +289,9 @@ export type UpdateVaultInput = {
 export type User = {
   __typename?: 'User';
   bityTokenStatus: BityLinkStatus;
+  createdAt: Scalars['DateTime'];
   email: Scalars['String'];
+  hasOpenOrders: Scalars['Boolean'];
   id: Scalars['ID'];
   locale: Scalars['String'];
   mfaEnabled: Scalars['Boolean'];
@@ -284,9 +299,22 @@ export type User = {
   vaults: Array<Vault>;
 };
 
+export type UserFilterInput = {
+  hasActiveBityToken?: InputMaybe<Scalars['Boolean']>;
+  hasOrders?: InputMaybe<Scalars['Boolean']>;
+};
+
 export enum UserRole {
   Admin = 'ADMIN',
   User = 'USER'
+}
+
+export enum UserSortFields {
+  BityStatus = 'BITY_STATUS',
+  CreatedAt = 'CREATED_AT',
+  Email = 'EMAIL',
+  HasOpenOrders = 'HAS_OPEN_ORDERS',
+  Role = 'ROLE'
 }
 
 export type Vault = {
@@ -383,10 +411,13 @@ export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: str
 
 export type UsersQueryVariables = Exact<{
   pagination: PaginationInput;
+  query?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Array<SortUserInput> | SortUserInput>;
+  filters?: InputMaybe<UserFilterInput>;
 }>;
 
 
-export type UsersQuery = { __typename?: 'Query', users: { __typename?: 'PaginatedUser', pagination: { __typename?: 'Pagination', firstPage: number, previousPage: number, page: number, nextPage: number, lastPage: number, count: number }, items: Array<{ __typename?: 'User', id: string, email: string, role: UserRole, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } }> } };
+export type UsersQuery = { __typename?: 'Query', users: { __typename?: 'PaginatedUser', pagination: { __typename?: 'Pagination', firstPage: number, previousPage: number, page: number, nextPage: number, lastPage: number, count: number }, items: Array<{ __typename?: 'User', id: string, email: string, role: UserRole, hasOpenOrders: boolean, createdAt: any, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } }> } };
 
 export type AddVaultMutationVariables = Exact<{
   data: VaultInput;
@@ -850,8 +881,8 @@ export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const UsersDocument = gql`
-    query users($pagination: PaginationInput!) {
-  users(pagination: $pagination) {
+    query users($pagination: PaginationInput!, $query: String, $sort: [SortUserInput!], $filters: UserFilterInput) {
+  users(pagination: $pagination, query: $query, sort: $sort, filters: $filters) {
     pagination {
       ...PaginationInfos
     }
@@ -863,6 +894,8 @@ export const UsersDocument = gql`
         linked
         linkStatus
       }
+      hasOpenOrders
+      createdAt
     }
   }
 }
@@ -881,6 +914,9 @@ export const UsersDocument = gql`
  * const { data, loading, error } = useUsersQuery({
  *   variables: {
  *      pagination: // value for 'pagination'
+ *      query: // value for 'query'
+ *      sort: // value for 'sort'
+ *      filters: // value for 'filters'
  *   },
  * });
  */

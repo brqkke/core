@@ -6,6 +6,7 @@ import { DataSource } from 'typeorm';
 import { buildRepositories } from '../utils';
 import { createActiveOrderByTemplateIdDataloader } from './active.order.dataloader';
 import { createVaultStatisticsDataloader } from './vault.stats.dataloader';
+import { createUserHasOrderDataloader } from './user.has-order.dataloader';
 
 export type DLoaders = ReturnType<typeof buildDataloaders>;
 
@@ -21,5 +22,7 @@ export const buildDataloaders = (data: DataSource) => {
     latestActiveOrderByTemplateId: createActiveOrderByTemplateIdDataloader(db),
     vaultStatisticsByVaultId: createVaultStatisticsDataloader(db),
     rateByCurrency: createEntityDataloader(db.rate, 'currency'),
+    tokenByUserId: createEntityDataloader(db.token, 'userId'),
+    userHasOpenOrder: createUserHasOrderDataloader(db),
   };
 };

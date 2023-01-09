@@ -1,6 +1,7 @@
 import {
   Check,
   Column,
+  CreateDateColumn,
   Entity,
   Index,
   OneToMany,
@@ -8,12 +9,19 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserStatus } from './enums/UserStatus';
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import {
+  Field,
+  ID,
+  InputType,
+  ObjectType,
+  registerEnumType,
+} from '@nestjs/graphql';
 import { Session } from './Session';
 import { UserRole } from './enums/UserRole';
 import { Order } from './Order';
 import { Token } from './Token';
 import { Vault } from './Vault';
+import { SortedInput } from '../dto/Sort';
 
 @Entity()
 @ObjectType()
@@ -69,6 +77,25 @@ export class User {
   @Column()
   @Field(() => Boolean)
   mfaEnabled: boolean = false;
+
+  @CreateDateColumn()
+  @Index()
+  @Field(() => Date)
+  createdAt: Date = new Date();
 }
 
 export type UserWithToken = User & { token: Token };
+
+export enum UserSortFields {
+  EMAIL = 'EMAIL',
+  BITY_STATUS = 'BITY_STATUS',
+  CREATED_AT = 'CREATED_AT',
+  HAS_OPEN_ORDERS = 'HAS_OPEN_ORDERS',
+  ROLE = 'ROLE',
+}
+registerEnumType(UserSortFields, {
+  name: 'UserSortFields',
+});
+
+@InputType('SortUserInput')
+export class SortUserInput extends SortedInput(UserSortFields) {}

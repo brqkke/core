@@ -41,10 +41,10 @@ export const Paginated = <T>(t: Type<T>) => {
 
 @InputType('PaginationInput')
 export class PaginationInput {
-  @Field(() => Int, { defaultValue: 0 })
+  @Field(() => Int)
   page: number;
 
-  @Field(() => Int, { defaultValue: 10 })
+  @Field(() => Int)
   count: number;
 }
 

@@ -15,8 +15,8 @@ export class PaginationService {
     input: PaginationInput,
   ): Promise<PaginatedResponse<T>> {
     const [items, count] = await query
-      .skip(input.page * input.count)
-      .take(input.count)
+      .offset(input.page * input.count)
+      .limit(input.count)
       .getManyAndCount();
     const lastPage = Math.ceil(count / input.count) - 1; // 0 based
     const nextPage = Math.min(input.page + 1, lastPage);

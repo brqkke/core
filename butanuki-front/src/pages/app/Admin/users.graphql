@@ -1,5 +1,10 @@
-query users($pagination: PaginationInput!){
-    users(pagination: $pagination){
+query users(
+    $pagination: PaginationInput!,
+    $query: String,
+    $sort: [SortUserInput!],
+    $filters: UserFilterInput
+){
+    users(pagination: $pagination, query: $query, sort: $sort, filters: $filters) {
         pagination {
             ...PaginationInfos
         }
@@ -11,6 +16,8 @@ query users($pagination: PaginationInput!){
                 linked
                 linkStatus
             }
+            hasOpenOrders
+            createdAt
         }
     }
 }
