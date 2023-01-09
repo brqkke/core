@@ -14,7 +14,6 @@ export class PaginationService {
     query: SelectQueryBuilder<T>,
     input: PaginationInput,
   ): Promise<PaginatedResponse<T>> {
-    console.log(query.getQuery());
     const [items, count] = await query
       .offset(input.page * input.count)
       .limit(input.count)
