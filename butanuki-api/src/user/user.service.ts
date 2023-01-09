@@ -125,14 +125,9 @@ export class UserService {
       [UserSortFields.CREATED_AT]: 'createdAt',
       [UserSortFields.ROLE]: 'role',
     };
-    console.log('sort', sort);
+
     sort.forEach(({ sortBy, order }, i) => {
       if (sortBy in simpleFields) {
-        console.log(
-          'simpleFields[sortBy]',
-          simpleFields[sortBy],
-          `${query.alias}."${simpleFields[sortBy]}"`,
-        );
         query.addOrderBy(`${query.alias}."${simpleFields[sortBy]}"`, order);
         return;
       }
