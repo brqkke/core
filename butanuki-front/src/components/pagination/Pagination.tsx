@@ -2,11 +2,15 @@ import React, { useCallback, useMemo } from "react";
 import { PaginationInfosFragment } from "../../generated/graphql";
 
 export const Pagination = ({
+  pageSize,
+  setPageSize,
   paginationInfos,
   onChange,
 }: {
   paginationInfos: PaginationInfosFragment;
   onChange: (page: number) => void;
+  pageSize: number;
+  setPageSize: (pageSize: number) => void;
 }) => {
   const prev: React.MouseEventHandler<HTMLAnchorElement> = useCallback(
     (e) => {
@@ -63,90 +67,102 @@ export const Pagination = ({
   }, [paginationInfos.page, paginationInfos.lastPage]);
 
   return (
-    <div>
-      <p>
-        Page {paginationInfos.page + 1} of {paginationInfos.lastPage + 1}, total{" "}
-        {paginationInfos.count} items
-      </p>
-      <nav aria-label="Page navigation example">
-        <ul className="pagination justify-content-center">
-          <li className="page-item">
-            <a
-              className={`page-link ${
-                paginationInfos.firstPage === paginationInfos.page
+    <div className={"row"}>
+      <div className="col-sm-12 col-8">
+        <p>
+          Page {paginationInfos.page + 1} of {paginationInfos.lastPage + 1},
+          total {paginationInfos.count} items
+        </p>
+      </div>
+      <div className="col-4">
+        <label>
+          Page size:{" "}
+          <select
+            className="form-select"
+            onChange={(e) => setPageSize(+e.target.value)}
+            value={pageSize}
+          >
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={50}>50</option>
+          </select>
+        </label>
+      </div>
+      <div className="col-sm-4">
+        <nav aria-label="Page navigation example">
+          <ul className="pagination justify-content-center">
+            <li className="page-item">
+              <a
+                className={`page-link ${
+                  paginationInfos.firstPage === paginationInfos.page
+                    ? "disabled"
+                    : ""
+                }`}
+                onClick={gotoFirst}
+              >
+                First
+              </a>
+            </li>
+            <li
+              className={`page-item ${
+                paginationInfos.previousPage === paginationInfos.page
                   ? "disabled"
                   : ""
               }`}
-              href="#"
-              onClick={gotoFirst}
             >
-              First
-            </a>
-          </li>
-          <li
-            className={`page-item ${
-              paginationInfos.previousPage === paginationInfos.page
-                ? "disabled"
-                : ""
-            }`}
-          >
-            <a className="page-link" href="#" onClick={prev}>
-              Previous
-            </a>
-          </li>
-          {displayedPages.map((page, i, array) => {
-            const addEllipsis = i > 0 && array[i - 1] !== page - 1;
-            return (
-              <React.Fragment key={page}>
-                {addEllipsis && (
-                  <li className="page-item">
-                    <a className={`page-link disabled`} href="#">
-                      ...
+              <a className="page-link" onClick={prev}>
+                Previous
+              </a>
+            </li>
+            {displayedPages.map((page, i, array) => {
+              const addEllipsis = i > 0 && array[i - 1] !== page - 1;
+              return (
+                <React.Fragment key={page}>
+                  {addEllipsis && (
+                    <li className="page-item">
+                      <a className={`page-link disabled`}>...</a>
+                    </li>
+                  )}
+                  <li className="page-item" key={page}>
+                    <a
+                      className={`page-link ${
+                        page === paginationInfos.page ? "active" : ""
+                      }`}
+                      onClick={() => onChange(page)}
+                    >
+                      {page + 1}
                     </a>
                   </li>
-                )}
-                <li className="page-item" key={page}>
-                  <a
-                    className={`page-link ${
-                      page === paginationInfos.page ? "active" : ""
-                    }`}
-                    href="#"
-                    onClick={() => onChange(page)}
-                  >
-                    {page + 1}
-                  </a>
-                </li>
-              </React.Fragment>
-            );
-          })}
-          <li className="page-item">
-            <a
-              className={`page-link ${
-                paginationInfos.nextPage === paginationInfos.page
-                  ? "disabled"
-                  : ""
-              }`}
-              href="#"
-              onClick={next}
-            >
-              Next
-            </a>
-          </li>
-          <li className="page-item">
-            <a
-              className={`page-link ${
-                paginationInfos.lastPage === paginationInfos.page
-                  ? "disabled"
-                  : ""
-              }`}
-              href="#"
-              onClick={gotoLast}
-            >
-              Last
-            </a>
-          </li>
-        </ul>
-      </nav>
+                </React.Fragment>
+              );
+            })}
+            <li className="page-item">
+              <a
+                className={`page-link ${
+                  paginationInfos.nextPage === paginationInfos.page
+                    ? "disabled"
+                    : ""
+                }`}
+                onClick={next}
+              >
+                Next
+              </a>
+            </li>
+            <li className="page-item">
+              <a
+                className={`page-link ${
+                  paginationInfos.lastPage === paginationInfos.page
+                    ? "disabled"
+                    : ""
+                }`}
+                onClick={gotoLast}
+              >
+                Last
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </div>
   );
 };

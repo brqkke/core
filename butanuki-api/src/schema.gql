@@ -157,8 +157,8 @@ type Query {
 }
 
 input PaginationInput {
-  page: Int = 0
-  count: Int = 10
+  page: Int!
+  count: Int!
 }
 
 input SortUserInput {

@@ -41,13 +41,16 @@ export const usePageTitle = (title: string) => {
   }, [title]);
 };
 
-export const usePagination = (): {
+export interface PaginationHookResult {
   paginationInput: PaginationInput;
   gotoPage: (page: number) => void;
+  setPageSize: (pageSize: number) => void;
   reset: () => void;
-} => {
+}
+
+export const usePagination = (): PaginationHookResult => {
   const [currentPage, setCurrentPage] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
 
   const paginationInput: PaginationInput = useMemo(() => {
     return {
@@ -65,6 +68,7 @@ export const usePagination = (): {
       gotoPage: setCurrentPage,
       paginationInput,
       reset,
+      setPageSize,
     }),
     [paginationInput, reset]
   );

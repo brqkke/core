@@ -218,8 +218,8 @@ export type Pagination = {
 };
 
 export type PaginationInput = {
-  count?: InputMaybe<Scalars['Int']>;
-  page?: InputMaybe<Scalars['Int']>;
+  count: Scalars['Int'];
+  page: Scalars['Int'];
 };
 
 export type Query = {

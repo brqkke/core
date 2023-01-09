@@ -39,7 +39,7 @@ const BooleanFilter = ({
 };
 
 export const AdminUsers = () => {
-  const { gotoPage, paginationInput, reset } = usePagination();
+  const { gotoPage, paginationInput, reset, setPageSize } = usePagination();
   const { sortingInput, onToggle } = useSorting(
     UserSortFields,
     UserSortFields.Email,
@@ -107,7 +107,7 @@ export const AdminUsers = () => {
           />
         </div>
       </div>
-      <table className="table">
+      <table className="table table-responsive">
         <thead>
           <tr>
             <th scope="col">
@@ -171,6 +171,8 @@ export const AdminUsers = () => {
       </table>
       {(users.data || users.previousData) && (
         <Pagination
+          pageSize={paginationInput.count}
+          setPageSize={setPageSize}
           paginationInfos={(users.data || users.previousData)!.users.pagination}
           onChange={gotoPage}
         />
