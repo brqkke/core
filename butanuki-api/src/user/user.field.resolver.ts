@@ -1,5 +1,6 @@
 import {
   Field,
+  Float,
   ObjectType,
   ResolveField,
   Resolver,
@@ -63,5 +64,11 @@ export class UserFieldResolver {
     @Root() user: User,
   ): Promise<boolean> {
     return dataloader.userHasOpenOrder.load(user.id);
+  }
+
+  @ResolveField(() => Float, { nullable: true })
+  @Roles(UserRole.ADMIN)
+  customPartnerFee(@Root() user: User): number | undefined {
+    return user.customPartnerFee;
   }
 }

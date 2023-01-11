@@ -1,5 +1,5 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { SortUserInput, User, UserSortFields } from '../entities/User';
+import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { User, UserSortFields, UserSortInput } from '../entities/User';
 import { CurrentUser, Roles } from '../decorator/user.decorator';
 import { UserRole } from '../entities/enums/UserRole';
 import { DataSource } from 'typeorm';
@@ -43,6 +43,12 @@ export class UserResolver {
     return user;
   }
 
+  @Query(() => User)
+  @Roles(UserRole.ADMIN)
+  async user(@Args({ name: 'id', type: () => ID }) id: string): Promise<User> {
+    return this.db.user.findOneOrFail({ where: { id } });
+  }
+
   @Query(() => PaginatedUser)
   @Roles(UserRole.ADMIN)
   async users(
@@ -50,8 +56,8 @@ export class UserResolver {
     pagination: PaginationInput,
     @Args({ name: 'query', type: () => String, nullable: true })
     query?: string,
-    @Args({ name: 'sort', type: () => [SortUserInput], nullable: true })
-    sort?: SortUserInput[],
+    @Args({ name: 'sort', type: () => [UserSortInput], nullable: true })
+    sort?: UserSortInput[],
     @Args({ name: 'filters', type: () => UserFilterInput, nullable: true })
     filters?: UserFilterInput,
   ): Promise<PaginatedUser> {

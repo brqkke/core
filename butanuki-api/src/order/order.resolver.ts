@@ -8,9 +8,13 @@ import {
   Root,
 } from '@nestjs/graphql';
 import { OrderTemplate } from '../entities/OrderTemplate';
-import { Order } from '../entities/Order';
+import { Order, OrderSortFields, OrderSortInput } from '../entities/Order';
 import { OrderService } from './order.service';
-import { CurrentUser, CurrentUserWithToken } from '../decorator/user.decorator';
+import {
+  CurrentUser,
+  CurrentUserWithToken,
+  Roles,
+} from '../decorator/user.decorator';
 import { User, UserWithToken } from '../entities/User';
 import { OrderTemplateService } from './order.template.service';
 import { CreateOrderInput, OrderInput } from '../dto/OrderInput';
@@ -19,6 +23,10 @@ import { Vault } from '../entities/Vault';
 import { VaultService } from '../vault/vault.service';
 import { Dataloaders } from '../decorator/dataloader.decorator';
 import { DLoaders } from '../dataloader/dataloaders';
+import { UserRole } from '../entities/enums/UserRole';
+import { PaginatedOrder, PaginationInput } from '../dto/Paginated';
+import { PaginationService } from '../database/pagination.service';
+import { Sort } from '../dto/Sort';
 
 @Resolver(() => OrderTemplate)
 export class OrderResolver {
@@ -27,6 +35,7 @@ export class OrderResolver {
     private orderTemplateService: OrderTemplateService,
     private mailerService: MailerService,
     private vaultService: VaultService,
+    private pagination: PaginationService,
   ) {}
 
   @Query(() => OrderTemplate)
@@ -106,5 +115,27 @@ export class OrderResolver {
     @Args('orderTemplateId', { type: () => ID }) orderTemplateId: string,
   ): Promise<OrderTemplate> {
     return this.orderTemplateService.deleteTemplate(user, orderTemplateId);
+  }
+
+  @Query(() => PaginatedOrder)
+  @Roles(UserRole.ADMIN)
+  async orders(
+    @Args({ name: 'userId', type: () => ID }) userId: string,
+    @Args({ name: 'pagination', type: () => PaginationInput })
+    pagination: PaginationInput,
+    @Args({ name: 'sort', type: () => [OrderSortInput], nullable: true })
+    sort?: OrderSortInput[],
+    @Args({ name: 'reference', type: () => String, nullable: true })
+    reference?: string,
+  ): Promise<PaginatedOrder> {
+    const q = this.orderService.getAllUserOrdersQuery(userId);
+    if (!sort) {
+      sort = [{ sortBy: OrderSortFields.CREATED_AT, order: Sort.DESC }];
+    }
+    this.orderService.applySortOnQuery(q, sort);
+    if (reference) {
+      this.orderService.applyReferenceSearchOnQuery(q, reference);
+    }
+    return this.pagination.paginate(q, pagination);
   }
 }

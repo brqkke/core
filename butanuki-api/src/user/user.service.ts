@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, MoreThan, Repository, SelectQueryBuilder } from 'typeorm';
-import { SortUserInput, User, UserSortFields } from '../entities/User';
+import { User, UserSortFields, UserSortInput } from '../entities/User';
 import { UserStatus } from '../entities/enums/UserStatus';
 import { Order } from '../entities/Order';
 import { OrderStatus } from '../entities/enums/OrderStatus';
@@ -118,7 +118,7 @@ export class UserService {
 
   applySortOnQuery(
     query: SelectQueryBuilder<User>,
-    sort: SortUserInput[],
+    sort: UserSortInput[],
   ): SelectQueryBuilder<User> {
     const simpleFields: { [key in UserSortFields]?: string } = {
       [UserSortFields.EMAIL]: 'email',

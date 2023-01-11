@@ -52,11 +52,13 @@ type Order {
   id: String!
   transferLabel: String!
   status: OrderStatus!
+  createdAt: DateTime!
   orderTemplateId: String
   amount: Float!
   filledAmount: Float
   currency: OrderCurrency!
   redactedCryptoAddress: String
+  remoteId: String!
   bankDetails: BityPaymentDetails
 }
 
@@ -79,6 +81,7 @@ type User {
   bityTokenStatus: BityLinkStatus!
   vaults: [Vault!]!
   hasOpenOrders: Boolean!
+  customPartnerFee: Float
 }
 
 enum UserRole {
@@ -99,6 +102,11 @@ type Pagination {
 type PaginatedUser {
   pagination: Pagination!
   items: [User!]!
+}
+
+type PaginatedOrder {
+  pagination: Pagination!
+  items: [Order!]!
 }
 
 type BityLinkStatus {
@@ -146,8 +154,10 @@ enum DCAInterval {
 
 type Query {
   me: User!
-  users(pagination: PaginationInput!, query: String, sort: [SortUserInput!], filters: UserFilterInput): PaginatedUser!
+  user(id: ID!): User!
+  users(pagination: PaginationInput!, query: String, sort: [UserSortInput!], filters: UserFilterInput): PaginatedUser!
   orderTemplate(id: ID!): OrderTemplate!
+  orders(userId: ID!, pagination: PaginationInput!, sort: [OrderSortInput!], reference: String): PaginatedOrder!
   linkUrl: String!
   vault(id: ID!): Vault!
   errors: [ErrorType!]!
@@ -161,7 +171,7 @@ input PaginationInput {
   count: Int!
 }
 
-input SortUserInput {
+input UserSortInput {
   order: Sort = ASC
   sortBy: UserSortFields!
 }
@@ -182,6 +192,15 @@ enum UserSortFields {
 input UserFilterInput {
   hasOrders: Boolean
   hasActiveBityToken: Boolean
+}
+
+input OrderSortInput {
+  order: Sort = ASC
+  sortBy: OrderSortFields!
+}
+
+enum OrderSortFields {
+  CREATED_AT
 }
 
 """Error type"""

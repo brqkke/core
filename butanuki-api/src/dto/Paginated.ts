@@ -1,6 +1,7 @@
 import { Field, InputType, Int, ObjectType } from '@nestjs/graphql';
 import { User } from '../entities/User';
 import { Type } from '@nestjs/common/interfaces/type.interface';
+import { Order } from '../entities/Order';
 
 @ObjectType('Pagination')
 export class Pagination {
@@ -50,3 +51,6 @@ export class PaginationInput {
 
 @ObjectType()
 export class PaginatedUser extends Paginated(User) {}
+
+@ObjectType()
+export class PaginatedOrder extends Paginated(Order) {}

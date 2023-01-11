@@ -153,11 +153,13 @@ export type Order = {
   __typename?: 'Order';
   amount: Scalars['Float'];
   bankDetails?: Maybe<BityPaymentDetails>;
+  createdAt: Scalars['DateTime'];
   currency: OrderCurrency;
   filledAmount?: Maybe<Scalars['Float']>;
   id: Scalars['String'];
   orderTemplateId?: Maybe<Scalars['String']>;
   redactedCryptoAddress?: Maybe<Scalars['String']>;
+  remoteId: Scalars['String'];
   status: OrderStatus;
   transferLabel: Scalars['String'];
 };
@@ -180,6 +182,15 @@ export type OrderInput = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+export enum OrderSortFields {
+  CreatedAt = 'CREATED_AT'
+}
+
+export type OrderSortInput = {
+  order?: InputMaybe<Sort>;
+  sortBy: OrderSortFields;
+};
+
 export enum OrderStatus {
   Cancelled = 'CANCELLED',
   CancelledNeedRenew = 'CANCELLED_NEED_RENEW',
@@ -198,6 +209,12 @@ export type OrderTemplate = {
   name: Scalars['String'];
   vault: Vault;
   vaultId: Scalars['ID'];
+};
+
+export type PaginatedOrder = {
+  __typename?: 'PaginatedOrder';
+  items: Array<Order>;
+  pagination: Pagination;
 };
 
 export type PaginatedUser = {
@@ -231,6 +248,8 @@ export type Query = {
   linkUrl: Scalars['String'];
   me: User;
   orderTemplate: OrderTemplate;
+  orders: PaginatedOrder;
+  user: User;
   users: PaginatedUser;
   vault: Vault;
 };
@@ -254,11 +273,24 @@ export type QueryOrderTemplateArgs = {
 };
 
 
+export type QueryOrdersArgs = {
+  pagination: PaginationInput;
+  reference?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Array<OrderSortInput>>;
+  userId: Scalars['ID'];
+};
+
+
+export type QueryUserArgs = {
+  id: Scalars['ID'];
+};
+
+
 export type QueryUsersArgs = {
   filters?: InputMaybe<UserFilterInput>;
   pagination: PaginationInput;
   query?: InputMaybe<Scalars['String']>;
-  sort?: InputMaybe<Array<SortUserInput>>;
+  sort?: InputMaybe<Array<UserSortInput>>;
 };
 
 
@@ -270,11 +302,6 @@ export enum Sort {
   Asc = 'ASC',
   Desc = 'DESC'
 }
-
-export type SortUserInput = {
-  order?: InputMaybe<Sort>;
-  sortBy: UserSortFields;
-};
 
 export enum TokenStatus {
   Active = 'ACTIVE',
@@ -290,6 +317,7 @@ export type User = {
   __typename?: 'User';
   bityTokenStatus: BityLinkStatus;
   createdAt: Scalars['DateTime'];
+  customPartnerFee?: Maybe<Scalars['Float']>;
   email: Scalars['String'];
   hasOpenOrders: Scalars['Boolean'];
   id: Scalars['ID'];
@@ -317,6 +345,11 @@ export enum UserSortFields {
   Role = 'ROLE'
 }
 
+export type UserSortInput = {
+  order?: InputMaybe<Sort>;
+  sortBy: UserSortFields;
+};
+
 export type Vault = {
   __typename?: 'Vault';
   bitcoinPrice?: Maybe<Scalars['Float']>;
@@ -343,6 +376,8 @@ export type VaultStatistics = {
 export type UserProfileFragment = { __typename?: 'User', id: string, locale: string, email: string, role: UserRole, mfaEnabled: boolean, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } };
 
 export type BityStatusFragment = { __typename?: 'User', id: string, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } };
+
+export type UserDetailsFragment = { __typename?: 'User', id: string, email: string, hasOpenOrders: boolean, customPartnerFee?: number | null, createdAt: any, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } };
 
 export type VaultShortInfosFragment = { __typename?: 'Vault', id: string, currency: OrderCurrency, name: string };
 
@@ -409,10 +444,27 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, locale: string, email: string, role: UserRole, mfaEnabled: boolean, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } } };
 
+export type OrdersQueryVariables = Exact<{
+  pagination: PaginationInput;
+  userId: Scalars['ID'];
+  sort?: InputMaybe<Array<OrderSortInput> | OrderSortInput>;
+  reference?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type OrdersQuery = { __typename?: 'Query', orders: { __typename?: 'PaginatedOrder', pagination: { __typename?: 'Pagination', firstPage: number, previousPage: number, page: number, nextPage: number, lastPage: number, count: number }, items: Array<{ __typename?: 'Order', id: string, status: OrderStatus, amount: number, transferLabel: string, redactedCryptoAddress?: string | null, createdAt: any, filledAmount?: number | null, currency: OrderCurrency, remoteId: string }> } };
+
+export type UserQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, email: string, hasOpenOrders: boolean, customPartnerFee?: number | null, createdAt: any, bityTokenStatus: { __typename?: 'BityLinkStatus', linked: boolean, linkStatus?: TokenStatus | null } } };
+
 export type UsersQueryVariables = Exact<{
   pagination: PaginationInput;
   query?: InputMaybe<Scalars['String']>;
-  sort?: InputMaybe<Array<SortUserInput> | SortUserInput>;
+  sort?: InputMaybe<Array<UserSortInput> | UserSortInput>;
   filters?: InputMaybe<UserFilterInput>;
 }>;
 
@@ -517,6 +569,16 @@ export const UserProfileFragmentDoc = gql`
   email
   role
   mfaEnabled
+}
+    ${BityStatusFragmentDoc}`;
+export const UserDetailsFragmentDoc = gql`
+    fragment UserDetails on User {
+  id
+  ...BityStatus
+  email
+  hasOpenOrders
+  customPartnerFee
+  createdAt
 }
     ${BityStatusFragmentDoc}`;
 export const VaultShortInfosFragmentDoc = gql`
@@ -880,8 +942,99 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const OrdersDocument = gql`
+    query orders($pagination: PaginationInput!, $userId: ID!, $sort: [OrderSortInput!], $reference: String) {
+  orders(
+    pagination: $pagination
+    userId: $userId
+    sort: $sort
+    reference: $reference
+  ) {
+    pagination {
+      ...PaginationInfos
+    }
+    items {
+      id
+      status
+      amount
+      transferLabel
+      redactedCryptoAddress
+      createdAt
+      filledAmount
+      currency
+      remoteId
+    }
+  }
+}
+    ${PaginationInfosFragmentDoc}`;
+
+/**
+ * __useOrdersQuery__
+ *
+ * To run a query within a React component, call `useOrdersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrdersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOrdersQuery({
+ *   variables: {
+ *      pagination: // value for 'pagination'
+ *      userId: // value for 'userId'
+ *      sort: // value for 'sort'
+ *      reference: // value for 'reference'
+ *   },
+ * });
+ */
+export function useOrdersQuery(baseOptions: Apollo.QueryHookOptions<OrdersQuery, OrdersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OrdersQuery, OrdersQueryVariables>(OrdersDocument, options);
+      }
+export function useOrdersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrdersQuery, OrdersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OrdersQuery, OrdersQueryVariables>(OrdersDocument, options);
+        }
+export type OrdersQueryHookResult = ReturnType<typeof useOrdersQuery>;
+export type OrdersLazyQueryHookResult = ReturnType<typeof useOrdersLazyQuery>;
+export type OrdersQueryResult = Apollo.QueryResult<OrdersQuery, OrdersQueryVariables>;
+export const UserDocument = gql`
+    query user($id: ID!) {
+  user(id: $id) {
+    ...UserDetails
+  }
+}
+    ${UserDetailsFragmentDoc}`;
+
+/**
+ * __useUserQuery__
+ *
+ * To run a query within a React component, call `useUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useUserQuery(baseOptions: Apollo.QueryHookOptions<UserQuery, UserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+      }
+export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+        }
+export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
+export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
+export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
 export const UsersDocument = gql`
-    query users($pagination: PaginationInput!, $query: String, $sort: [SortUserInput!], $filters: UserFilterInput) {
+    query users($pagination: PaginationInput!, $query: String, $sort: [UserSortInput!], $filters: UserFilterInput) {
   users(pagination: $pagination, query: $query, sort: $sort, filters: $filters) {
     pagination {
       ...PaginationInfos

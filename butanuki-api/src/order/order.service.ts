@@ -4,13 +4,13 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { DataSource, In, LessThan, Not } from 'typeorm';
+import { DataSource, In, LessThan, Not, SelectQueryBuilder } from 'typeorm';
 import { OrderStatus } from '../entities/enums/OrderStatus';
 import { OrderCurrency } from '../entities/enums/OrderCurrency';
 import { buildRepositories, redactCryptoAddress, Repositories } from '../utils';
 import { BityService } from '../bity/bity.service';
 import { Token } from '../entities/Token';
-import { Order } from '../entities/Order';
+import { Order, OrderSortFields, OrderSortInput } from '../entities/Order';
 import { TokenStatus } from '../entities/enums/TokenStatus';
 import { OrderTemplate } from '../entities/OrderTemplate';
 
@@ -221,6 +221,38 @@ export class OrderService {
         },
         { status: OrderStatus.CANCELLED },
       );
+    });
+  }
+
+  public getAllUserOrdersQuery(userId: string): SelectQueryBuilder<Order> {
+    return this.db.order.createQueryBuilder('o').where('o.userId = :userId', {
+      userId,
+    });
+  }
+
+  applySortOnQuery(
+    query: SelectQueryBuilder<Order>,
+    sort: OrderSortInput[],
+  ): SelectQueryBuilder<Order> {
+    const simpleFields: { [key in OrderSortFields]?: string } = {
+      [OrderSortFields.CREATED_AT]: 'createdAt',
+    };
+    sort.forEach((sortItem) => {
+      query.addOrderBy(
+        `${query.alias}."${simpleFields[sortItem.sortBy]}"`,
+        sortItem.order,
+      );
+    });
+
+    return query;
+  }
+
+  applyReferenceSearchOnQuery(
+    query: SelectQueryBuilder<Order>,
+    reference: string,
+  ): SelectQueryBuilder<Order> {
+    return query.andWhere('o.transferLabel ILIKE :reference', {
+      reference: `%${reference}%`,
     });
   }
 }

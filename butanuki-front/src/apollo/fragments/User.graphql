@@ -14,3 +14,12 @@ fragment BityStatus on User{
         linkStatus
     }
 }
+
+fragment UserDetails on User{
+    id
+    ...BityStatus
+    email
+    hasOpenOrders
+    customPartnerFee
+    createdAt
+}

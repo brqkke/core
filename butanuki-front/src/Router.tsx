@@ -13,6 +13,7 @@ import { useNavigate } from "react-router";
 import { EstimatorPage } from "./pages/app/Estimator/EstimatorPage";
 import { LoadingCard } from "./components/LoadingCard";
 import { MfaSettingsPage } from "./pages/app/Settings/MfaSettingsPage";
+import { LoggedLayout } from "./layout/LoggedLayout";
 
 const AdminApp = React.lazy(() => import("./pages/app/Admin/AdminApp"));
 
@@ -49,7 +50,13 @@ function UserApp() {
         <Route
           path={"/admin/*"}
           element={
-            <Suspense fallback={<LoadingCard />}>
+            <Suspense
+              fallback={
+                <LoggedLayout>
+                  <LoadingCard />
+                </LoggedLayout>
+              }
+            >
               <AdminApp />
             </Suspense>
           }

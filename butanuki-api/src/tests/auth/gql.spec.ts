@@ -105,4 +105,37 @@ describe('GraphQL endpoint', () => {
       },
     });
   });
+
+  it('cant access protected customPartnerFee on itself if not admin', async () => {
+    const user = await makeUser(db);
+    user.customPartnerFee = 0.1;
+    await db.user.save(user);
+    const sessionToken = await app
+      .get(AuthService)
+      .createUserSession(user)
+      .then((s) => s.token);
+
+    const res = await request(app.getHttpServer())
+      .post('/api/graphql')
+      .set('Authorization', sessionToken)
+      .send({
+        query: `
+          query me{
+            me {
+              id
+              customPartnerFee
+            }
+          }
+        `,
+      });
+    expect(res.body.errors[0].extensions.code).toBe('FORBIDDEN');
+    expect(res.body).toMatchObject({
+      data: {
+        me: {
+          id: user.id,
+          customPartnerFee: null,
+        },
+      },
+    });
+  });
 });

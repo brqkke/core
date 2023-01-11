@@ -97,5 +97,5 @@ registerEnumType(UserSortFields, {
   name: 'UserSortFields',
 });
 
-@InputType('SortUserInput')
-export class SortUserInput extends SortedInput(UserSortFields) {}
+@InputType('UserSortInput')
+export class UserSortInput extends SortedInput(UserSortFields) {}

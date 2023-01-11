@@ -1,0 +1,28 @@
+query orders(
+    $pagination: PaginationInput!,
+    $userId: ID!,
+    $sort: [OrderSortInput!],
+    $reference: String
+) {
+    orders(
+        pagination: $pagination,
+        userId: $userId,
+        sort: $sort,
+        reference: $reference
+    ) {
+        pagination {
+            ...PaginationInfos
+        }
+        items {
+            id
+            status
+            amount
+            transferLabel
+            redactedCryptoAddress
+            createdAt
+            filledAmount
+            currency
+            remoteId
+        }
+    }
+}
