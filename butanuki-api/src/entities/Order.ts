@@ -11,8 +11,15 @@ import {
 import { OrderStatus } from './enums/OrderStatus';
 import { User } from './User';
 import { OrderCurrency } from './enums/OrderCurrency';
-import { Field, Float, ObjectType } from '@nestjs/graphql';
+import {
+  Field,
+  Float,
+  InputType,
+  ObjectType,
+  registerEnumType,
+} from '@nestjs/graphql';
 import { OrderTemplate } from './OrderTemplate';
+import { SortedInput } from '../dto/Sort';
 
 @ObjectType()
 export class BityPaymentDetails {
@@ -63,6 +70,7 @@ export class Order {
   user?: User;
 
   @Column()
+  @Field()
   createdAt: Date;
 
   @Column()
@@ -110,3 +118,13 @@ export class Order {
   @Field(() => String, { nullable: true })
   redactedCryptoAddress?: string;
 }
+
+export enum OrderSortFields {
+  CREATED_AT = 'CREATED_AT',
+}
+registerEnumType(OrderSortFields, {
+  name: 'OrderSortFields',
+});
+
+@InputType('OrderSortInput')
+export class OrderSortInput extends SortedInput(OrderSortFields) {}

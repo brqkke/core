@@ -1,5 +1,6 @@
 import {
   Sort,
+  UserRole,
   UserSortFields,
   useUsersQuery,
 } from "../../../generated/graphql";
@@ -7,6 +8,7 @@ import { usePagination, useSorting } from "../../../utils/hooks";
 import { Pagination } from "../../../components/pagination/Pagination";
 import React, { useCallback, useMemo, useState } from "react";
 import { debounce } from "lodash";
+import { Link } from "react-router-dom";
 
 const BooleanFilter = ({
   falseText,
@@ -120,15 +122,6 @@ export const AdminUsers = () => {
               </button>
             </th>
             <th scope="col">
-              Role{" "}
-              <button
-                className={"btn btn-sm"}
-                onClick={() => onToggle(UserSortFields.Role)}
-              >
-                /\ \/
-              </button>
-            </th>
-            <th scope="col">
               Bity Status{" "}
               <button
                 className={"btn btn-sm"}
@@ -155,16 +148,29 @@ export const AdminUsers = () => {
                 /\ \/
               </button>
             </th>
+            <th scope="col">View</th>
           </tr>
         </thead>
         <tbody>
           {(users.data || users.previousData)?.users.items.map((user) => (
             <tr key={user.id}>
-              <td>{user.email}</td>
-              <td>{user.role}</td>
+              <td>
+                {user.email}
+                {user.role === UserRole.Admin && (
+                  <span className={"text-danger"}>*</span>
+                )}
+              </td>
               <td>{user.bityTokenStatus?.linkStatus}</td>
               <td>{user.hasOpenOrders ? "Yes" : "No"}</td>
               <td>{user.createdAt}</td>
+              <td>
+                <Link
+                  className={"btn btn-info btn-sm"}
+                  to={`/admin/users/${user.id}`}
+                >
+                  View
+                </Link>
+              </td>
             </tr>
           ))}
         </tbody>

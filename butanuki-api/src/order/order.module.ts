@@ -7,6 +7,8 @@ import { OrderResolver } from './order.resolver';
 import { MailerModule } from '../emails/mailer.module';
 import { VaultModule } from '../vault/vault.module';
 import { AppConfigModule } from '../config/config.module';
+import { DatabaseModule } from '../database/database.module';
+import { OrderFieldResolver } from './order.field.resolver';
 
 @Module({
   imports: [
@@ -14,9 +16,15 @@ import { AppConfigModule } from '../config/config.module';
     MailerModule,
     VaultModule,
     AppConfigModule,
+    DatabaseModule,
   ],
   controllers: [OrderController],
-  providers: [OrderService, OrderTemplateService, OrderResolver],
+  providers: [
+    OrderService,
+    OrderTemplateService,
+    OrderResolver,
+    OrderFieldResolver,
+  ],
   exports: [OrderService],
 })
 export class OrderModule {}

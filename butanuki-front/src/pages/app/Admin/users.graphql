@@ -1,7 +1,7 @@
 query users(
     $pagination: PaginationInput!,
     $query: String,
-    $sort: [SortUserInput!],
+    $sort: [UserSortInput!],
     $filters: UserFilterInput
 ){
     users(pagination: $pagination, query: $query, sort: $sort, filters: $filters) {

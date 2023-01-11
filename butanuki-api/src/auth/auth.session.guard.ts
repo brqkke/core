@@ -11,7 +11,8 @@ export class AuthenticationGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = getRequestFromExecutionContext(context);
     const token = this.extractTokenFromRequest(request);
-    if (token) {
+    if (token && !request.user) {
+      // if we already have a user, we don't need to check the token. This avoid checking for each field resolver
       const user = await this.authService.authenticateUser(token);
       if (user) {
         request.user = user;

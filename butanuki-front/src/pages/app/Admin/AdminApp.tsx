@@ -2,6 +2,7 @@ import { Link, Route, Routes } from "react-router-dom";
 import { AdminPage } from "./AdminPage";
 import { LoggedLayout } from "../../../layout/LoggedLayout";
 import { AdminUsers } from "./AdminUsers";
+import { AdminUser } from "./AdminUser";
 
 export default function AdminApp() {
   return (
@@ -14,6 +15,7 @@ export default function AdminApp() {
       <Routes>
         <Route path={"/"} element={<AdminPage />} />
         <Route path={"/users"} element={<AdminUsers />} />
+        <Route path={"/users/:id"} element={<AdminUser />} />
       </Routes>
     </LoggedLayout>
   );

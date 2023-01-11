@@ -64,6 +64,7 @@ export const STATIC_PATH = join(__dirname, '..', 'front-build/');
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
       useFactory: (db: DataSource, { config }: AppConfigService) => ({
+        fieldResolverEnhancers: ['guards'],
         driver: ApolloDriver,
         introspection: config.nodeEnv === 'development',
         cache: 'bounded',
