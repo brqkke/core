@@ -252,7 +252,7 @@ export class OrderService {
     reference: string,
   ): SelectQueryBuilder<Order> {
     return query.andWhere(
-      `${query.alias}."transferLabel" ILIKE '%' || :reference || '%'`,
+      `"${query.alias}"."transferLabel" ILIKE '%' || :reference || '%'`,
       {
         reference: `${reference}`,
       },
