@@ -9,6 +9,7 @@ import { Pagination } from "../../../components/pagination/Pagination";
 import React, { useCallback, useMemo, useState } from "react";
 import { debounce } from "lodash";
 import { Link } from "react-router-dom";
+import { isoToDDMMYYYYHHMMSS } from "../../../utils/date";
 
 const BooleanFilter = ({
   falseText,
@@ -162,7 +163,7 @@ export const AdminUsers = () => {
               </td>
               <td>{user.bityTokenStatus?.linkStatus}</td>
               <td>{user.hasOpenOrders ? "Yes" : "No"}</td>
-              <td>{user.createdAt}</td>
+              <td>{isoToDDMMYYYYHHMMSS(user.createdAt)}</td>
               <td>
                 <Link
                   className={"btn btn-info btn-sm"}

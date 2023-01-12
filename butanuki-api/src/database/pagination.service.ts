@@ -18,7 +18,7 @@ export class PaginationService {
       .offset(input.page * input.count)
       .limit(input.count)
       .getManyAndCount();
-    const lastPage = Math.ceil(count / input.count) - 1; // 0 based
+    const lastPage = Math.max(0, Math.ceil(count / input.count) - 1); // 0 based
     const nextPage = Math.min(input.page + 1, lastPage);
     const previousPage = Math.max(input.page - 1, 0);
     const pagination: Pagination = {

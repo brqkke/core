@@ -13,6 +13,7 @@ import { useTranslation } from "react-i18next";
 import { debounce } from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons/faSearch";
+import { isoToDDMMYYYYHHMMSS } from "../../../utils/date";
 
 export const AdminUser = () => {
   const { id } = useParams<{ id: string }>();
@@ -49,7 +50,7 @@ const UserDetails = ({ userId }: { userId: string }) => {
           <br />
           Custom partner fee: {data.user.customPartnerFee ?? "None"}
           <br />
-          Created at: {data.user.createdAt}
+          Created at: {isoToDDMMYYYYHHMMSS(data.user.createdAt)}
         </p>
       </div>
     </div>
@@ -67,10 +68,8 @@ const OrderHistory = ({ userId }: { userId: string }) => {
   );
   const [search, setSearch] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
-  console.log("search", search);
   const handleSearchChange = useCallback(
     (ev: React.ChangeEvent<HTMLInputElement>) => {
-      console.log("search change");
       setSearch(ev.target.value);
       reset();
     },
@@ -181,7 +180,7 @@ const OrderHistory = ({ userId }: { userId: string }) => {
                       </span>
                     ) : null}
                   </td>
-                  <td>{order.createdAt}</td>
+                  <td>{isoToDDMMYYYYHHMMSS(order.createdAt)}</td>
                 </tr>
               ))}
             </tbody>
