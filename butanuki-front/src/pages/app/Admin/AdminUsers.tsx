@@ -97,7 +97,10 @@ export const AdminUsers = () => {
             trueText="Yes"
             falseText="No"
             unsetText=""
-            onChange={setFilterActiveBity}
+            onChange={(value) => {
+              setFilterActiveBity(value);
+              reset();
+            }}
           />
         </div>
         <div className="col-md-4">
@@ -106,7 +109,10 @@ export const AdminUsers = () => {
             trueText="Yes"
             falseText="No"
             unsetText=""
-            onChange={setFilterHasOpenOrders}
+            onChange={(value) => {
+              setFilterHasOpenOrders(value);
+              reset();
+            }}
           />
         </div>
       </div>

@@ -1,5 +1,0 @@
-export enum TokenHistoryCause {
-  REFRESH = 'REFRESH',
-  REFRESH_FROM_HISTORY = 'REFRESH_FROM_HISTORY',
-  MANUAL_CHANGE = 'MANUAL_CHANGE',
-}
