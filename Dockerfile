@@ -26,7 +26,6 @@ WORKDIR /app
 # Set NODE_ENV environment variable
 ENV NODE_ENV production
 COPY butanuki-api/package*.json ./
-# Running `npm ci` removes the existing node_modules directory and passing in --only=production ensures that only the production dependencies are installed. This ensures that the node_modules directory is as optimized as possible
 RUN npm ci --omit dev --omit peer --omit optional && npm cache clean --force
 
 FROM node:16.18.1-alpine3.16 As production

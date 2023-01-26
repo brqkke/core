@@ -83,25 +83,6 @@ export class OrderService {
     });
   }
 
-  async getOrdersScheduledForCancellation(limit: number): Promise<Order[]> {
-    return this.db.order.find({
-      where: {
-        status: OrderStatus.TO_CANCEL,
-        user: {
-          token: {
-            status: TokenStatus.ACTIVE,
-          },
-        },
-      },
-      take: limit,
-      relations: {
-        user: {
-          token: true,
-        },
-      },
-    });
-  }
-
   async getOrdersToCheck(
     limit: number,
     minimumCheckInterval: number,

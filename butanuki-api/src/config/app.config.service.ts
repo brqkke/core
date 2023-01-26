@@ -95,11 +95,11 @@ export class AppConfigService {
           reportingInterval: 3600 * 24, //1 day
           reportingEmail: config.get<string>(
             'REPORTING_EMAIL',
-            'taccolaaless@gmail.com',
+            'changeme@example.com',
           ), //'reportingbity@uazo.com',
           alertEmail: config.get(
             'REPORTING_ALERT_EMAIL',
-            'taccolaaless@gmail.com',
+            'changeme@example.com',
           ),
         },
         bitcoinPriceRefreshInterval: 15 * 60, //15 minutes
