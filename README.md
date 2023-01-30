@@ -62,4 +62,4 @@ stateDiagram-v2
 
 ## License
 
-~~Butanuki is [XXX licensed](LICENSE).~~ TODO
+Butanuki is licensed [CC BY-NC-ND 4.0](LICENSE)
