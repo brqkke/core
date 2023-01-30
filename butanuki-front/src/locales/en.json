@@ -41,7 +41,7 @@
       "loading": "Error while loading",
       "ButanukiAccountPreviouslyLinkedToOtherBityAccount": "This Butanuki account was previously linked to another Bity account.",
       "CantRefreshBityToken": "Please try again. If the error persists, please disconnect your Butanuki account from Bity, then reconnect it.",
-      "NeedVerifiedBityAccount": "You must verify your account and your IBAN (with Bity) before being able to setup a DCA with Butanuki.",
+      "NeedVerifiedBityAccount": "You must verify your account and your IBAN (with <kycLink>Bity.com</kycLink>) before being able to setup a DCA with Butanuki. <kycLink>Click here to verify your account</kycLink>.",
       "Unknown": "An unknown error occured. Please try again later.",
       "UnknownBityError": "Please try again. If the error persists, please disconnect your Butanuki account from Bity, then reconnect it.",
       "TooManyOrdersInVault": "You have too many orders in your piggy bank.",
@@ -112,12 +112,6 @@
       "delete": "Delete",
       "confirmDelete": "Confirm deletion?",
       "edit": "Edit"
-    },
-    "bity": {
-      "error": {
-        "input_payment_information_required": "You must verify your account and your IBAN (with Bity) before being able to setup a saving plan with Butanuki.",
-        "cant_refresh_token": "Please try again. If the error persists, please disconnect your Butanuki account from Bity, then reconnect it."
-      }
     }
   },
   "estimator": {
