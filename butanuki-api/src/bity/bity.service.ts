@@ -94,7 +94,6 @@ export class BityService {
       }
 
       const newToken = await this.bityClient.refreshToken(token.refreshToken);
-      const newTokenHistoryCause: TokenHistoryCause = TokenHistoryCause.REFRESH;
       console.log(token.id, newToken);
       dbToken.lastRefreshTriedAt = new Date();
       dbToken.refreshTriesCount++;
@@ -105,12 +104,6 @@ export class BityService {
         dbToken.refreshToken = newToken.refreshToken;
         dbToken.status = TokenStatus.ACTIVE;
         dbToken.refreshTriesCount = 0;
-
-        //Note: this operation doesn't use the transaction's entityManager
-        //If the transaction is reverted, the record will still be there
-        await this.saveTokenToHistory(dbToken, newTokenHistoryCause).catch(
-          (err) => console.log('An error occured in saveTokenToHistory', err),
-        );
 
         return db.token.save(dbToken);
       }

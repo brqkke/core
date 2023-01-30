@@ -1,7 +1,7 @@
 import { ApiError } from "../../api/call";
 import { Alert } from "./Alert";
 import { useMemo } from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import { ErrorType } from "../../generated/graphql";
 
 export function ApiErrorAlert({
@@ -9,12 +9,12 @@ export function ApiErrorAlert({
 }: {
   error: ApiError | ErrorType | string;
 }) {
-  const { t } = useTranslation();
-  const messages = useMemo<string[]>(() => {
+  const { t, i18n } = useTranslation();
+  const messages = useMemo(() => {
     if (typeof error === "string") {
       if (Object.values(ErrorType).includes(error as ErrorType)) {
         const key = `app.error.${error as ErrorType}` as const;
-        return [t(key)];
+        return [{ key }];
       } else {
         return [error];
       }
@@ -26,20 +26,44 @@ export function ApiErrorAlert({
       (err) => {
         switch (err.code) {
           case "input_payment_information_required":
-            return t("app.bity.error.input_payment_information_required");
+            return {
+              key: `app.error.${ErrorType.NeedVerifiedBityAccount}` as const,
+            };
           case "cant_refresh_token":
-            return t("app.bity.error.cant_refresh_token");
+            return {
+              key: `app.error.${ErrorType.CantRefreshBityToken}` as const,
+            };
           default:
             return err.message || err.code;
         }
       }
     );
-  }, [error, t]);
+  }, [error]);
   return (
     <>
-      {messages.map((message) => (
-        <Alert key={message} level={"danger"} message={message} />
-      ))}
+      {messages.map((message) =>
+        typeof message === "string" ? (
+          <Alert key={message} level={"danger"} message={message} />
+        ) : (
+          <Alert key={message.key} level={"danger"}>
+            <Trans
+              i18nKey={message.key}
+              t={t}
+              i18n={i18n}
+              components={{
+                kycLink: (
+                  // eslint-disable-next-line jsx-a11y/anchor-has-content
+                  <a
+                    href="https://kyc.my.bity.com/"
+                    target={"_blank"}
+                    rel="noreferrer"
+                  />
+                ),
+              }}
+            />
+          </Alert>
+        )
+      )}
     </>
   );
 }

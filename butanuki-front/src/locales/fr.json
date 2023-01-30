@@ -41,7 +41,7 @@
       "loading": "Erreur pendant le chargement",
       "ButanukiAccountPreviouslyLinkedToOtherBityAccount": "Ce compte Butanuki était déjà lié à un autre compte Bity.",
       "CantRefreshBityToken": "Veuillez réessayer. Si l'erreur subsiste, veuillez déconnecter votre compte Butanuki de Bity, puis le reconnecter.",
-      "NeedVerifiedBityAccount": "Vous devez vérifier votre compte et votre IBAN (auprès de Bity) avant de pouvoir mettre en place une épargne automatique chez Butanuki.",
+      "NeedVerifiedBityAccount": "Vous devez vérifier votre compte et votre IBAN (auprès de <kycLink>Bity.com</kycLink>) avant de pouvoir mettre en place une épargne automatique chez Butanuki. <kycLink>Cliquez ici pour vérifier votre compte</kycLink>.",
       "UnknownBityError": "Veuillez réessayer. Si l'erreur subsiste, veuillez déconnecter votre compte Butanuki de Bity, puis le reconnecter.",
       "Unknown": "Une erreur est survenue. Merci de rééssayer plus tard",
       "TooManyOrdersInVault": "Vous avez atteint la limite du nombre d'ordre dans une tirelire.",
@@ -112,12 +112,6 @@
       "delete": "Supprimer",
       "confirmDelete": "Confirmer la suppression ?",
       "edit": "Modifier"
-    },
-    "bity": {
-      "error": {
-        "input_payment_information_required": "Vous devez vérifier votre compte et votre IBAN (auprès de Bity) avant de pouvoir mettre en place une épargne automatique chez Butanuki.",
-        "cant_refresh_token": "Veuillez réessayer. Si l'erreur subsiste, veuillez déconnecter votre compte Butanuki de Bity, puis le reconnecter."
-      }
     }
   },
   "estimator": {
