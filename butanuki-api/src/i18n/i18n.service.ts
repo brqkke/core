@@ -18,4 +18,12 @@ export class I18nService {
     }
     return this.cachedI18nInstanceMap.get(locale)!;
   }
+
+  getLanguages(): readonly string[] {
+    return Object.keys(i18next.options.resources || {});
+  }
+
+  isLanguageSupported(locale: string): boolean {
+    return this.getLanguages().includes(locale);
+  }
 }

@@ -15,6 +15,7 @@ import { CurrentUser, Roles } from '../decorator/user.decorator';
 import { UserRole } from '../entities/enums/UserRole';
 import { AuthService } from './AuthService';
 import { MfaService } from '../mfa/mfa.service';
+import { I18nService } from '../i18n/i18n.service';
 
 @Controller('auth')
 export class AuthController {
@@ -24,6 +25,7 @@ export class AuthController {
     private authService: AuthService,
     private userService: UserService,
     private mfaService: MfaService,
+    private i18nService: I18nService,
   ) {}
 
   @Post('login/email')
@@ -39,7 +41,7 @@ export class AuthController {
       );
     }
     let locale = body.locale || 'en';
-    if (!['en', 'fr'].includes(locale)) {
+    if (!this.i18nService.isLanguageSupported(locale)) {
       locale = 'en';
     }
     const user = await this.userService.findUserOrInit({

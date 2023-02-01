@@ -87,7 +87,7 @@ export const STATIC_PATH = join(__dirname, '..', 'front-build/');
     ErrorModule,
     CommandModule,
     RateModule,
-    I18nModule.forRootAsync(),
+    I18nModule,
     DcaEstimatorModule,
   ],
   controllers: [AppController],
