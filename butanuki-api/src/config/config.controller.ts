@@ -10,8 +10,6 @@ export class ConfigController {
   @Get('/config')
   config(@Req() req: Request) {
     const config = this.appConfig.config;
-    const headerLocale = req.header('Accept-Language');
-    console.log('headerLocale', headerLocale);
     const locale = this.i18n.isLanguageSupported(req.cookies?.locale)
       ? req.cookies.locale
       : 'fr';
