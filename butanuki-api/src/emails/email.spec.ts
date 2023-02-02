@@ -27,6 +27,7 @@ describe('Email rendering', () => {
         },
       })
       .compile();
+    await module.init();
     mailerService = module.get(MailerService);
   });
 
