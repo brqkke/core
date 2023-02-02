@@ -15,14 +15,17 @@ export const Header = React.memo(() => {
         </div>
       </div>
       <div className="nav-links">
-        <a href={getUrl("about")} target="_top">
-          {t("nav.about")}
-        </a>
+        {/*<a href={getUrl("about")} target="_top">*/}
+        {/*  {t("nav.about")}*/}
+        {/*</a>*/}
         <a href={getUrl("help")} target="_top">
           {t("nav.help")}
         </a>
         <a href="https://twitter.com/butanuki21" target="twitter">
           Twitter
+        </a>
+        <a href="https://t.me/Butanuki" target={"_blank"}>
+          Telegram
         </a>
       </div>
     </div>
