@@ -55,9 +55,9 @@
     },
     "home": {
       "bity": {
-        "linked": "Your bity account is linked",
-        "not_linked": "Your Bity account isn't linked",
-        "broken": "It looks like the link between Butanuki and your Bity account is broken.",
+        "linked": "Your Bity.com account is linked",
+        "not_linked": "Your Bity.com account isn't linked",
+        "broken": "It looks like the link between Butanuki and your Bity.com account is broken.",
         "to_link": "to link it now.",
         "to_unlink": "to unlink it.",
         "not_setup": "Saving plan not setup",
