@@ -55,12 +55,13 @@
     },
     "home": {
       "bity": {
-        "linked": "Your bity account is linked",
-        "not_linked": "Your Bity account isn't linked",
-        "broken": "It looks like the link between Butanuki and your Bity account is broken.",
+        "linked": "Your Bity.com account is linked",
+        "not_linked": "Your Bity.com account isn't linked",
+        "broken": "It looks like the link between Butanuki and your Bity.com account is broken.",
         "to_link": "to link it now.",
         "to_unlink": "to unlink it.",
-        "not_setup": "Saving plan not setup"
+        "not_setup": "Saving plan not setup",
+        "create_bity": "If you don't have a verified Bity.com account yet, <link1>Click here</link1> to create one."
       },
       "click_here": "Click here",
       "try_again": "Try again",
