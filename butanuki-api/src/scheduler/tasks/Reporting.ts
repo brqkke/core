@@ -35,6 +35,10 @@ export class Reporting extends AbstractTask {
       return true;
     }
 
+    if (!this.appConfig.config.backgroundAgent.reporting.enable) {
+      return false;
+    }
+
     return (
       task.lastRunAt <
       new Date(

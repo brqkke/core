@@ -101,6 +101,7 @@ export class AppConfigService {
             'REPORTING_ALERT_EMAIL',
             'changeme@example.com',
           ),
+          enable: config.get<string>('ENABLE_REPORTING', 'false') === 'true',
         },
         bitcoinPriceRefreshInterval: 15 * 60, //15 minutes
       },
