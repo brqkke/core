@@ -10,4 +10,7 @@ export class Task {
 
   @Column()
   lastRunAt: Date;
+
+  @Column({ default: '0' })
+  triesCount: number = 0;
 }
