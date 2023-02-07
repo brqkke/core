@@ -17,6 +17,10 @@ export const Footer = React.memo(() => {
       |{" "}
       <a href="https://twitter.com/butanuki21" target="twitter">
         Twitter
+      </a>{" "}
+      |{" "}
+      <a href="https://t.me/Butanuki" target={"_blank"}>
+        Telegram
       </a>
       <br />
       <br />
