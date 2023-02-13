@@ -1,7 +1,6 @@
-import { Controller, Post } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { BityService } from './bity.service';
-import { CurrentUser, Roles } from '../decorator/user.decorator';
-import { User } from '../entities/User';
+import { Roles } from '../decorator/user.decorator';
 import { UserRole } from '../entities/enums/UserRole';
 import { IsNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
@@ -19,11 +18,4 @@ export class BityLinkCodeDTO {
 @Roles(UserRole.USER)
 export class BityLinkController {
   constructor(private bity: BityService) {}
-
-  @Post('/refresh')
-  async refresh(@CurrentUser() user: User) {
-    if (user.token) {
-      return this.bity.refreshBityToken(user.token);
-    }
-  }
 }
