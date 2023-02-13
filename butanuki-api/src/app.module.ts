@@ -28,6 +28,7 @@ import { RateModule } from './rate/rate.module';
 import { I18nModule } from './i18n/i18n.module';
 import { DcaEstimatorModule } from './dca-estimator/dca-estimator.module';
 import { IndexHtmlMiddleware } from './middlewares/IndexHtmlMiddleware';
+import { AlertModule } from './alert/alert.module';
 
 export const STATIC_PATH = join(__dirname, '..', 'front-build/');
 
@@ -89,6 +90,7 @@ export const STATIC_PATH = join(__dirname, '..', 'front-build/');
     RateModule,
     I18nModule,
     DcaEstimatorModule,
+    AlertModule,
   ],
   controllers: [AppController],
 })
