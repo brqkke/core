@@ -18,6 +18,7 @@ export class AppConfigService {
 
   static generateAppConfig(config: ConfigService) {
     return {
+      envName: config.get('ENV_NAME', undefined),
       port: config.getOrThrow<number>('PORT', 3000),
       baseUrl: config.getOrThrow<string>('BASE_URL'),
       nodeEnv: config.getOrThrow<string>('NODE_ENV'),
@@ -111,6 +112,12 @@ export class AppConfigService {
       },
       exchangeRateData: {
         apiKey: config.get<string>('HISTORICAL_RATE_API_KEY', 'xxx'),
+      },
+      alert: {
+        telegram: {
+          chatId: config.get<string>('TELEGRAM_CHAT_ID', 'xxx'),
+          apiKey: config.get<string>('TELEGRAM_API_KEY', 'xxx'),
+        },
       },
     };
   }
