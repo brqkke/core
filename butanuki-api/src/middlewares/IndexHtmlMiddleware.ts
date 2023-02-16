@@ -5,15 +5,41 @@ import * as fs from 'fs/promises';
 import path from 'path';
 import { DCACConfigs } from '../dca-estimator/dca-estimator.resolver';
 import { DCAInterval, ItemType } from '../dca-estimator/types';
+import { I18nService } from '../i18n/i18n.service';
+import { ServerResponse } from 'http';
 
 @Injectable()
 export class IndexHtmlMiddleware implements NestMiddleware {
   private cachedIndexHtml: { [key: string]: string } = {};
 
+  constructor(private i18n: I18nService) {}
+
   async use(req: Request, res: Response, next: NextFunction) {
+    this.addConfigPreloadHeader(req, res);
     if (!req.url.startsWith('/savings')) {
       return next();
     }
+    res.send(await this.handlesSavingsPage(req));
+    return next();
+  }
+
+  public addConfigPreloadHeader(req: Request, res: ServerResponse) {
+    if (req.url.startsWith('/api')) {
+      return;
+    }
+    const url = new URL(req.url, req.protocol + '://' + req.headers.host);
+    const lang = url.searchParams.get('lang');
+    const langQueryString =
+      !!lang && this.i18n.isLanguageSupported(lang) ? `?lang=${lang}` : '';
+
+    res.setHeader('Content-Type', 'text/html');
+    res.setHeader(
+      'Link',
+      `</api/config${langQueryString}>; rel="preload"; as="fetch"`,
+    );
+  }
+
+  private async handlesSavingsPage(req: Request) {
     const url = new URL(req.url, req.protocol + '://' + req.headers.host);
 
     const isOther = url.searchParams.get('slug') === 'custom';
@@ -28,9 +54,6 @@ export class IndexHtmlMiddleware implements NestMiddleware {
         }
       : DCACConfigs.find((c) => c.slug === url.searchParams.get('slug')) ||
         DCACConfigs[0];
-
-    res.header('Content-Type', 'text/html');
-    res.header('Link', '</api/config>; rel="preload"; as="fetch"');
 
     if (!this.cachedIndexHtml[config.slug]) {
       const content = (
@@ -68,9 +91,7 @@ export class IndexHtmlMiddleware implements NestMiddleware {
         // add og: meta tags
       );
     }
-
-    res.send(this.cachedIndexHtml[config.slug]);
-    return next();
+    return this.cachedIndexHtml[config.slug];
   }
 
   /**

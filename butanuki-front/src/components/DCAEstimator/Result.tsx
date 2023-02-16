@@ -174,7 +174,7 @@ export const Result = ({
       <ValidationError dateStatus={dateStatus} />
       <div className="row text-center">
         <div className="col-md-12">
-          <a className={"btn btn-success"} href={link("root")}>
+          <a className={"estimator-share-button"} href={link("root")}>
             {t("estimator.action.startNow")}
           </a>
         </div>

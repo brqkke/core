@@ -1,11 +1,9 @@
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
-import { ModuleMocker } from 'jest-mock';
 import { useAppWithMockedDatabase } from '../utils';
 import { invariant } from 'graphql/jsutils/invariant';
 import { JSDOM } from 'jsdom';
 
-const moduleMocker = new ModuleMocker(global);
 describe('index.html meta ssr', () => {
   let app: INestApplication;
 

@@ -18,7 +18,6 @@ export default function i18ninit() {
       ),
       lng: "fr",
       fallbackLng: "fr",
-
       interpolation: {
         escapeValue: false,
       },

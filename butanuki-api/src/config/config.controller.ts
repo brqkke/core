@@ -10,9 +10,15 @@ export class ConfigController {
   @Get('/config')
   config(@Req() req: Request) {
     const config = this.appConfig.config;
-    const locale = this.i18n.isLanguageSupported(req.cookies?.locale)
-      ? req.cookies.locale
-      : 'fr';
+    const urlLang = req.query.lang?.toString();
+    const cookieLang = req.cookies?.locale;
+    const headerLang = req.headers['accept-language'];
+    const locale =
+      !!urlLang && this.i18n.isLanguageSupported(urlLang)
+        ? urlLang
+        : !!cookieLang && this.i18n.isLanguageSupported(cookieLang)
+        ? cookieLang
+        : this.i18n.findBestLanguageFromHeader(headerLang || '');
     return {
       recaptchaKey: config.recaptcha.key,
       locale, //TODO: use browser locale

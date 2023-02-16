@@ -26,4 +26,13 @@ export class I18nService {
   isLanguageSupported(locale: string): boolean {
     return this.getLanguages().includes(locale);
   }
+
+  findBestLanguageFromHeader(header: string): string {
+    const languages = this.getLanguages();
+    const supportedLanguages = header
+      .split(',')
+      .map((l) => l.split(';')[0].trim())
+      .filter((l) => languages.includes(l));
+    return supportedLanguages[0] || 'fr';
+  }
 }
