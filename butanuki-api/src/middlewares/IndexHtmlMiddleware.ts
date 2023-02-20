@@ -16,7 +16,7 @@ export class IndexHtmlMiddleware implements NestMiddleware {
 
   async use(req: Request, res: Response, next: NextFunction) {
     this.addConfigPreloadHeader(req, res);
-    if (!req.url.startsWith('/savings')) {
+    if (!req.originalUrl.startsWith('/savings')) {
       return next();
     }
     res.send(await this.handlesSavingsPage(req));
@@ -32,7 +32,7 @@ export class IndexHtmlMiddleware implements NestMiddleware {
     const langQueryString =
       !!lang && this.i18n.isLanguageSupported(lang) ? `?lang=${lang}` : '';
 
-    res.setHeader('Content-Type', 'text/html');
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader(
       'Link',
       `</api/config${langQueryString}>; rel="preload"; as="fetch"`,

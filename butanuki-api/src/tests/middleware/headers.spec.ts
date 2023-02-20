@@ -23,6 +23,7 @@ describe('index.html header', () => {
       expect(response.headers.link).toContain(
         '</api/config>; rel="preload"; as="fetch"',
       );
+      expect(response.headers['content-type']).toBe('text/html; charset=utf-8');
     },
   );
 
@@ -34,6 +35,7 @@ describe('index.html header', () => {
       expect(response.headers.link).toContain(
         '</api/config?lang=fr>; rel="preload"; as="fetch"',
       );
+      expect(response.headers['content-type']).toBe('text/html; charset=utf-8');
     },
   );
 
@@ -47,6 +49,18 @@ describe('index.html header', () => {
       expect(response.status).toBe(200);
       expect(response.headers.link).toBeUndefined();
       expect(response.body.locale).toBe(lang);
+      expect(response.headers['content-type']).toBe(
+        'application/json; charset=utf-8',
+      );
     },
   );
+
+  it('sould not temper with assets headers', async () => {
+    const response = await request(app.getHttpServer()).get('/assets/test.js');
+    expect(response.status).toBe(200);
+    expect(response.headers.link).toBeUndefined();
+    expect(response.headers['content-type']).toBe(
+      'application/javascript; charset=UTF-8',
+    );
+  });
 });

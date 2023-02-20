@@ -39,5 +39,6 @@ server.key
 
 front-build/
 !front-build/index.html
+!front-build/assets/test.js
 
 .env

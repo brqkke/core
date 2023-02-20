@@ -91,6 +91,6 @@ export const STATIC_PATH = join(__dirname, '..', 'front-build/');
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(IndexHtmlMiddleware).forRoutes('/');
+    consumer.apply(IndexHtmlMiddleware).forRoutes('/savings');
   }
 }
