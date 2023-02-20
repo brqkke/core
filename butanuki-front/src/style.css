@@ -2,6 +2,10 @@ body {
     font: 16px -apple-system, BlinkMacSystemFont, Arial, Helvetica, sans-serif;
 }
 
+.lh-savings p {
+    line-height: 1.75rem;
+}
+
 a {
     background-color: transparent;
     text-decoration: underline dotted;
@@ -91,6 +95,20 @@ footer a:hover {
 .nav-title a:hover {
     color: #f90;
     text-decoration: underline dotted;
+}
+
+@media(max-width: 640px){
+    .nav-title img {
+        width: 124px;
+        height: auto;
+    }
+}
+
+@media(max-width: 400px){
+    .nav-title img {
+        width: 100px;
+        height: auto;
+    }
 }
 
 .heading-bitcoin{

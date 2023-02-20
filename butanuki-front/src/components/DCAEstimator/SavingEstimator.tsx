@@ -10,6 +10,7 @@ import { useSavingEstimatorConfig } from "./SavingEstimatorConfigProvider";
 import { useDebounce } from "../../utils/hooks";
 import { Result } from "./Result";
 import { useSearchParams } from "react-router-dom";
+import BigText from "../../locales/savings/BigText";
 
 const isDcaInterval = (value?: string | null): value is DcaInterval => {
   return Object.values(DcaInterval).includes(value as DcaInterval);
@@ -232,6 +233,9 @@ export default function SavingEstimator() {
           }}
           currency={currency}
         />
+      </div>
+      <div className="col-md-8 mx-auto mt-5 lh-savings">
+        <BigText />
       </div>
     </div>
   );
