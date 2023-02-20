@@ -2,11 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useConfigContext } from "../../context/ConfigContext";
 import React from "react";
 import { useUpdateLocaleMutation } from "../../generated/graphql";
-
-const setLangCookie = (locale: string) => {
-  window.document.cookie =
-    "locale=" + locale + ";" + new Date(Date.now() + 1000 * 3600 * 24 * 365);
-};
+import { setLangCookie } from "../../utils/i18n";
 
 export const LocaleChanger = React.memo(
   ({ logged = false }: { logged?: boolean }) => {

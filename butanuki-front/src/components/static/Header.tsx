@@ -10,7 +10,12 @@ export const Header = React.memo(() => {
       <div className="nav-header">
         <div className="nav-title">
           <a href={getUrl("root")} target="_top">
-            Butanuki
+            <img
+              src={"/images/logo_butanuki.png"}
+              alt="logo"
+              width="171"
+              height="28"
+            />
           </a>
         </div>
       </div>

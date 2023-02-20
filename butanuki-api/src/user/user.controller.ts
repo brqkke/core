@@ -14,7 +14,7 @@ class UpdateLocaleDTO {
   locale: string;
 }
 
-@Controller('user')
+@Controller('api/user')
 export class UserController {
   private db: Repositories;
   constructor(db: DataSource, private i18n: I18nService) {

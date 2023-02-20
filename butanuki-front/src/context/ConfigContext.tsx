@@ -5,12 +5,17 @@ import { MainLayout } from "../layout/MainLayout";
 import { LoadingCard } from "../components/LoadingCard";
 import { useEffectOnce } from "../utils/hooks";
 import { ConfigContext, ConfigContextProps } from "./contexts";
+import { setLangCookie } from "../utils/i18n";
+
+const urlLang = new URLSearchParams(window.location.search)
+  .get("lang")
+  ?.toString();
 
 const response = get<
   ConfigContextProps & {
     locale: string;
   }
->("/config", true, {
+>(urlLang ? "/config?lang=" + urlLang : "/config", true, {
   credentials: "include",
   mode: "no-cors",
   headers: {
@@ -39,6 +44,10 @@ export function ConfigContextProvider({
       if (response.response) {
         setConfig(response.response);
         setLocale(response.response.locale);
+        const url = new URL(window.location.href);
+        url.searchParams.delete("lang");
+        window.history.replaceState({}, "", url.toString());
+        setLangCookie(response.response.locale);
       } else {
         setConfig(null);
       }

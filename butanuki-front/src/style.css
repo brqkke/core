@@ -151,3 +151,32 @@ footer a:hover {
 .card.active-order .card-header, .card.active-order .card-footer {
     background-color: #e6f2ff;
 }
+
+
+/* btn copied from static site */
+.estimator-share-button:active {
+    top: 1px;
+    box-shadow: 5px 5px 10px #cccccc;
+}
+.estimator-share-button:hover {
+    opacity: 0.9;
+    text-decoration: underline dotted;
+    box-shadow: 5px 5px 10px #cccccc;
+}
+
+.estimator-share-button {
+    font-weight: 600;
+    border-radius: 16px;
+    padding: 1em 1em;
+    margin: 0.5em 0;
+    align-items: center;
+    justify-content: center;
+    background: #44bb44;
+    color: white;
+    outline: 0;
+    transition: 0.3s all;
+    text-decoration: none;
+    border: 2px solid #369636;
+    display: inline-block;
+}
+/* end */

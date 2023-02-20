@@ -10,7 +10,6 @@ async function bootstrap() {
   const appConfig = app.get(AppConfigService).config;
   app.use(cookieParser());
   app.enableCors();
-  app.setGlobalPrefix('api');
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,

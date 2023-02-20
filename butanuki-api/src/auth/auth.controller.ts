@@ -17,7 +17,7 @@ import { AuthService } from './AuthService';
 import { MfaService } from '../mfa/mfa.service';
 import { I18nService } from '../i18n/i18n.service';
 
-@Controller('auth')
+@Controller('api/auth')
 export class AuthController {
   constructor(
     private db: DataSource,

@@ -189,7 +189,7 @@ export const OrderCard = ({
                     formatAmount(
                       order.amount,
                       order.activeOrder.currency,
-                      i18n.language as "en" | "fr"
+                      i18n.language
                     )}
                 </p>
               </div>

@@ -1,9 +1,4 @@
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  RequestMethod,
-} from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
@@ -29,6 +24,7 @@ import { I18nModule } from './i18n/i18n.module';
 import { DcaEstimatorModule } from './dca-estimator/dca-estimator.module';
 import { IndexHtmlMiddleware } from './middlewares/IndexHtmlMiddleware';
 import { AlertModule } from './alert/alert.module';
+import { MiddlewareModule } from './middlewares/middleware.module';
 
 export const STATIC_PATH = join(__dirname, '..', 'front-build/');
 
@@ -40,21 +36,20 @@ export const STATIC_PATH = join(__dirname, '..', 'front-build/');
     AuthModule,
     UserModule,
     ServeStaticModule.forRootAsync({
-      useFactory: () => {
+      inject: [IndexHtmlMiddleware],
+      imports: [MiddlewareModule],
+      useFactory: (indexHtmlMiddleware: IndexHtmlMiddleware) => {
         return [
           {
             rootPath: STATIC_PATH,
-            exclude: ['/api/graphql', '/savings'],
+            exclude: ['/api/*', '/savings'],
             serveStaticOptions: {
               setHeaders: (res, path, stat) => {
                 if (
                   path.replace(STATIC_PATH, '') === 'index.html' &&
                   res instanceof ServerResponse
                 ) {
-                  res.setHeader(
-                    'Link',
-                    '</api/config>; rel="preload"; as="fetch"',
-                  );
+                  indexHtmlMiddleware.addConfigPreloadHeader(res.req, res);
                 }
               },
             },
@@ -96,8 +91,6 @@ export const STATIC_PATH = join(__dirname, '..', 'front-build/');
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(IndexHtmlMiddleware)
-      .forRoutes({ path: '*', method: RequestMethod.ALL });
+    consumer.apply(IndexHtmlMiddleware).forRoutes('/');
   }
 }

@@ -65,7 +65,7 @@ describe('AuthController', () => {
     const transport = app.get(MailerTransportService);
 
     await request(app.getHttpServer())
-      .post('/auth/login/email')
+      .post('/api/auth/login/email')
       .send({
         email: 'john@doe.com',
         captchaToken: 'valid',
@@ -79,7 +79,7 @@ describe('AuthController', () => {
     )?.[1];
     expect(tempCode).toBeTruthy();
     const verify = await request(app.getHttpServer())
-      .post('/auth/login/email/verify')
+      .post('/api/auth/login/email/verify')
       .send({
         email: 'john@doe.com',
         tempCode,
@@ -93,7 +93,7 @@ describe('AuthController', () => {
     expect(verify.body.sessionToken).toBeTruthy();
 
     const verify2 = await request(app.getHttpServer())
-      .post('/auth/login/email/verify')
+      .post('/api/auth/login/email/verify')
       .send({
         email: 'john@doe.com',
         tempCode,
@@ -101,7 +101,7 @@ describe('AuthController', () => {
     expect(verify2.status).toBe(401);
 
     const me = await request(app.getHttpServer())
-      .get('/auth/me')
+      .get('/api/auth/me')
       .set('Authorization', verify.body.sessionToken)
       .send();
     expect(me.body).toMatchObject({
@@ -111,7 +111,7 @@ describe('AuthController', () => {
 
   it("can't login with invalid captcha", async () => {
     await request(app.getHttpServer())
-      .post('/auth/login/email')
+      .post('/api/auth/login/email')
       .send({
         email: 'john@doe.com',
         captcha: 'invalid',
@@ -123,7 +123,7 @@ describe('AuthController', () => {
 
   it('can login without locale', async () => {
     await request(app.getHttpServer())
-      .post('/auth/login/email')
+      .post('/api/auth/login/email')
       .send({
         email: 'john@doe.com',
         captchaToken: 'valid',
@@ -137,7 +137,7 @@ describe('AuthController', () => {
     let user = await makeUser(testingModule.db!);
     user.mfaSecret = 'secret123';
     await testingModule.db!.user.save(user); //mfa is set but not enabled
-    await request(app.getHttpServer()).post('/auth/login/email').send({
+    await request(app.getHttpServer()).post('/api/auth/login/email').send({
       email: user.email,
       captchaToken: 'valid',
       locale: 'en',
@@ -145,14 +145,14 @@ describe('AuthController', () => {
     user = await testingModule.db!.user.findOneByOrFail({ id: user.id });
     let tempCode = user.tempCode;
     const verify = await request(app.getHttpServer())
-      .post('/auth/login/email/verify')
+      .post('/api/auth/login/email/verify')
       .send({
         email: user.email,
         tempCode,
       });
     expect(verify.status).toBe(201); //mfa is not enabled, so we can login
 
-    await request(app.getHttpServer()).post('/auth/login/email').send({
+    await request(app.getHttpServer()).post('/api/auth/login/email').send({
       email: user.email,
       captchaToken: 'valid',
       locale: 'en',
@@ -163,7 +163,7 @@ describe('AuthController', () => {
     await testingModule.db!.user.save(user); //mfa is set and enabled
 
     const verify2 = await request(app.getHttpServer())
-      .post('/auth/login/email/verify')
+      .post('/api/auth/login/email/verify')
       .send({
         email: user.email,
         tempCode,
@@ -175,7 +175,7 @@ describe('AuthController', () => {
     });
 
     const verify3 = await request(app.getHttpServer())
-      .post('/auth/login/email/verify')
+      .post('/api/auth/login/email/verify')
       .send({
         email: user.email,
         tempCode,

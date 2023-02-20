@@ -22,7 +22,7 @@ export const usePublicPageLink = (): ((key: Pages) => string) => {
 export const formatAmount = (
   amount: number,
   currency: OrderCurrency | "btc",
-  locale: "en" | "fr",
+  locale: string,
   withSign = false,
   withCents = true
 ) => {
@@ -68,4 +68,9 @@ export const formatAmount = (
 export const useTranslateFrequency = () => {
   const { t } = useTranslation();
   return (frequency: DcaInterval) => t(`estimator.input.per.${frequency}`);
+};
+
+export const setLangCookie = (locale: string) => {
+  window.document.cookie =
+    "locale=" + locale + ";" + new Date(Date.now() + 1000 * 3600 * 24 * 365);
 };

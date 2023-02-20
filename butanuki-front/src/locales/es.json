@@ -1,0 +1,171 @@
+{
+  "code": "en",
+  "language": "EN",
+  "nav": {
+    "about": "About",
+    "help": "Help",
+    "blog": "Blog",
+    "contact": "Contact",
+    "privacy": "Privacy",
+    "links": {
+      "about": "/en/about",
+      "help": "/en/help",
+      "tou": "/en/conditions",
+      "privacy": "/en/privacy",
+      "login": "/en/login",
+      "root": "/en/"
+    }
+  },
+  "homepage": {
+    "hello": "Soon, a Bitcoin ATM open 24/7 in Geneva city-center.",
+    "get_started": "Get started here: ",
+    "get_started_call_to_action": "Buy Bitcoin",
+    "subtitle": "Easy Bitcoin Saving",
+    "get_started_follow_us": "Follow us on Twitter: "
+  },
+  "tou": {
+    "title": "Terms Of Use"
+  },
+  "privacy": {
+    "title": "Privacy policy"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions"
+  },
+  "about": {
+    "title": "About"
+  },
+  "app": {
+    "loading": "Loading",
+    "error": {
+      "loading": "Error while loading",
+      "ButanukiAccountPreviouslyLinkedToOtherBityAccount": "This Butanuki account was previously linked to another Bity account.",
+      "CantRefreshBityToken": "Please try again. If the error persists, please disconnect your Butanuki account from Bity, then reconnect it.",
+      "NeedVerifiedBityAccount": "You must verify your account and your IBAN (with <kycLink>Bity.com</kycLink>) before being able to setup a DCA with Butanuki. <kycLink>Click here to verify your account</kycLink>.",
+      "Unknown": "An unknown error occured. Please try again later.",
+      "UnknownBityError": "Please try again. If the error persists, please disconnect your Butanuki account from Bity, then reconnect it.",
+      "TooManyOrdersInVault": "You have too many orders in your piggy bank.",
+      "TooManyVaults": "You have too many piggy banks."
+    },
+    "login": {
+      "enter_email": "Enter your email to receive a unique login link",
+      "email": "Email",
+      "receive_link": "Receive login link",
+      "accept_tou": "Accept the <1>Terms Of Use</1>"
+    },
+    "home": {
+      "bity": {
+        "linked": "Your Bity.com account is linked",
+        "not_linked": "Your Bity.com account isn't linked",
+        "broken": "It looks like the link between Butanuki and your Bity.com account is broken.",
+        "to_link": "to link it now.",
+        "to_unlink": "to unlink it.",
+        "not_setup": "Saving plan not setup",
+        "create_bity": "If you don't have a verified Bity.com account yet, <link1>Click here</link1> to create one."
+      },
+      "click_here": "Click here",
+      "try_again": "Try again",
+      "setup_dca": "Setup saving plan"
+    },
+    "order": {
+      "amount": "Amount",
+      "change_amount": "Edit",
+      "payment_informations": "Payment informations",
+      "reference": "Bank Transfer Reference (VERY IMPORTANT!)",
+      "crypto_address": "Bitcoin address",
+      "crypto_address_desc": "Receiving Bitcoin address",
+      "save": "Save",
+      "go_back": "Go back",
+      "warning_reset": "Warning, you will get a new Bank Transfer Reference",
+      "create_order_text": "Need to start other saving plans?",
+      "create_order": "Add a new order",
+      "name": "Name",
+      "name_placeholder": "You can set a name for this order to easily find it",
+      "editing": "Editing you order {{name}}",
+      "creating": "Creating a new order in your piggy bank {{name}}",
+      "cancelled_warning": "Warning, this order has been cancelled by Bity. You need to reconfigure it to make it work again.",
+      "frequency": "Frequency",
+      "frequencies": {
+        "WEEKLY": "Weekly",
+        "MONTHLY": "Monthly",
+        "UNIQUE": "One-time buy"
+      }
+    },
+    "vault": {
+      "add": "Add a new piggy bank",
+      "name": "Name",
+      "name_placeholder": "Name of this piggy bank",
+      "currency": "Currency",
+      "maxReached": "You've reached the maximum number of piggy banks you can create. ({{max}})",
+      "editing": "Editing your piggy bank {{name}}",
+      "statistics": {
+        "total_spent": "Total saved",
+        "total_spent_desc": "Total amount of {{currency}} saved in this piggy bank.",
+        "total_received": "Total received bitcoins",
+        "valuation": "Valuation"
+      }
+    },
+    "action": {
+      "submit": "Submit",
+      "save": "Save",
+      "go_back": "Go back",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "confirmDelete": "Confirm deletion?",
+      "edit": "Edit"
+    }
+  },
+  "estimator": {
+    "share": "Compartir",
+    "action": {
+      "copyUrl": "Copiar URL",
+      "copyFeedback": "Copiado!",
+      "shareOnTwitter": "Compartir en Twitter",
+      "shareOnFacebook": "Compartir en Facebook",
+      "shareOnLinkedIn": "Compartir en LinkedIn",
+      "startNow": "Empieza a ahorrar ya"
+    },
+    "interval": {
+      "DAILY": "Diario",
+      "WEEKLY": "Semanal",
+      "MONTHLY": "Mensual"
+    },
+    "error": {
+      "invalid_date": "Fecha Inválida (min: 2013-01-01)"
+    },
+    "input": {
+      "recurring_amount": "Cantidad a ahorrar",
+      "currency": "Divisa",
+      "interval": "Intervalo",
+      "start_date": "Fecha de inicio",
+      "end_date": "Fecha final",
+      "per": {
+        "DAILY": "Cada día",
+        "WEEKLY": "Cada semana",
+        "MONTHLY": "Cada mes"
+      }
+    },
+    "title": "<nb>¿Cuánto Bitcoin</nb> <nb>podría tener hoy?</nb>",
+    "profit": "un aumento de valor",
+    "loss": "una depreciación",
+    "item": {
+      "CIGARETTES": "un paquete de cigarrillos",
+      "FASTFOOD": "un menú gigante con patatas",
+      "BEER": "una pinta de cerveza de barril",
+      "COFFEE": "un cappuccino caramelizado",
+      "OTHER": "un trasto barato inútil"
+    },
+    "results": {
+      "phrase": "Si hubiera comprado <currencyInput /> <itemPrice/> <nb> de valor en Bitcoin</nb> en lugar de <object/> <frequency/> <nb> desde <startInput/></nb>, <loader><nb> habría ahorrado</nb> <t>{{saved}},<t/> y <nb> ahora tendría</nb> cerca de <t>{{bitcoinAmount}}</t> con un valor de <t>{{bitcoinValue}}</t> a día de hoy, <nb>lo que supone <t>{{profitOrLoss}}</t> de</nb> <nb><t>{{profitLoss}}</t> <small>(<percentPL/>)</small>.</nb></loader>",
+      "share": "Si hubiera comprado {{price}} de valor en Bitcoin en lugar de {{object}} {{frequency}} desde {{start}}, habría ahorrado {{saved}}, y ahora tendría {{bitcoinAmount}}, con un valor de {{bitcoinValue}} a día de hoy, lo que supone un aumento de valor de {{profitLoss}} ({{percentPL}}).",
+      "title": "Results",
+      "total_buys": "Compra total:",
+      "total_spent": "Ahorro total:",
+      "total_bought": "Bitcoin comprado:",
+      "average_cost": "Coste promedio por bitcoin:",
+      "current_price": "Precio actual:",
+      "valuation": "Valoración:",
+      "profit_loss": "Beneficio/pérdida:"
+    }
+  }
+}

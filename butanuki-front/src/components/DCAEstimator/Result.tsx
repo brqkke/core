@@ -141,17 +141,17 @@ export const Result = ({
             saved: formatAmount(
               results?.totalInvestment || 0,
               currency,
-              i18n.language as "fr" | "en"
+              i18n.language
             ),
             bitcoinAmount: formatAmount(
               results?.totalBtcBought || 0,
               "btc",
-              i18n.language as "fr" | "en"
+              i18n.language
             ),
             bitcoinValue: formatAmount(
               results?.totalBtcValue || 0,
               currency,
-              i18n.language as "fr" | "en"
+              i18n.language
             ),
             profitOrLoss:
               (results?.totalProfit || 0) >= 0
@@ -160,7 +160,7 @@ export const Result = ({
             profitLoss: formatAmount(
               Math.abs(results?.totalProfit || 0),
               currency,
-              i18n.language as "fr" | "en",
+              i18n.language,
               false
             ),
             percentPL: formatToPercent({
@@ -174,7 +174,7 @@ export const Result = ({
       <ValidationError dateStatus={dateStatus} />
       <div className="row text-center">
         <div className="col-md-12">
-          <a className={"btn btn-success"} href={link("root")}>
+          <a className={"estimator-share-button"} href={link("root")}>
             {t("estimator.action.startNow")}
           </a>
         </div>
@@ -267,7 +267,7 @@ const useShareLink = (
     price: formatAmount(
       nanToZero(Number(params.price || 0)),
       currency,
-      i18n.language as "fr" | "en",
+      i18n.language,
       false,
       false
     ),
@@ -277,19 +277,19 @@ const useShareLink = (
     saved: formatAmount(
       results?.totalInvestment || 0,
       currency,
-      i18n.language as "fr" | "en",
+      i18n.language,
       false,
       false
     ),
     bitcoinAmount: formatAmount(
       results?.totalBtcBought || 0,
       "btc",
-      i18n.language as "fr" | "en"
+      i18n.language
     ),
     bitcoinValue: formatAmount(
       results?.totalBtcValue || 0,
       currency,
-      i18n.language as "fr" | "en",
+      i18n.language,
       false,
       false
     ),
@@ -300,7 +300,7 @@ const useShareLink = (
     profitLoss: formatAmount(
       Math.abs(results?.totalProfit || 0),
       currency,
-      i18n.language as "fr" | "en",
+      i18n.language,
       false,
       false
     ),

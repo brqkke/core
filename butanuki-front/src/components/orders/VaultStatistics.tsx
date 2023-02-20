@@ -15,7 +15,7 @@ export const VaultStatistics = (props: {
         {formatAmount(
           props.vaultStatistics.totalSpent,
           props.currency,
-          i18n.language as "en" | "fr"
+          i18n.language
         )}
       </p>
       <p>
@@ -23,7 +23,7 @@ export const VaultStatistics = (props: {
         {formatAmount(
           props.vaultStatistics.totalReceived,
           "btc",
-          i18n.language as "en" | "fr"
+          i18n.language
         )}
       </p>
       {!!props.bitcoinPrice && (
@@ -32,7 +32,7 @@ export const VaultStatistics = (props: {
           {formatAmount(
             props.vaultStatistics.totalReceived * props.bitcoinPrice,
             props.currency,
-            i18n.language as "en" | "fr"
+            i18n.language
           )}
         </p>
       )}

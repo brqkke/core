@@ -160,11 +160,7 @@ const OrderHistory = ({ userId }: { userId: string }) => {
                     </a>
                   </td>
                   <td>
-                    {formatAmount(
-                      order.amount,
-                      order.currency,
-                      i18n.language as "fr" | "en"
-                    )}
+                    {formatAmount(order.amount, order.currency, i18n.language)}
                   </td>
                   <td>
                     {order.status}
@@ -172,11 +168,7 @@ const OrderHistory = ({ userId }: { userId: string }) => {
                       <span>
                         {" "}
                         -{" "}
-                        {formatAmount(
-                          order.filledAmount,
-                          "btc",
-                          i18n.language as "fr" | "en"
-                        )}
+                        {formatAmount(order.filledAmount, "btc", i18n.language)}
                       </span>
                     ) : null}
                   </td>

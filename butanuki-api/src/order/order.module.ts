@@ -1,5 +1,4 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { OrderController } from './order.controller';
 import { OrderService } from './order.service';
 import { BityModule } from '../bity/bity.module';
 import { OrderTemplateService } from './order.template.service';
@@ -18,7 +17,6 @@ import { OrderFieldResolver } from './order.field.resolver';
     AppConfigModule,
     DatabaseModule,
   ],
-  controllers: [OrderController],
   providers: [
     OrderService,
     OrderTemplateService,

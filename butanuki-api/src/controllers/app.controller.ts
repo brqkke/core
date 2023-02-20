@@ -1,16 +1,16 @@
 import { Controller, Get } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 
-@Controller()
+@Controller('api')
 export class AppController {
   constructor(private db: DataSource) {}
 
-  @Get('/version')
+  @Get('version')
   version() {
     return { version: process.env.APP_VERSION };
   }
 
-  @Get('/status')
+  @Get('status')
   async status() {
     await this.db.query('SELECT 1');
     return { status: 'ok' };
