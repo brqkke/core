@@ -1,0 +1,57 @@
+{
+  "code": "ro",
+  "language": "RO",
+  "estimator": {
+    "share": "Împartăşeşte",
+    "action": {
+      "copyUrl": "Copiază URL-ul",
+      "copyFeedback": "Copiat !",
+      "shareOnTwitter": " Împartăşeşte pe Twitter",
+      "shareOnFacebook": " Împartăşeşte pe Facebook",
+      "shareOnLinkedIn": " Împartăşeşte pe LinkedIn",
+      "startNow": "Incepe sa economisesti azi. Clic aici !"
+    },
+    "interval": {
+      "DAILY": "Zilnic",
+      "WEEKLY": "Săptămânal",
+      "MONTHLY": "Lunar"
+    },
+    "error": {
+      "invalid_date": "Data invalida (min: 2013-01-01)"
+    },
+    "input": {
+      "recurring_amount": "Suma recurenta",
+      "currency": "Moneda",
+      "interval": "Interval",
+      "start_date": "Dată de început",
+      "end_date": "Dată de sfârşit",
+      "per": {
+        "DAILY": "pe zi",
+        "WEEKLY": "pe săptămână ",
+        "MONTHLY": "pe lună"
+      }
+    },
+    "title": "<nb>Cat Bitcoin</nb> <nb>aş putea avea?</nb>",
+    "profit": "creştere",
+    "loss": "scădere",
+    "item": {
+      "CIGARETTES": "un pachet de ţigări",
+      "FASTFOOD": "un menu maxi de cartofi prăjiţi",
+      "BEER": "o halbă de bere",
+      "COFFEE": "un cappuccino caramel",
+      "OTHER": "un lucru inutil"
+    },
+    "results": {
+      "phrase": "Dacă aş fi cumpărat <nb><currencyInput /> <itemPrice/> în Bitcoin</nb> în loc de <nb>qu'<object/></nb> <frequency/> începând cu <nb>le <startInput/>,</nb> <loader> aş fi economisit <t>{{saved}},<t/> iar astăzi aş avea <t>{{bitcoinAmount}}</t> în valoare de <t>{{bitcoinValue}}</t>, <nb> adică </nb> o <t>{{profitOrLoss}}</t> <nb>de <t>{{profitLoss}}</t> <small>(<percentPL/>)</small>.</nb></loader>",
+      "share": "Dacă aş fi cumpărat {{price}} în Bitcoin  în loc de {{object}} {{frequency}} începând cu {{start}}, aş fi economisit {{saved}}, e iar astăzi aş avea {{bitcoinAmount}}, în valoare de {{bitcoinValue}} adică o  {{profitOrLoss}} de {{profitLoss}} ({{percentPL}}).",
+      "title": "Rezultate",
+      "total_buys": "Număr total de tranzacţii:",
+      "total_spent": "Total economisit :",
+      "total_bought": "Bitcoin cumpăraţi :",
+      "average_cost": "Cost mediu al Bitcoin :",
+      "current_price": "Curs actual :",
+      "valuation": "Valoare actuală :",
+      "profit_loss": "Profit/Pierdere :"
+    }
+  }
+}

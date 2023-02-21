@@ -1,6 +1,6 @@
 {
-  "code": "en",
-  "language": "EN",
+  "code": "es",
+  "language": "ES",
   "nav": {
     "about": "About",
     "help": "Help",
@@ -140,9 +140,9 @@
       "start_date": "Fecha de inicio",
       "end_date": "Fecha final",
       "per": {
-        "DAILY": "Cada día",
-        "WEEKLY": "Cada semana",
-        "MONTHLY": "Cada mes"
+        "DAILY": "cada día",
+        "WEEKLY": "cada semana",
+        "MONTHLY": "cada mes"
       }
     },
     "title": "<nb>¿Cuánto Bitcoin</nb> <nb>podría tener hoy?</nb>",

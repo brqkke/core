@@ -43,7 +43,7 @@ footer a:hover {
     border-bottom: 1px solid #ebeaeb;
     top: 0;
     position: fixed;
-    z-index: 2;
+    z-index: 3;
 }
 
 .nav > .nav-header {

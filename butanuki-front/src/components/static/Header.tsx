@@ -20,9 +20,6 @@ export const Header = React.memo(() => {
         </div>
       </div>
       <div className="nav-links">
-        {/*<a href={getUrl("about")} target="_top">*/}
-        {/*  {t("nav.about")}*/}
-        {/*</a>*/}
         <a href={getUrl("help")} target="_top">
           {t("nav.help")}
         </a>

@@ -1,12 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { createTransport, Transporter } from 'nodemailer';
 import { AppConfigService } from '../config/app.config.service';
+import { AlertService } from '../alert/alert.service';
 
 @Injectable()
 export class MailerTransportService {
   private transporter: Transporter;
 
-  constructor(private appConfig: AppConfigService) {
+  constructor(
+    private appConfig: AppConfigService,
+    private alertService: AlertService,
+  ) {
     this.transporter = this.makeMailTransport();
   }
 
@@ -39,11 +43,31 @@ export class MailerTransportService {
     const fullSubject =
       prefix === undefined ? `Butanuki - ${subject}` : `${prefix}${subject}`;
     const transport = this.transporter;
-    return transport.sendMail({
-      from: { name: 'Butanuki', address: 'no-reply@butanuki.com' },
-      to,
-      subject: fullSubject,
-      html: content,
-    });
+    try {
+      const result = await transport.sendMail({
+        from: { name: 'Butanuki', address: 'no-reply@butanuki.com' },
+        to,
+        subject: fullSubject,
+        html: content,
+      });
+      return result;
+    } catch (e: unknown) {
+      console.log('Error sending email', e);
+      this.alertService
+        .send(
+          'critical',
+          'Error sending email to ' +
+            to +
+            '\n\n' +
+            (typeof e === 'object' && e
+              ? e.toString() + '\n\n' + JSON.stringify(e, null, 2)
+              : JSON.stringify(e, null, 2)),
+          'telegram',
+        )
+        .catch((err) => {
+          console.log('Error sending alert', err);
+        });
+      throw e;
+    }
   }
 }
